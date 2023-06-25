@@ -17,7 +17,14 @@ class MyPlugin_Users {
 				'key' => 'editor_plus',
 				'label' => 'Editor Plus',
 				'base_role' => 'editor',
-				'additional_capabilities' => array('edit_theme_options')
+				'additional_capabilities' => array(
+					'edit_theme_options',
+					'list_users',
+					'create_users',
+					'edit_users',
+					'delete_users',
+					'promote_users'
+				)
 			)
 		);
 	}
@@ -130,6 +137,12 @@ class MyPlugin_Users {
 	 * @return WP_Role[]
 	 */
 	function rejig_the_role_list($roles): array {
+		$user_query = new WP_User_Query(array(
+			'role' => 'editor_plus'
+		));
+		error_log(print_r($user_query->results, true));
+
+
 		$updated = $roles;
 		uasort($updated, function($a, $b) {
 			return ($a < $b) ? -1 : 1;

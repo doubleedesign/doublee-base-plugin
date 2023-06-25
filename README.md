@@ -7,7 +7,7 @@ Framework/template for building a plugin in an OOP fashion. Based on plugins I h
 To show you how to use it, this package comes with examples of some of the common things I do in client-specific plugins:
  - How you could add admin notices
  - The creation of custom roles; out-of-the box it has an "Editor Plus" role and works like so:
-    - Upon plugin activation, the Editor Plus role is created based on the built-in Editor role, and the `edit_theme_options` capability is added
+    - Upon plugin activation, the Editor Plus role is created based on the built-in Editor role, and some capabilities I commonly assign to clients are added to it
     - Upon deactivation, users with the role are reverted to Editors
     - Upon reactivation (without uninstallation), users who had the Editor Plus role should get it back (note: this is because a capability by the same name is left there unless the plugin is uninstalled; if you intend to use `current_user_can('editor_plus')` then this may not suit your needs)
     - Upon uninstallation, the remnants of the role are totally wiped so if the plugin is reactivated again, custom roles must be manually reassigned.
