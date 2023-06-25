@@ -24,6 +24,9 @@ class MyPlugin_Users {
 					'edit_users',
 					'delete_users',
 					'promote_users'
+				),
+				'custom_capabilities' => array(
+					'manage_forms'
 				)
 			)
 		);
@@ -44,6 +47,9 @@ class MyPlugin_Users {
 			// Addition of capabilities
 			$the_role = get_role($custom_role['key']);
 			foreach($custom_role['additional_capabilities'] as $capability) {
+				$the_role->add_cap($capability);
+			}
+			foreach($custom_role['custom_capabilities'] as $capability) {
 				$the_role->add_cap($capability);
 			}
 		}
@@ -118,6 +124,11 @@ class MyPlugin_Users {
 				// Revert them to the base role of their custom role
 				$user->add_role($custom_role['base_role']);
 
+				// Ensure custom capabilities are removed
+				foreach($custom_role['custom_capabilities'] as $capability) {
+					$user->remove_cap($capability);
+				}
+
 				// Lastly, remove what's left over from our custom role if applicable
 				// (intended for plugin uninstallation)
 				if($permanently) {
@@ -125,6 +136,27 @@ class MyPlugin_Users {
 					$user->remove_cap($custom_role['key']);
 				}
 			}
+		}
+	}
+
+
+	/**
+	 * Use custom capability manage_forms to grant access to Ninja Forms admin stuff
+	 * @wp-hook
+	 *
+	 * @return void
+	 */
+	function apply_manage_forms_capability(): void {
+
+		function get_manage_forms_capability(): string {
+			return 'manage_forms';
+		}
+
+		if(is_plugin_active('ninja-forms/ninja-forms.php')) {
+			add_filter('ninja_forms_admin_parent_menu_capabilities', 'get_manage_forms_capability'); // Parent Menu
+			add_filter('ninja_forms_admin_all_forms_capabilities', 'get_manage_forms_capability'); // Forms
+			add_filter('ninja_forms_admin_submissions_capabilities', 'get_manage_forms_capability'); // Submissions
+			add_filter('ninja_forms_admin_import_export_capabilities', 'get_manage_forms_capability'); // Import/Export
 		}
 	}
 
@@ -140,8 +172,6 @@ class MyPlugin_Users {
 		$user_query = new WP_User_Query(array(
 			'role' => 'editor_plus'
 		));
-		error_log(print_r($user_query->results, true));
-
 
 		$updated = $roles;
 		uasort($updated, function($a, $b) {
