@@ -125,6 +125,7 @@ class MyPlugin {
 	 */
 	public static function activate(): void {
 		self::$user_functions->create_roles();
+		self::$user_functions->reassign_users_roles();
 	}
 
 	/**
@@ -157,7 +158,7 @@ class MyPlugin {
 	 * @return void
 	 */
 	public static function uninstall(): void {
-		self::$user_functions->revert_users_roles();
+		self::$user_functions->revert_users_roles(true);
 	}
 
 

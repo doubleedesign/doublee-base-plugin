@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This class defines functions to set up custom user roles and capabilities.
  *
@@ -29,8 +30,11 @@ class MyPlugin_Users {
 	 */
 	function create_roles(): void {
 		foreach($this->custom_roles as $custom_role) {
-			add_role($custom_role['key'], $custom_role['label'], $custom_role['base_role']);
+			// Initial role creation
+			$template_role = get_role($custom_role['base_role']);
+			add_role($custom_role['key'], $custom_role['label'], $template_role->capabilities);
 
+			// Addition of capabilities
 			$the_role = get_role($custom_role['key']);
 			foreach($custom_role['additional_capabilities'] as $capability) {
 				$the_role->add_cap($capability);
@@ -42,14 +46,39 @@ class MyPlugin_Users {
 	/**
 	 * Function to remove the roles we created
 	 *
-	 * Intended for use upon plugin deactivation, this makes users with this role have no role,
+	 * Intended for use upon plugin deactivation, this reverts users with custom roles to the base role,
 	 * but upon reactivation their custom role will be reinstated (unless the plugin has been uninstalled as well)
 	 *
 	 * @return void
 	 */
 	function delete_roles(): void {
+		// Revert users with custom roles to the associated base roles
+		$this->revert_users_roles(false);
+
+		// Remove the roles from WordPress
 		foreach($this->custom_roles as $custom_role) {
 			wp_roles()->remove_role($custom_role['key']);
+		}
+	}
+
+
+	/**
+	 * Function to reassign custom roles to users
+	 *
+	 * Intended for use on plugin reactivation, after revert_users_roles has been run with $permanently set to false,
+	 * leaving a 'dangling' capability with the same name as the role
+	 *
+	 * @return void
+	 */
+	function reassign_users_roles(): void {
+		foreach($this->custom_roles as $custom_role) {
+			$user_query = new WP_User_Query(array(
+				'capability' => $custom_role['key']
+			));
+			foreach($user_query->results as $user) {
+				$user->add_role($custom_role['key']);
+				$user->remove_role($custom_role['base_role']);
+			}
 		}
 	}
 
@@ -63,31 +92,31 @@ class MyPlugin_Users {
 	 * i.e. restore users to how they would be if our plugin was never there
 	 * THIS IS A DESTRUCTIVE OPERATION, USE WITH CARE!
 	 *
+	 * @param bool $permanently
 	 * @return void
 	 */
-	function revert_users_roles(): void {
+	function revert_users_roles(bool $permanently): void {
 		foreach($this->custom_roles as $custom_role) {
 
 			// Query to get users who had this custom role
 			// Even though the role is deleted upon plugin deactivation, this query still works
-			// (I assume because of the dangling/leftover capability that we're about to remove)
-			$user_query = new WP_User_Query(
-				array(
-					'role' => $custom_role['key']
-				)
-			);
+			// (I assume because of the dangling/leftover capability that we're about to remove if $permanently = true)
+			$user_query = new WP_User_Query(array(
+				'role' => $custom_role['key']
+			));
 
 			// Loop through the found users
 			foreach($user_query->results as $user) {
 
-				// If the user doesn't have any other roles, default them to subscriber
-				// (update this for other roles according to your needs)
-				if(empty($user->roles)) {
-					$user->add_role($custom_role['base_role']);
-				}
+				// Revert them to the base role of their custom role
+				$user->add_role($custom_role['base_role']);
 
-				// Lastly, remove what's left over from our custom role
-				$user->remove_cap($custom_role['key']);
+				// Lastly, remove what's left over from our custom role if applicable
+				// (intended for plugin uninstallation)
+				if($permanently) {
+					$user->remove_role($custom_role['key']);
+					$user->remove_cap($custom_role['key']);
+				}
 			}
 		}
 	}

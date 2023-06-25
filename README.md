@@ -9,7 +9,7 @@ To show you how to use it, this package comes with examples of some of the commo
  - The creation of custom roles; out-of-the box it has an "Editor Plus" role and works like so:
     - Upon plugin activation, the Editor Plus role is created based on the built-in Editor role, and the `edit_theme_options` capability is added
     - Upon deactivation, users with the role are reverted to Editors
-    - Upon reactivation (without uninstallation), users who had the Editor Plus role should get it back
+    - Upon reactivation (without uninstallation), users who had the Editor Plus role should get it back (note: this is because a capability by the same name is left there unless the plugin is uninstalled; if you intend to use `current_user_can('editor_plus')` then this may not suit your needs)
     - Upon uninstallation, the remnants of the role are totally wiped so if the plugin is reactivated again, custom roles must be manually reassigned.
  - A `frontend` folder where I sometimes put templates/partials when they're so tightly coupled to plugin functionality that it makes more sense than putting them in the theme. (Not super common, but it's happened.)
 
