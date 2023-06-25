@@ -192,6 +192,7 @@ class MyPlugin {
 		$this->loader->add_filter('editable_roles', self::$user_functions, 'rejig_the_role_list');
 
 		// Access stuff
+		$this->loader->add_action('init', self::$user_functions, 'customise_capabilities');
 		$this->loader->add_action('init', self::$user_functions, 'apply_manage_forms_capability');
 	}
 

@@ -20,10 +20,10 @@ class MyPlugin_Users {
 				'additional_capabilities' => array(
 					'edit_theme_options',
 					'list_users',
-					'create_users',
 					'edit_users',
-					'delete_users',
-					'promote_users'
+					'promote_users',
+					'delete_users'
+					// TODO: Stop anyone who is not an admin from deleting or editing admins
 				),
 				'custom_capabilities' => array(
 					'manage_forms'
@@ -34,17 +34,26 @@ class MyPlugin_Users {
 
 
 	/**
-	 * Function to create our custom user roles and assign capabilities to them
+	 * Function to create our custom user roles
 	 *
 	 * @return void
 	 */
 	function create_roles(): void {
 		foreach($this->custom_roles as $custom_role) {
-			// Initial role creation
 			$template_role = get_role($custom_role['base_role']);
 			add_role($custom_role['key'], $custom_role['label'], $template_role->capabilities);
+		}
+	}
 
-			// Addition of capabilities
+
+	/**
+	 * Function to add/remove capabilities for custom roles
+	 * @wp-hook
+	 *
+	 * @return void
+	 */
+	function customise_capabilities(): void {
+		foreach($this->custom_roles as $custom_role) {
 			$the_role = get_role($custom_role['key']);
 			foreach($custom_role['additional_capabilities'] as $capability) {
 				$the_role->add_cap($capability);
@@ -52,6 +61,27 @@ class MyPlugin_Users {
 			foreach($custom_role['custom_capabilities'] as $capability) {
 				$the_role->add_cap($capability);
 			}
+		}
+	}
+
+
+	/**
+	 * Use custom capability manage_forms to grant access to Ninja Forms admin stuff
+	 * @wp-hook
+	 *
+	 * @return void
+	 */
+	function apply_manage_forms_capability(): void {
+
+		function get_manage_forms_capability(): string {
+			return 'manage_forms';
+		}
+
+		if(is_plugin_active('ninja-forms/ninja-forms.php')) {
+			add_filter('ninja_forms_admin_parent_menu_capabilities', 'get_manage_forms_capability'); // Parent Menu
+			add_filter('ninja_forms_admin_all_forms_capabilities', 'get_manage_forms_capability'); // Forms
+			add_filter('ninja_forms_admin_submissions_capabilities', 'get_manage_forms_capability'); // Submissions
+			add_filter('ninja_forms_admin_import_export_capabilities', 'get_manage_forms_capability'); // Import/Export
 		}
 	}
 
@@ -124,7 +154,10 @@ class MyPlugin_Users {
 				// Revert them to the base role of their custom role
 				$user->add_role($custom_role['base_role']);
 
-				// Ensure custom capabilities are removed
+				// Ensure additional and custom capabilities are removed
+				foreach($custom_role['additional_capabilities'] as $capability) {
+					$user->remove_cap($capability);
+				}
 				foreach($custom_role['custom_capabilities'] as $capability) {
 					$user->remove_cap($capability);
 				}
@@ -141,27 +174,6 @@ class MyPlugin_Users {
 
 
 	/**
-	 * Use custom capability manage_forms to grant access to Ninja Forms admin stuff
-	 * @wp-hook
-	 *
-	 * @return void
-	 */
-	function apply_manage_forms_capability(): void {
-
-		function get_manage_forms_capability(): string {
-			return 'manage_forms';
-		}
-
-		if(is_plugin_active('ninja-forms/ninja-forms.php')) {
-			add_filter('ninja_forms_admin_parent_menu_capabilities', 'get_manage_forms_capability'); // Parent Menu
-			add_filter('ninja_forms_admin_all_forms_capabilities', 'get_manage_forms_capability'); // Forms
-			add_filter('ninja_forms_admin_submissions_capabilities', 'get_manage_forms_capability'); // Submissions
-			add_filter('ninja_forms_admin_import_export_capabilities', 'get_manage_forms_capability'); // Import/Export
-		}
-	}
-
-
-	/**
 	 * Function to be used to reorder the list of roles in the WordPress admin
 	 * @wp-hook
 	 * @param $roles
@@ -169,10 +181,6 @@ class MyPlugin_Users {
 	 * @return WP_Role[]
 	 */
 	function rejig_the_role_list($roles): array {
-		$user_query = new WP_User_Query(array(
-			'role' => 'editor_plus'
-		));
-
 		$updated = $roles;
 		uasort($updated, function($a, $b) {
 			return ($a < $b) ? -1 : 1;
