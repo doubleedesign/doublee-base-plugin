@@ -102,7 +102,9 @@ class MyPlugin_Users {
 	 */
 	function rejig_the_role_list($roles): array {
 		$updated = $roles;
-		sort($updated);
+		uasort($updated, function($a, $b) {
+			return ($a < $b) ? -1 : 1;
+		});
 
 		return array_reverse($updated);
 	}
