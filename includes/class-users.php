@@ -186,7 +186,64 @@ class MyPlugin_Users {
 			return ($a < $b) ? -1 : 1;
 		});
 
+		if(!current_user_can('administrator')) {
+			unset($updated['administrator']);
+		}
+
 		return array_reverse($updated);
 	}
 
+
+	/**
+	 * Function to customise output of the users list table by overriding functions in the built-in one
+	 * Used for restricting ability for non-admins to edit admin accounts while still being able to view them
+	 * To be run on the wp_list_table_class_name filter
+	 * @wp-hook
+	 *
+	 * @param $class_name
+	 * @param $args
+	 * @return string
+	 */
+	function custom_user_list_table($class_name, $args): string {
+		include('class-users-list-table.php');
+
+		if($args['screen']->id === 'users') {
+			$class_name = 'MyPlugin_Users_List_Table';
+		}
+
+		return $class_name;
+	}
+
+
+	/**
+	 * Remove action links in user table for non-admins with user editing/deletion capabilities
+	 * To be run on user_row_actions filter
+	 * @wp-hook
+	 * @param $actions
+	 * @param $user_object
+	 *
+	 * @return array
+	 */
+	function restrict_user_list_actions($actions, $user_object): array {
+		if(!current_user_can('administrator') && in_array('administrator', $user_object->roles)) {
+			unset($actions['edit']);
+			unset($actions['delete']);
+			unset($actions['resetpassword']);
+		}
+
+		return $actions;
+	}
+
+
+	function restrict_user_edit_screen($current_screen) {
+		if($current_screen->id === 'user-edit' && !current_user_can('administrator')) {
+			$user_id = $_REQUEST['user_id'];
+			$user = get_user_by('id', $user_id);
+
+			if(in_array('administrator', $user->roles)) {
+				wp_die( __("<p>You don't have sufficient permissions to edit this user.</p><p><a class='button button-primary' href='/wp-admin/users.php'>Go back</a></p>"),
+					403 );
+			}
+		}
+	}
 }

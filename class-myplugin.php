@@ -188,12 +188,12 @@ class MyPlugin {
 	 * @return void
 	 */
 	private function wp_admin_customisations(): void {
-		// Display stuff
 		$this->loader->add_filter('editable_roles', self::$user_functions, 'rejig_the_role_list');
-
-		// Access stuff
 		$this->loader->add_action('init', self::$user_functions, 'customise_capabilities');
-		$this->loader->add_action('init', self::$user_functions, 'apply_manage_forms_capability');
+		$this->loader->add_action('admin_init', self::$user_functions, 'apply_manage_forms_capability');
+		$this->loader->add_filter('user_row_actions', self::$user_functions, 'restrict_user_list_actions', 10, 2);
+		$this->loader->add_filter('wp_list_table_class_name', self::$user_functions, 'custom_user_list_table', 10, 2);
+		$this->loader->add_action('current_screen', self::$user_functions, 'restrict_user_edit_screen');
 	}
 
 
