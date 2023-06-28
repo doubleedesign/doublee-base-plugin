@@ -62,6 +62,9 @@ class MyPlugin_Users {
 				$the_role->add_cap($capability);
 			}
 		}
+
+		$admin_role = get_role('administrator');
+       		$admin_role->add_cap('manage_forms');
 	}
 
 
