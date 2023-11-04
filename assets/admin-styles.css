@@ -1,0 +1,29 @@
+li.toplevel_page_section-title-content,
+li.toplevel_page_section-title-content a,
+li.toplevel_page_section-title-shop,
+li.toplevel_page_section-title-shop a,
+li.toplevel_page_section-title-enquiries,
+li.toplevel_page_section-title-enquiries a,
+li.toplevel_page_section-title-people,
+li.toplevel_page_section-title-people a,
+li.toplevel_page_section-title-config,
+li.toplevel_page_section-title-config a {
+	pointer-events: none;
+}
+
+li.toplevel_page_section-title-content a,
+li.toplevel_page_section-title-shop a,
+li.toplevel_page_section-title-enquiries a,
+li.toplevel_page_section-title-people a,
+li.toplevel_page_section-title-config a {
+	border-top: 1px solid rgba(255, 255, 255, 0.2);
+	background: rgba(255, 255, 255, 0.075);
+}
+
+li.toplevel_page_section-title-content .wp-menu-name,
+li.toplevel_page_section-title-shop .wp-menu-name,
+li.toplevel_page_section-title-enquiries .wp-menu-name,
+li.toplevel_page_section-title-people .wp-menu-name,
+li.toplevel_page_section-title-config .wp-menu-name {
+	font-weight: bold;
+}

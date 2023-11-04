@@ -23,13 +23,19 @@ class MyPlugin_Users {
 					'edit_users',
 					'promote_users',
 					'delete_users'
-					// TODO: Stop anyone who is not an admin from deleting or editing admins
 				),
 				'custom_capabilities' => array(
 					'manage_forms'
 				)
 			)
 		);
+
+		add_filter('editable_roles', array($this, 'rejig_the_role_list'));
+		add_action('init', array($this, 'customise_capabilities'));
+		add_action('admin_init', array($this, 'apply_manage_forms_capability'));
+		add_filter('user_row_actions', array($this, 'restrict_user_list_actions', 10, 2));
+		add_filter('wp_list_table_class_name', array($this, 'custom_user_list_table'), 10, 2);
+		add_action('current_screen', array($this, 'restrict_user_edit_screen'));
 	}
 
 
@@ -238,7 +244,13 @@ class MyPlugin_Users {
 	}
 
 
-	function restrict_user_edit_screen($current_screen) {
+	/**
+	 * Restrict the user editing screen so users who can see admins in the list can't edit their profiles
+	 * @param $current_screen
+	 *
+	 * @return void
+	 */
+	function restrict_user_edit_screen($current_screen): void {
 		if($current_screen->id === 'user-edit' && !current_user_can('administrator')) {
 			$user_id = $_REQUEST['user_id'];
 			$user = get_user_by('id', $user_id);

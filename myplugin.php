@@ -4,10 +4,12 @@
  * Description: Starter files for creating a plugin in an OOP fashion.
  * Rename and find & replace MyPlugin, myplugin etc to suit your needs, and update the name and this description.
  *
- * Author:      Leesa Ward
- * Author URI:  https://www.leesaward.dev
- * Version:     1.0
- * Text Domain: myplugin
+ * Author:      		Leesa Ward
+ * Author URI:  		https://www.leesaward.dev
+ * Version:     		2.0.0
+ * Requires at least: 	6.3.2
+ * Requires PHP: 		8.1.9
+ * Text Domain: 		myplugin
  *
  * @package MyPlugin
  */
@@ -37,8 +39,7 @@ register_uninstall_hook(__FILE__, 'uninstall_myplugin');
 
 
 // Load and run the rest of the plugin
-$plugin = new MyPlugin();
-$plugin->run();
+new MyPlugin();
 
 
 /**

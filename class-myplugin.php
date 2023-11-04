@@ -17,16 +17,16 @@ if (!defined('WPINC')) {
 }
 
 /**
- * Currently plugin version.
+ * Current plugin version.
  * Rename this for your plugin and update it as you release new versions.
  */
-const MYPLUGIN_VERSION = '1.0.0';
+const MYPLUGIN_VERSION = '2.0.0';
 
 
 /**
  * Path of plugin root folder
  */
-define("MYPLUGIN_PLUGIN_PATH", plugin_dir_path(__FILE__));
+define('MYPLUGIN_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
 
 /**
@@ -50,17 +50,6 @@ class MyPlugin {
 
 
 	/**
-	 * The loader that's responsible for maintaining and registering all hooks that power
-	 * the plugin. We generally don't expect to need to edit the loader.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      WPPB_Loader $loader Maintains and registers all hooks for the plugin.
-	 */
-	protected WPPB_Loader $loader;
-
-
-	/**
 	 * Variables to store instances of our custom classes
 	 * This is one option of how to create an instance of a class, in this case using the same instance in multiple places.
 	 * Instances can also be created as-needed within functions below,
@@ -78,42 +67,41 @@ class MyPlugin {
 
 	/**
 	 * Set up the core functionality of the plugin in the constructor
-	 * by loading dependencies and then running functions to call the hooks etc.
+	 * by loading the modular classes of functionality.
 	 *
-	 * Each time we add a function to this file, we call it here,
-	 * except for activation/deactivation/uninstallation as those are static functions called in the plugin root file.
-	 *
-	 * @since    1.0.0
+	 * @since    2.0.0
 	 */
 	public function __construct() {
 		$this->version = MYPLUGIN_VERSION;
 
-		// Call the function that makes our classes available
+		// Call the function that initialises our classes
 		// and sets up some values that can be used throughout this file
-		$this->load_dependencies();
-
-		// Call our other custom functions defined below
-		$this->setup_admin_notices();
-		$this->wp_admin_customisations();
+		$this->load_classes();
 	}
+
 
 	/**
 	 * Load the required dependencies for this plugin.
-	 * Each time we create a class file, we need to add it here
-	 * and then use it in the functions below as appropriate.
+	 * Each time we create a class file, we need to add it and initialise it here.
 	 *
 	 * @return   void
-	 * @since    1.0.0
+	 * @since    2.0.0
 	 * @access   private
 	 */
-	private function load_dependencies(): void {
-		require_once MYPLUGIN_PLUGIN_PATH . '/includes/class-loader.php';
-		$this->loader = new WPPB_Loader();
-
+	private function load_classes(): void {
 		require_once MYPLUGIN_PLUGIN_PATH . '/includes/class-users.php';
 		self::$user_functions = new MyPlugin_Users();
 
 		require_once MYPLUGIN_PLUGIN_PATH . '/includes/class-admin-notices.php';
+		new MyPlugin_Admin_Notices();
+
+		require_once MYPLUGIN_PLUGIN_PATH . '/includes/class-admin-ui.php';
+		new MyPlugin_Admin_UI();
+
+		if(class_exists('WooCommerce')) {
+			require_once MYPLUGIN_PLUGIN_PATH . '/includes/class-woocommerce.php';
+			new MyPlugin_WooCommerce();
+		}
 	}
 
 
@@ -162,40 +150,6 @@ class MyPlugin {
 	}
 
 
-	/**
-	 * For each class or type of functionality as appropriate,
-	 * we can create a function in this file to call its functions
-	 * using the appropriate WordPress action hooks and filters (or action hooks and filters from another plugin).
-	 * Note: Functions run on activation/deactivation/uninstallation are an exception to this approach.
-	 *
-	 * We call these functions in the constructor above.
-	 */
-
-	/**
-	 * Call functions for adding admin notices.
-	 * @return void
-	 */
-	private function setup_admin_notices(): void {
-		$class = new MyPlugin_Admin_Notices();
-
-		$this->loader->add_action('admin_notices', $class, 'required_plugin_notification');
-	}
-
-
-	/**
-	 * Call functions to customise how things are displayed or are accessible in the WordPress admin.
-	 *
-	 * @return void
-	 */
-	private function wp_admin_customisations(): void {
-		$this->loader->add_filter('editable_roles', self::$user_functions, 'rejig_the_role_list');
-		$this->loader->add_action('init', self::$user_functions, 'customise_capabilities');
-		$this->loader->add_action('admin_init', self::$user_functions, 'apply_manage_forms_capability');
-		$this->loader->add_filter('user_row_actions', self::$user_functions, 'restrict_user_list_actions', 10, 2);
-		$this->loader->add_filter('wp_list_table_class_name', self::$user_functions, 'custom_user_list_table', 10, 2);
-		$this->loader->add_action('current_screen', self::$user_functions, 'restrict_user_edit_screen');
-	}
-
 
 	/**
 	 * Function to retrieve the version number of the plugin.
@@ -210,12 +164,51 @@ class MyPlugin {
 
 
 	/**
-	 * Function to run the loader to execute the hooks with WordPress.
-	 * This function is called from the root plugin file to, well, run the plugin.
+	 * Function to retrieve the name of the plugin for use in the admin
+	 * (e.g., labelling stuff)
 	 *
-	 * @since    1.0.0
+	 * @return string   The name of the plugin
+	 * @since     1.0.0
 	 */
-	public function run(): void {
-		$this->loader->run();
+	public static function get_name(): string {
+		$plugin_data = get_plugin_data(MYPLUGIN_PLUGIN_PATH . 'myplugin.php');
+
+		return $plugin_data['Name'];
 	}
+
+
+	/**
+	 * Shared utility function to conditionally change the ACF JSON save location
+	 * - to be used for field groups relevant to CPTs, taxonomies, etc. introduced by this plugin
+	 * - when called, must be wrapped in a relevant conditional to identify the group to save to the plugin
+	 * @return void
+	 */
+	public static function override_acf_json_save_location(): void {
+		// remove this filter so it will not affect other groups
+		remove_filter('acf/settings/save_json',  'override_acf_json_save_location', 9999);
+
+		add_filter('acf/settings/save_json', function($path) {
+			// remove this filter so it will not affect other groups
+			remove_filter('acf/settings/save_json', 'self::override_acf_json_save_location', 9999);
+
+			// override save path in this case
+			return MYPLUGIN_PLUGIN_PATH . 'assets/acf-json';
+		}, 9999);
+	}
+
+
+	/**
+	 * Utility function to get lists of filenames where ACF JSON files are stored in the plugin and theme
+	 * @return array
+	 */
+	public static function get_acf_json_filenames(): array {
+		$in_plugin = scandir(MYPLUGIN_PLUGIN_PATH . 'assets/acf-json/');
+		$in_theme = scandir(get_template_directory() . '/acf-json/');
+
+		return array(
+			'plugin' => array_values(array_filter($in_plugin, fn($item) => str_contains($item, '.json'))),
+			'theme' => array_values(array_filter($in_theme, fn($item) => str_contains($item, '.json')))
+		);
+	}
+
 }
