@@ -1,6 +1,6 @@
 # doublee-plugin-framework
 
-Framework/template for building a plugin in an OOP fashion, including some common stuff I use for client sites.
+Framework/template for building a WordPress plugin in an OOP fashion, including some common stuff I use for client sites.
 
 ## What's included
 
@@ -34,5 +34,6 @@ Please see the [changelog](CHANGELOG.md) for more information and the latest upd
 
 ## General intentions and advice
 
-- Custom Post Types and Taxonomies should be set up in the plugin, not in a theme
-- Consequently, it makes sense to also load and save ACF fields (using the ACF JSON feature) from the plugin directory, not the active theme (the latter being the default location)
+I use this with my own [theme starterkit](https://github.com/doubleedesign/doublee-dev-starter-kit) to create custom sites with clear separation of concerns as much as is practical. As a  guide:
+- Code related to front-end design and content display belongs in the theme
+- Custom functionality, custom post types, custom taxonomies, modifications to WordPress functionality (including the admin UI), site-specific data structures and management belong in the plugin.
