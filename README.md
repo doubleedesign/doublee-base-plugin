@@ -28,7 +28,7 @@ Please see the [changelog](CHANGELOG.md) for more information and the latest upd
 6. Do a case-sensitive find and replace throughout the folder for `MyPlugin`, replacing it with the PascalCase name of your plugin.
 7. Find & replace `@author     Leesa Ward` with your name throughout.
 8. Remove/modify/add to the provided classes to suit your needs.
-9. Start adding your own classes for the units of functionality you require.
+9. Add your own classes for the units of functionality you require.
 10. More code stuff. Build all the things.
 11. Profit.
 
