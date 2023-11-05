@@ -34,6 +34,6 @@ Please see the [changelog](CHANGELOG.md) for more information and the latest upd
 
 ## General intentions and advice
 
-I use this with my own [theme starterkit](https://github.com/doubleedesign/doublee-dev-starter-kit) to create custom sites with clear separation of concerns as much as is practical. As a  guide:
+I use this with my own [theme starterkit](https://github.com/doubleedesign/doublee-theme-starter-kit) to create custom sites with clear separation of concerns as much as is practical. As a  guide:
 - Code related to front-end design and content display belongs in the theme
 - Custom functionality, custom post types, custom taxonomies, modifications to WordPress functionality (including the admin UI), site-specific data structures and management belong in the plugin.
