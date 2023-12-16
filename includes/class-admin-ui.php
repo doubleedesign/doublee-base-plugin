@@ -19,6 +19,8 @@ class MyPlugin_Admin_UI {
 		add_filter('hidden_meta_boxes', array($this, 'customise_default_hidden_metaboxes'), 10, 2);
 		add_filter('default_hidden_columns', array($this, 'customise_default_hidden_columns'), 10, 2);
 		add_action('admin_init', array($this, 'remove_welcome_panel'));
+		add_action('admin_menu', array($this, 'promote_menu_items'));
+		add_action('admin_menu', array($this, 'rename_menu_items'));
 		add_action('admin_menu', array($this, 'add_menu_section_titles'));
 		add_filter('menu_order', array($this, 'customise_admin_menu_order_and_sections'), 99);
 		add_filter('custom_menu_order', array($this, 'customise_admin_menu_order_and_sections'));
@@ -157,6 +159,74 @@ class MyPlugin_Admin_UI {
 
 
 	/**
+	 * Move some submenu items to top-level menu items
+	 * @return void
+	 */
+	function promote_menu_items(): void {
+		if (is_plugin_active('woocommerce/woocommerce.php')) {
+			remove_submenu_page('woocommerce', 'edit.php?post_type=shop_order');
+			add_menu_page(
+				__('Subscriptions', 'wapr'),
+				'Orders',
+				'manage_woocommerce',
+				'edit.php?post_type=shop_order',
+				'',
+				'dashicons-index-card',
+				0
+			);
+
+			remove_submenu_page('woocommerce', 'admin.php?page=wc-reports');
+			add_menu_page(
+				__('Reports', 'wapr'),
+				'Sales Reports',
+				'manage_woocommerce',
+				'admin.php?page=wc-reports',
+				'',
+				'dashicons-portfolio',
+				0
+			);
+
+			if (is_plugin_active('woocommerce-subscriptions/woocommerce-subscriptions.php')) {
+				remove_submenu_page('woocommerce', 'edit.php?post_type=shop_subscription');
+				add_menu_page(
+					__('Subscriptions', 'wapr'),
+					'Subscriptions',
+					'manage_woocommerce',
+					'edit.php?post_type=shop_subscription',
+					'',
+					'dashicons-update',
+					0
+				);
+			}
+		}
+	}
+
+
+	/**
+	 * Rename some menu items
+	 * @return void
+	 */
+	function rename_menu_items(): void {
+		global $menu;
+
+		foreach($menu as $index => $item) {
+			if($item[0] === 'Users') {
+				$menu[$index][0] = 'User Accounts';
+			}
+			if($item[0] === 'WooCommerce') {
+				$menu[$index][0] = 'Shop Settings';
+			}
+			if($item[0] === 'ACF') {
+				$menu[$index][0] = 'Custom Fields';
+			}
+			if($item[0] === 'Settings') {
+				$menu[$index][0] = 'General Settings';
+			}
+		}
+	}
+
+
+	/**
 	 * Add section titles to the admin menu
 	 * Note: The positions are set to 0 and then overridden in the below ordering function
 	 *
@@ -228,8 +298,10 @@ class MyPlugin_Admin_UI {
 			// Shop
 			'section-title-shop',
 			'edit.php?post_type=product',
+			'edit.php?post_type=shop_order',
+			'edit.php?post_type=shop_subscription', // WooCommerce Subscriptions
 			'edit.php?post_type=event_ticket', // WooCommerce Box Office
-			'woocommerce',
+			'admin.php?page=wc-reports',
 			'woocommerce-marketing',
 			'wc-admin&path=/analytics/overview',
 
@@ -244,6 +316,7 @@ class MyPlugin_Admin_UI {
 			// Config
 			'section-title-config',
 			'acf-options-global-options',
+			'woocommerce',
 			'options-general.php', // Settings
 			'themes.php', // Appearance
 			'plugins.php',
