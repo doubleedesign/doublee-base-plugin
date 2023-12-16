@@ -12,6 +12,7 @@ class MyPlugin_WooCommerce {
 
 	public function __construct() {
 		add_filter('woocommerce_product_data_tabs', array($this, 'customise_product_data_tabs'), 50);
+		add_filter('woocommerce_admin_features', array($this, 'disable_some_admin_features'), 20);
 		add_action('do_meta_boxes', array($this, 'custom_meta_box_positions'));
 	}
 
@@ -28,6 +29,32 @@ class MyPlugin_WooCommerce {
 
 		return $tabs;
 	}
+
+	/**
+	* Simplify admin menu by removing things we don't expect to use, such as promotion of extensions
+	* @param $features
+	*
+	* @return array
+	*/
+    function disable_some_admin_features($features): array {
+        // Note re Marketing:
+        // Make sure 'wc_admin_show_legacy_coupon_menu' in wp_options table is set to 1 so Coupons is in the main Woo menu
+
+        return array_values(
+            array_filter($features, function ($feature) {
+                return !in_array($feature, array(
+                    'homescreen',
+                    'onboarding',
+                    'onboarding-tasks',
+                    'marketing',
+                    'wc-pay-promotion',
+                    'wc-pay-welcome-page',
+                    'mobile-app-banner',
+                    'product-block-editor'
+                ));
+            })
+        );
+    }
 
 
 	/**
