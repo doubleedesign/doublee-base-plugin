@@ -6,6 +6,7 @@
             "key": "field_60e6b91c89105",
             "label": "Contact details",
             "name": "",
+            "aria-label": "",
             "type": "tab",
             "instructions": "",
             "required": 0,
@@ -22,6 +23,7 @@
             "key": "field_60e6b78dff698",
             "label": "Contact details",
             "name": "contact_details",
+            "aria-label": "",
             "type": "group",
             "instructions": "",
             "required": 0,
@@ -37,6 +39,7 @@
                     "key": "field_60e6b7a1ff699",
                     "label": "Phone",
                     "name": "phone",
+                    "aria-label": "",
                     "type": "text",
                     "instructions": "",
                     "required": 0,
@@ -56,6 +59,7 @@
                     "key": "field_60e6b7b8ff69a",
                     "label": "Address",
                     "name": "address",
+                    "aria-label": "",
                     "type": "text",
                     "instructions": "",
                     "required": 0,
@@ -75,6 +79,7 @@
                     "key": "field_60e6b7caff69b",
                     "label": "Suburb",
                     "name": "suburb",
+                    "aria-label": "",
                     "type": "text",
                     "instructions": "",
                     "required": 0,
@@ -94,6 +99,7 @@
                     "key": "field_60e6b7d1ff69c",
                     "label": "State",
                     "name": "state",
+                    "aria-label": "",
                     "type": "text",
                     "instructions": "",
                     "required": 0,
@@ -113,6 +119,7 @@
                     "key": "field_60e6b7d8ff69d",
                     "label": "Postcode",
                     "name": "postcode",
+                    "aria-label": "",
                     "type": "text",
                     "instructions": "",
                     "required": 0,
@@ -134,6 +141,7 @@
             "key": "field_62cfdf1d5744b",
             "label": "Accounts",
             "name": "",
+            "aria-label": "",
             "type": "tab",
             "instructions": "",
             "required": 0,
@@ -150,6 +158,7 @@
             "key": "field_62cfdf275744c",
             "label": "Google Maps API key",
             "name": "google_maps_api_key",
+            "aria-label": "",
             "type": "text",
             "instructions": "",
             "required": 0,
@@ -164,6 +173,41 @@
             "prepend": "",
             "append": "",
             "maxlength": ""
+        },
+        {
+            "key": "field_6590ac197c0df",
+            "label": "About",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "left",
+            "endpoint": 0
+        },
+        {
+            "key": "field_6590ab440f42e",
+            "label": "",
+            "name": "",
+            "aria-label": "",
+            "type": "message",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "These settings come from the custom plugin created for your site by Double-E Design, and are designed for use with it and your custom theme. Other plugins and themes may use these settings, but compatibility is not guaranteed.",
+            "new_lines": "wpautop",
+            "esc_html": 0
         }
     ],
     "location": [
@@ -184,5 +228,16 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1657790257
+    "is_acf_component": 0,
+    "acf_component_defaults": {
+        "layout": "block",
+        "repeatable": "0",
+        "pagination": "0",
+        "rows_per_page": "20",
+        "min": "",
+        "max": "",
+        "button_label": "",
+        "appearances": ""
+    },
+    "modified": 1703980073
 }

@@ -73,7 +73,7 @@ class MyPlugin_Admin_UI {
 		if(function_exists('acf_add_options_page')) {
 			acf_add_options_page(array(
 				'page_title' => 'Global Settings and Information for ' . get_bloginfo('name'),
-				'menu_title' => 'Global Options',
+				'menu_title' => get_bloginfo('name'),
 				'menu_slug' => 'acf-options-global-options',
 				'position' => 2
 			));
@@ -90,7 +90,7 @@ class MyPlugin_Admin_UI {
 	 */
 	function save_acf_global_options_to_plugin($group): void {
 		if($group['key'] === 'group_5876ae3e825e9') {
-			starterkit::override_acf_json_save_location();
+			MyPlugin::override_acf_json_save_location();
 		}
 	}
 
