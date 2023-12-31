@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This class defines functions to customise the WordPress admin,
  * including adding options pages, leveraging ACF etc.
@@ -12,8 +13,11 @@
 class MyPlugin_Admin_UI {
 
 	public function __construct() {
-		add_action('acf/update_field_group', array($this, 'save_acf_global_options_to_plugin'), 1, 1);
-		add_filter('manage_acf-field-group_posts_custom_column', array($this, 'show_where_acf_fields_are_loaded_from'), 100, 2);
+		add_action('acf/update_field_group', array($this, 'save_acf_global_options_to_plugin'), 1);
+		add_filter('manage_acf-field-group_posts_custom_column', array(
+			$this,
+			'show_where_acf_fields_are_loaded_from'
+		), 100, 2);
 		add_action('acf/init', array($this, 'setup_acf_global_options'), 5);
 		add_filter('acf/settings/load_json', array($this, 'load_acf_fields_from_plugin'));
 		add_filter('hidden_meta_boxes', array($this, 'customise_default_hidden_metaboxes'), 10, 2);
@@ -31,6 +35,7 @@ class MyPlugin_Admin_UI {
 
 	/**
 	 * Enable loading JSON files of ACF fields from the plugin
+	 *
 	 * @param $paths
 	 *
 	 * @return array
@@ -44,6 +49,7 @@ class MyPlugin_Admin_UI {
 
 	/**
 	 * Update the Local JSON column in the ACF Field Groups admin list to show where the fields are being loaded from
+	 *
 	 * @param $column_key
 	 * @param $post_id
 	 *
@@ -54,10 +60,10 @@ class MyPlugin_Admin_UI {
 			$files = MyPlugin::get_acf_json_filenames();
 			$post = get_post($post_id);
 			$key = $post->post_name;
-			if(in_array($key.'.json', $files['plugin'])) {
+			if(in_array($key . '.json', $files['plugin'])) {
 				echo ' in ' . MyPlugin::get_name() . ' plugin';
 			}
-			if(in_array($key.'.json', $files['theme'])) {
+			if(in_array($key . '.json', $files['theme'])) {
 				echo ' in ' . wp_get_theme()->name . ' theme';
 			}
 		}
@@ -74,8 +80,8 @@ class MyPlugin_Admin_UI {
 			acf_add_options_page(array(
 				'page_title' => 'Global Settings and Information for ' . get_bloginfo('name'),
 				'menu_title' => get_bloginfo('name'),
-				'menu_slug' => 'acf-options-global-options',
-				'position' => 2
+				'menu_slug'  => 'acf-options-global-options',
+				'position'   => 2
 			));
 		}
 	}
@@ -84,6 +90,7 @@ class MyPlugin_Admin_UI {
 	/**
 	 * Save any changes to Global Options ACF fields to the JSON file in the plugin
 	 * rather than the default location (the theme)
+	 *
 	 * @param $group
 	 *
 	 * @return void
@@ -98,6 +105,7 @@ class MyPlugin_Admin_UI {
 	/**
 	 * Hide some metaboxes by default, without completely removing them
 	 * (user can still override using Screen Options)
+	 *
 	 * @param $hidden
 	 * @param $screen
 	 *
@@ -118,7 +126,13 @@ class MyPlugin_Admin_UI {
 		}
 
 		if(is_plugin_active('woocommerce/woocommerce.php') && $screen->id === 'product') {
-			return array_merge($hidden, array('postexcerpt', 'wpseo_meta', 'commentsdiv', 'tagsdiv-product_tag', 'woocommerce-product-images'));
+			return array_merge($hidden, array(
+				'postexcerpt',
+				'wpseo_meta',
+				'commentsdiv',
+				'tagsdiv-product_tag',
+				'woocommerce-product-images'
+			));
 		}
 
 		return $hidden;
@@ -128,13 +142,21 @@ class MyPlugin_Admin_UI {
 	/**
 	 * Hide some admin columns by default, without completely removing them
 	 * (user can still override using Screen Options unless they've been completely disabled elsewhere)
+	 *
 	 * @param $hidden
 	 * @param $screen
 	 *
 	 * @return array
 	 */
 	function customise_default_hidden_columns($hidden, $screen): array {
-		$yoast = array('wpseo-score', 'wpseo-score-readability', 'wpseo-title', 'wpseo-metadesc', 'wpseo-focuskw', 'wpseo-links');
+		$yoast = array(
+			'wpseo-score',
+			'wpseo-score-readability',
+			'wpseo-title',
+			'wpseo-metadesc',
+			'wpseo-focuskw',
+			'wpseo-links'
+		);
 		if($screen->id === 'edit-post') {
 			return array_merge($hidden, $yoast, array('post_tag'));
 		}
@@ -163,7 +185,7 @@ class MyPlugin_Admin_UI {
 	 * @return void
 	 */
 	function promote_menu_items(): void {
-		if (is_plugin_active('woocommerce/woocommerce.php')) {
+		if(is_plugin_active('woocommerce/woocommerce.php')) {
 			remove_submenu_page('woocommerce', 'edit.php?post_type=shop_order');
 			add_menu_page(
 				__('Subscriptions', 'wapr'),
@@ -186,7 +208,7 @@ class MyPlugin_Admin_UI {
 				0
 			);
 
-			if (is_plugin_active('woocommerce-subscriptions/woocommerce-subscriptions.php')) {
+			if(is_plugin_active('woocommerce-subscriptions/woocommerce-subscriptions.php')) {
 				remove_submenu_page('woocommerce', 'edit.php?post_type=shop_subscription');
 				add_menu_page(
 					__('Subscriptions', 'wapr'),
@@ -242,7 +264,7 @@ class MyPlugin_Admin_UI {
 			'dashicons-welcome-write-blog',
 			0
 		);
-		if (is_plugin_active('woocommerce/woocommerce.php')) {
+		if(is_plugin_active('woocommerce/woocommerce.php')) {
 			add_menu_page(
 				__('Shop', 'woocommerce'),
 				'Shop',
@@ -276,12 +298,13 @@ class MyPlugin_Admin_UI {
 
 	/**
 	 * Customise the menu order and sectioning
+	 *
 	 * @param $menu_order
 	 *
 	 * @return string[]|true
 	 */
 	function customise_admin_menu_order_and_sections($menu_order): array|bool {
-		if (!$menu_order) {
+		if( ! $menu_order) {
 			return true;
 		}
 

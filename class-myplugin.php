@@ -12,7 +12,7 @@
  */
 
 // If this file is called directly, abort.
-if (!defined('WPINC')) {
+if( ! defined('WPINC')) {
 	die;
 }
 
@@ -150,7 +150,6 @@ class MyPlugin {
 	}
 
 
-
 	/**
 	 * Function to retrieve the version number of the plugin.
 	 * @wp-hook
@@ -185,11 +184,11 @@ class MyPlugin {
 	 */
 	public static function override_acf_json_save_location(): void {
 		// remove this filter so it will not affect other groups
-		remove_filter('acf/settings/save_json',  'override_acf_json_save_location', 9999);
+		remove_filter('acf/settings/save_json', 'override_acf_json_save_location', 9999);
 
 		add_filter('acf/settings/save_json', function($path) {
 			// remove this filter so it will not affect other groups
-			remove_filter('acf/settings/save_json', 'self::override_acf_json_save_location', 9999);
+			remove_filter('acf/settings/save_json', 'override_acf_json_save_location', 9999);
 
 			// override save path in this case
 			return MYPLUGIN_PLUGIN_PATH . 'assets/acf-json';
@@ -207,7 +206,7 @@ class MyPlugin {
 
 		return array(
 			'plugin' => array_values(array_filter($in_plugin, fn($item) => str_contains($item, '.json'))),
-			'theme' => array_values(array_filter($in_theme, fn($item) => str_contains($item, '.json')))
+			'theme'  => array_values(array_filter($in_theme, fn($item) => str_contains($item, '.json')))
 		);
 	}
 

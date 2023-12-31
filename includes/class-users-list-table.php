@@ -10,16 +10,17 @@ if(class_exists('WP_Users_List_Table')) {
 		 * @param string $role Deprecated. Not used.
 		 * @param int $numposts Optional. Post count to display for this user. Defaults
 		 *                             to zero, as in, a new user has made zero posts.
+		 *
 		 * @return string Output for a single row.
 		 * @since 4.4.0 The `$role` parameter was deprecated.
 		 *
 		 * @since 3.1.0
 		 * @since 4.2.0 The `$style` parameter was deprecated.
 		 */
-		public function single_row($user_object, $style = '', $role = '', $numposts = 0) {
+		public function single_row($user_object, $style = '', $role = '', $numposts = 0): string {
 
-			if(!($user_object instanceof WP_User)) {
-				$user_object = get_userdata((int)$user_object);
+			if( ! ($user_object instanceof WP_User)) {
+				$user_object = get_userdata((int) $user_object);
 			}
 			$user_object->filter = 'display';
 			$email = $user_object->user_email;
@@ -57,7 +58,7 @@ if(class_exists('WP_Users_List_Table')) {
 
 				if(current_user_can('edit_user', $user_object->ID)) {
 					// CUSTOMISED: Don't show for admins if the current user is a non-admin
-					if(in_array('administrator', $user_object->roles) && !current_user_can('administrator')) {
+					if(in_array('administrator', $user_object->roles) && ! current_user_can('administrator')) {
 						$edit = "<strong>{$user_object->user_login}{$super_admin}</strong><br />";
 					}
 					else {
@@ -69,15 +70,15 @@ if(class_exists('WP_Users_List_Table')) {
 					$edit = "<strong>{$user_object->user_login}{$super_admin}</strong><br />";
 				}
 
-				if(!is_multisite()
-					&& get_current_user_id() !== $user_object->ID
-					&& current_user_can('delete_user', $user_object->ID)
+				if( ! is_multisite()
+				    && get_current_user_id() !== $user_object->ID
+				    && current_user_can('delete_user', $user_object->ID)
 				) {
 					$actions['delete'] = "<a class='submitdelete' href='" . wp_nonce_url("users.php?action=delete&amp;user=$user_object->ID", 'bulk-users') . "'>" . __('Delete') . '</a>';
 				}
 
 				if(is_multisite()
-					&& current_user_can('remove_user', $user_object->ID)
+				   && current_user_can('remove_user', $user_object->ID)
 				) {
 					$actions['remove'] = "<a class='submitdelete' href='" . wp_nonce_url($url . "action=remove&amp;user=$user_object->ID", 'bulk-users') . "'>" . __('Remove') . '</a>';
 				}
@@ -96,7 +97,7 @@ if(class_exists('WP_Users_List_Table')) {
 
 				// Add a link to send the user a reset password link by email.
 				if(get_current_user_id() !== $user_object->ID
-					&& current_user_can('edit_user', $user_object->ID)
+				   && current_user_can('edit_user', $user_object->ID)
 				) {
 					$actions['resetpassword'] = "<a class='resetpassword' href='" . wp_nonce_url("users.php?action=resetpassword&amp;users=$user_object->ID", 'bulk-users') . "'>" . __('Send password reset') . '</a>';
 				}
@@ -108,6 +109,7 @@ if(class_exists('WP_Users_List_Table')) {
 				 *                              Default 'Edit', 'Delete' for single site, and
 				 *                              'Edit', 'Remove' for Multisite.
 				 * @param WP_User $user_object WP_User object for the currently listed user.
+				 *
 				 * @since 2.8.0
 				 *
 				 */
@@ -126,7 +128,7 @@ if(class_exists('WP_Users_List_Table')) {
 					$role_classes
 				);
 				// CUSTOMISED: Don't show for admins if the current user is a non-admin
-				if(in_array('administrator', $user_object->roles) && !current_user_can('administrator')) {
+				if(in_array('administrator', $user_object->roles) && ! current_user_can('administrator')) {
 					$checkbox = '';
 				}
 			}
@@ -222,6 +224,7 @@ if(class_exists('WP_Users_List_Table')) {
 							 * @param string $output Custom column output. Default empty.
 							 * @param string $column_name Column name.
 							 * @param int $user_id ID of the currently-listed user.
+							 *
 							 * @since 2.8.0
 							 *
 							 */
