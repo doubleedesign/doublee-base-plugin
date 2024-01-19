@@ -275,6 +275,17 @@ class MyPlugin_Admin_UI {
 				0
 			);
 		}
+		if(is_plugin_active('ninja-forms/ninja-forms.php')) {
+			add_menu_page(
+				__('Enquiries', 'starterkit'),
+				'Enquiries',
+				'manage_forms',
+				'section-title-enquiries',
+				'',
+				'dashicons-admin-comments',
+				0
+			);
+		}
 		add_menu_page(
 			__('People', 'starterkit'),
 			'People',

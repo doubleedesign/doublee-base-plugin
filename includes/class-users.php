@@ -14,9 +14,9 @@ class MyPlugin_Users {
 	public function __construct() {
 		$this->custom_roles = array(
 			array(
-				'key' => 'editor_plus',
-				'label' => 'Editor Plus',
-				'base_role' => 'editor',
+				'key'                     => 'editor_plus',
+				'label'                   => 'Editor Plus',
+				'base_role'               => 'editor',
 				'additional_capabilities' => array(
 					'edit_theme_options',
 					'list_users',
@@ -24,7 +24,7 @@ class MyPlugin_Users {
 					'promote_users',
 					'delete_users'
 				),
-				'custom_capabilities' => array(
+				'custom_capabilities'     => array(
 					'manage_forms'
 				)
 			)
@@ -32,8 +32,8 @@ class MyPlugin_Users {
 
 		add_filter('editable_roles', array($this, 'rejig_the_role_list'));
 		add_action('init', array($this, 'customise_capabilities'));
-		add_action('admin_init', array($this, 'apply_manage_forms_capability'));
-		add_filter('user_row_actions', array($this, 'restrict_user_list_actions', 10, 2));
+		add_action('init', array($this, 'apply_manage_forms_capability'), 10);
+		add_filter('user_row_actions', array($this, 'restrict_user_list_actions'), 10, 2);
 		add_filter('wp_list_table_class_name', array($this, 'custom_user_list_table'), 10, 2);
 		add_action('current_screen', array($this, 'restrict_user_edit_screen'));
 	}
@@ -70,27 +70,51 @@ class MyPlugin_Users {
 		}
 
 		$admin_role = get_role('administrator');
-       		$admin_role->add_cap('manage_forms');
+		$admin_role->add_cap('manage_forms');
 	}
 
 
+	function get_manage_forms_capability($cap): string {
+		return 'manage_forms';
+	}
+
+	function can_current_user_manage_forms(): bool {
+		return current_user_can('manage_forms');
+	}
+
 	/**
 	 * Use custom capability manage_forms to grant access to Ninja Forms admin stuff
-	 * @wp-hook
-	 *
-	 * @return void
 	 */
 	function apply_manage_forms_capability(): void {
 
-		function get_manage_forms_capability(): string {
-			return 'manage_forms';
-		}
-
 		if(is_plugin_active('ninja-forms/ninja-forms.php')) {
-			add_filter('ninja_forms_admin_parent_menu_capabilities', 'get_manage_forms_capability'); // Parent Menu
-			add_filter('ninja_forms_admin_all_forms_capabilities', 'get_manage_forms_capability'); // Forms
-			add_filter('ninja_forms_admin_submissions_capabilities', 'get_manage_forms_capability'); // Submissions
-			add_filter('ninja_forms_admin_import_export_capabilities', 'get_manage_forms_capability'); // Import/Export
+
+			add_filter('ninja_forms_admin_parent_menu_capabilities', array(
+				$this,
+				'get_manage_forms_capability'
+			));// Parent Menu
+			add_filter('ninja_forms_admin_all_forms_capabilities', array($this, 'get_manage_forms_capability'));// Forms
+			add_filter('ninja_forms_admin_submissions_capabilities', array(
+				$this,
+				'get_manage_forms_capability'
+			));// Submissions
+			add_filter('ninja_forms_admin_import_export_capabilities', array(
+				$this,
+				'get_manage_forms_capability'
+			));    // Import/Export
+
+			// New settings required as per Ninja Forms 3.6
+			add_filter('ninja_forms_api_allow_get_submissions', array($this, 'can_current_user_manage_forms'), 10, 2);
+			add_filter('ninja_forms_api_allow_delete_submissions', array(
+				$this,
+				'can_current_user_manage_forms'
+			), 10, 2);
+			add_filter('ninja_forms_api_allow_update_submission', array($this, 'can_current_user_manage_forms'), 10, 2);
+			add_filter('ninja_forms_api_allow_handle_extra_submission', array(
+				$this,
+				'can_current_user_manage_forms'
+			), 10, 2);
+			add_filter('ninja_forms_api_allow_email_action', array($this, 'can_current_user_manage_forms'), 10, 2);
 		}
 	}
 
@@ -145,6 +169,7 @@ class MyPlugin_Users {
 	 * THIS IS A DESTRUCTIVE OPERATION, USE WITH CARE!
 	 *
 	 * @param bool $permanently
+	 *
 	 * @return void
 	 */
 	function revert_users_roles(bool $permanently): void {
@@ -185,6 +210,7 @@ class MyPlugin_Users {
 	/**
 	 * Function to be used to reorder the list of roles in the WordPress admin
 	 * @wp-hook
+	 *
 	 * @param $roles
 	 *
 	 * @return WP_Role[]
@@ -192,10 +218,10 @@ class MyPlugin_Users {
 	function rejig_the_role_list($roles): array {
 		$updated = $roles;
 		uasort($updated, function($a, $b) {
-			return ($a < $b) ? -1 : 1;
+			return ($a < $b) ? - 1 : 1;
 		});
 
-		if(!current_user_can('administrator')) {
+		if( ! current_user_can('administrator')) {
 			unset($updated['administrator']);
 		}
 
@@ -211,6 +237,7 @@ class MyPlugin_Users {
 	 *
 	 * @param $class_name
 	 * @param $args
+	 *
 	 * @return string
 	 */
 	function custom_user_list_table($class_name, $args): string {
@@ -228,13 +255,14 @@ class MyPlugin_Users {
 	 * Remove action links in user table for non-admins with user editing/deletion capabilities
 	 * To be run on user_row_actions filter
 	 * @wp-hook
+	 *
 	 * @param $actions
 	 * @param $user_object
 	 *
 	 * @return array
 	 */
 	function restrict_user_list_actions($actions, $user_object): array {
-		if(!current_user_can('administrator') && in_array('administrator', $user_object->roles)) {
+		if( ! current_user_can('administrator') && in_array('administrator', $user_object->roles)) {
 			unset($actions['edit']);
 			unset($actions['delete']);
 			unset($actions['resetpassword']);
@@ -246,18 +274,19 @@ class MyPlugin_Users {
 
 	/**
 	 * Restrict the user editing screen so users who can see admins in the list can't edit their profiles
+	 *
 	 * @param $current_screen
 	 *
 	 * @return void
 	 */
 	function restrict_user_edit_screen($current_screen): void {
-		if($current_screen->id === 'user-edit' && !current_user_can('administrator')) {
+		if($current_screen->id === 'user-edit' && ! current_user_can('administrator')) {
 			$user_id = $_REQUEST['user_id'];
 			$user = get_user_by('id', $user_id);
 
 			if(in_array('administrator', $user->roles)) {
-				wp_die( __("<p>You don't have sufficient permissions to edit this user.</p><p><a class='button button-primary' href='/wp-admin/users.php'>Go back</a></p>"),
-					403 );
+				wp_die(__("<p>You don't have sufficient permissions to edit this user.</p><p><a class='button button-primary' href='/wp-admin/users.php'>Go back</a></p>"),
+					403);
 			}
 		}
 	}

@@ -26,11 +26,12 @@ Please see the [changelog](CHANGELOG.md) for more information and the latest upd
 4. Rename and find & replace references to `MYPLUGIN_VERSION` and `MYPLUGIN_PLUGIN_PATH`.
 5. Do a case-sensitive find and replace throughout the folder for `myplugin`, replacing it with the all-lowercase name of your plugin.
 6. Do a case-sensitive find and replace throughout the folder for `MyPlugin`, replacing it with the PascalCase name of your plugin.
-7. Find & replace `@author     Leesa Ward` with your name throughout.
-8. Remove/modify/add to the provided classes to suit your needs.
-9. Add your own classes for the units of functionality you require.
-10. More code stuff. Build all the things.
-11. Profit.
+7. Fix the path to the admin CSS file in `class-admin-ui.php`.
+8. Find & replace `@author     Leesa Ward` with your name throughout.
+9. Remove/modify/add to the provided classes to suit your needs.
+10. Add your own classes for the units of functionality you require.
+11. More code stuff. Build all the things.
+12. Profit.
 
 ## General intentions and advice
 
