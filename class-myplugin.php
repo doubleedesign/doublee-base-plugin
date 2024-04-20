@@ -12,7 +12,7 @@
  */
 
 // If this file is called directly, abort.
-if( ! defined('WPINC')) {
+if (!defined('WPINC')) {
 	die;
 }
 
@@ -20,7 +20,7 @@ if( ! defined('WPINC')) {
  * Current plugin version.
  * Rename this for your plugin and update it as you release new versions.
  */
-const MYPLUGIN_VERSION = '2.0.0';
+const MYPLUGIN_VERSION = '1.1.0';
 
 
 /**
@@ -98,7 +98,10 @@ class MyPlugin {
 		require_once MYPLUGIN_PLUGIN_PATH . '/includes/class-admin-ui.php';
 		new MyPlugin_Admin_UI();
 
-		if(class_exists('WooCommerce')) {
+		require_once MYPLUGIN_PLUGIN_PATH . '/includes/class-seo.php';
+		new MyPlugin_SEO();
+
+		if (class_exists('WooCommerce')) {
 			require_once MYPLUGIN_PLUGIN_PATH . '/includes/class-woocommerce.php';
 			new MyPlugin_WooCommerce();
 		}
@@ -184,11 +187,11 @@ class MyPlugin {
 	 */
 	public static function override_acf_json_save_location(): void {
 		// remove this filter so it will not affect other groups
-		remove_filter('acf/settings/save_json', 'override_acf_json_save_location', 9999);
+		remove_filter('acf/settings/save_json', 'override_acf_json_save_location', 400);
 
-		add_filter('acf/settings/save_json', function($path) {
+		add_filter('acf/settings/save_json', function ($path) {
 			// remove this filter so it will not affect other groups
-			remove_filter('acf/settings/save_json', 'override_acf_json_save_location', 9999);
+			remove_filter('acf/settings/save_json', 'override_acf_json_save_location', 400);
 
 			// override save path in this case
 			return MYPLUGIN_PLUGIN_PATH . 'assets/acf-json';
@@ -201,12 +204,20 @@ class MyPlugin {
 	 * @return array
 	 */
 	public static function get_acf_json_filenames(): array {
+		$in_events_plugin = array();
 		$in_plugin = scandir(MYPLUGIN_PLUGIN_PATH . 'assets/acf-json/');
-		$in_theme = scandir(get_template_directory() . '/acf-json/');
+		$in_parent_theme = scandir(get_template_directory() . '/acf-json/');
+		$in_theme = scandir(get_stylesheet_directory() . '/acf-json/');
+
+		if (class_exists('Doublee_Events') && defined('DOUBLEE_EVENTS_PLUGIN_PATH')) {
+			$in_events_plugin = scandir(DOUBLEE_EVENTS_PLUGIN_PATH . 'assets/acf-json/');
+		}
 
 		return array(
-			'plugin' => array_values(array_filter($in_plugin, fn($item) => str_contains($item, '.json'))),
-			'theme'  => array_values(array_filter($in_theme, fn($item) => str_contains($item, '.json')))
+			'plugin'        => array_values(array_filter($in_plugin, fn($item) => str_contains($item, '.json'))),
+			'parent_theme'  => array_values(array_filter($in_parent_theme, fn($item) => str_contains($item, '.json'))),
+			'theme'         => array_values(array_filter($in_theme, fn($item) => str_contains($item, '.json'))),
+			'events_plugin' => class_exists('Doublee_Events') ? array_values(array_filter($in_events_plugin, fn($item) => str_contains($item, '.json'))) : array()
 		);
 	}
 

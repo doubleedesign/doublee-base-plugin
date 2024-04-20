@@ -5,7 +5,6 @@
  *
  * @since      1.0.0
  * @package    MyPlugin
- * @subpackage MyPlugin/includes
  * @author     Leesa Ward
  */
 class MyPlugin_Users {
@@ -25,14 +24,16 @@ class MyPlugin_Users {
 					'delete_users'
 				),
 				'custom_capabilities'     => array(
-					'manage_forms'
+					'manage_forms',
+					'manage_socials'
 				)
-			)
+			),
 		);
 
 		add_filter('editable_roles', array($this, 'rejig_the_role_list'));
 		add_action('init', array($this, 'customise_capabilities'));
-		add_action('init', array($this, 'apply_manage_forms_capability'), 10);
+		add_action('admin_init', array($this, 'apply_manage_forms_capability'));
+		add_action('init', array($this, 'apply_manage_socials_capability'), 20);
 		add_filter('user_row_actions', array($this, 'restrict_user_list_actions'), 10, 2);
 		add_filter('wp_list_table_class_name', array($this, 'custom_user_list_table'), 10, 2);
 		add_action('current_screen', array($this, 'restrict_user_edit_screen'));
@@ -71,6 +72,7 @@ class MyPlugin_Users {
 
 		$admin_role = get_role('administrator');
 		$admin_role->add_cap('manage_forms');
+		$admin_role->add_cap('manage_socials');
 	}
 
 
@@ -115,6 +117,24 @@ class MyPlugin_Users {
 				'can_current_user_manage_forms'
 			), 10, 2);
 			add_filter('ninja_forms_api_allow_email_action', array($this, 'can_current_user_manage_forms'), 10, 2);
+		}
+	}
+
+	function get_manage_socials_capability($cap): string {
+		return 'manage_socials';
+	}
+
+	function can_current_user_manage_socials(): bool {
+		return current_user_can('manage_socials');
+	}
+
+	function apply_manage_socials_capability(): void {
+		if(function_exists('sb_instagram_feed_init')) {
+			add_filter('manage_instagram_feed_options', array($this, 'get_manage_socials_capability'), 10, 1);
+			add_filter('sbi_settings_pages_capability', array($this, 'get_manage_socials_capability'), 10, 1);
+		}
+		if(defined('CFF_PLUGIN_DIR')) {
+			add_filter('cff_settings_pages_capability', array($this, 'get_manage_socials_capability'), 10, 1);
 		}
 	}
 
@@ -221,7 +241,7 @@ class MyPlugin_Users {
 			return ($a < $b) ? - 1 : 1;
 		});
 
-		if( ! current_user_can('administrator')) {
+		if( !current_user_can('administrator')) {
 			unset($updated['administrator']);
 		}
 
@@ -262,7 +282,7 @@ class MyPlugin_Users {
 	 * @return array
 	 */
 	function restrict_user_list_actions($actions, $user_object): array {
-		if( ! current_user_can('administrator') && in_array('administrator', $user_object->roles)) {
+		if( !current_user_can('administrator') && in_array('administrator', $user_object->roles)) {
 			unset($actions['edit']);
 			unset($actions['delete']);
 			unset($actions['resetpassword']);
@@ -280,7 +300,7 @@ class MyPlugin_Users {
 	 * @return void
 	 */
 	function restrict_user_edit_screen($current_screen): void {
-		if($current_screen->id === 'user-edit' && ! current_user_can('administrator')) {
+		if($current_screen->id === 'user-edit' && !current_user_can('administrator')) {
 			$user_id = $_REQUEST['user_id'];
 			$user = get_user_by('id', $user_id);
 

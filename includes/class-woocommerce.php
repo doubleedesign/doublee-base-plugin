@@ -3,9 +3,8 @@
 /**
  * This class defines functions to customise WooCommerce functionality.
  *
- * @since      2.0.0
+ * @since      1.0.0
  * @package    MyPlugin
- * @subpackage MyPlugin/includes
  * @author     Leesa Ward
  */
 class MyPlugin_WooCommerce {
@@ -31,30 +30,30 @@ class MyPlugin_WooCommerce {
 	}
 
 	/**
-	* Simplify admin menu by removing things we don't expect to use, such as promotion of extensions
-	* @param $features
-	*
-	* @return array
-	*/
-    function disable_some_admin_features($features): array {
-        // Note re Marketing:
-        // Make sure 'wc_admin_show_legacy_coupon_menu' in wp_options table is set to 1 so Coupons is in the main Woo menu
+	 * Simplify admin menu by removing things we don't expect to use, such as promotion of extensions
+	 * @param $features
+	 *
+	 * @return array
+	 */
+	function disable_some_admin_features($features): array {
+		// Note re Marketing:
+		// Make sure 'wc_admin_show_legacy_coupon_menu' in wp_options table is set to 1 so Coupons is in the main Woo menu
 
-        return array_values(
-            array_filter($features, function ($feature) {
-                return !in_array($feature, array(
-                    'homescreen',
-                    'onboarding',
-                    'onboarding-tasks',
-                    'marketing',
-                    'wc-pay-promotion',
-                    'wc-pay-welcome-page',
-                    'mobile-app-banner',
-                    'product-block-editor'
-                ));
-            })
-        );
-    }
+		return array_values(
+			array_filter($features, function($feature) {
+				return !in_array($feature, array(
+					'homescreen',
+					'onboarding',
+					'onboarding-tasks',
+					'marketing',
+					'wc-pay-promotion',
+					'wc-pay-welcome-page',
+					'mobile-app-banner',
+					'product-block-editor'
+				));
+			})
+		);
+	}
 
 
 	/**
