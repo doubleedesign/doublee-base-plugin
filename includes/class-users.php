@@ -4,10 +4,10 @@
  * This class defines functions to set up custom user roles and capabilities.
  *
  * @since      1.0.0
- * @package    MyPlugin
+ * @package    Doublee
  * @author     Leesa Ward
  */
-class MyPlugin_Users {
+class Doublee_Users {
 	protected array $custom_roles;
 
 	public function __construct() {
@@ -264,7 +264,7 @@ class MyPlugin_Users {
 		include('class-users-list-table.php');
 
 		if($args['screen']->id === 'users') {
-			$class_name = 'MyPlugin_Users_List_Table';
+			$class_name = 'Doublee_Users_List_Table';
 		}
 
 		return $class_name;

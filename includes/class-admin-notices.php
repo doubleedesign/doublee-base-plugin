@@ -4,10 +4,10 @@
  * This class defines functions to add admin messages.
  *
  * @since      1.0.0
- * @package    MyPlugin
+ * @package    Doublee
  * @author     Leesa Ward
  */
-class MyPlugin_Admin_Notices {
+class Doublee_Admin_Notices {
 
     public function __construct() {
         add_action('admin_notices', array($this, 'required_plugins_notification'));
@@ -30,7 +30,7 @@ class MyPlugin_Admin_Notices {
 
         if (count($warnings) > 0) {
             echo '<div class="notice notice-error">';
-            echo '<p>The ' . MyPlugin::get_name() . ' plugin requires the following plugins to be installed and activated for full functionality. Without them, some features may be missing or not work as expected.</p>';
+            echo '<p>The ' . Doublee::get_name() . ' plugin requires the following plugins to be installed and activated for full functionality. Without them, some features may be missing or not work as expected.</p>';
             echo '<ul>';
             foreach ($warnings as $warning) {
                 echo '<li>' . $warning . '</li>';

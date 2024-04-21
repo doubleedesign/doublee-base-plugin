@@ -4,10 +4,10 @@
  * This class defines basic SEO functionality for sensible defaults in the absence of an SEO plugin.
  *
  * @since      1.0.0
- * @package    MyPlugin
+ * @package    Doublee
  * @author     Leesa Ward
  */
-class MyPlugin_SEO {
+class Doublee_SEO {
 
 	public function __construct() {
 		add_filter('wp_title', [$this, 'basic_seo_title'], 10, 2);

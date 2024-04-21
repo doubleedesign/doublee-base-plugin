@@ -4,10 +4,10 @@
  * This class defines functions to customise WooCommerce functionality.
  *
  * @since      1.0.0
- * @package    MyPlugin
+ * @package    Doublee
  * @author     Leesa Ward
  */
-class MyPlugin_WooCommerce {
+class Doublee_WooCommerce {
 
 	public function __construct() {
 		add_filter('woocommerce_product_data_tabs', array($this, 'customise_product_data_tabs'), 50);
@@ -59,7 +59,7 @@ class MyPlugin_WooCommerce {
 	/**
 	 * Move the Product Data box to the top
 	 * Note: The after_title context is custom and has to be run on the edit_form_after_title hook;
-	 *       at the time of writing this was done in the MyPlugin_Admin_UI class
+	 *       at the time of writing this was done in the Doublee_Admin_UI class
 	 * @return void
 	 */
 	function custom_meta_box_positions(): void {

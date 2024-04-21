@@ -1,6 +1,6 @@
 <?php
 if(class_exists('WP_Users_List_Table')) {
-	class MyPlugin_Users_List_Table extends WP_Users_List_Table {
+	class Doublee_Users_List_Table extends WP_Users_List_Table {
 
 		/**
 		 * Generate HTML for a single row on the users.php admin panel.

@@ -20,24 +20,24 @@ if (!defined('WPINC')) {
  * Current plugin version.
  * Rename this for your plugin and update it as you release new versions.
  */
-const MYPLUGIN_VERSION = '1.1.0';
+const DOUBLEE_VERSION = '2.1.0';
 
 
 /**
  * Path of plugin root folder
  */
-define('MYPLUGIN_PLUGIN_PATH', plugin_dir_path(__FILE__));
+define('DOUBLEE_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
 
 /**
  * The core plugin class
  *
  * @since      1.0.0
- * @package    MyPlugin
- * @subpackage MyPlugin/includes
+ * @package    Doublee
+ * @subpackage Doublee/includes
  * @author     Leesa Ward
  */
-class MyPlugin {
+class Doublee {
 
 	/**
 	 * The current version of the plugin.
@@ -62,7 +62,7 @@ class MyPlugin {
 	 * - Is one method more efficient than another?
 	 * - Which way might be clearer and easier to understand? Are there any downsides to the "easier" way?
 	 */
-	private static MyPlugin_Users $user_functions;
+	private static Doublee_Users $user_functions;
 
 
 	/**
@@ -72,7 +72,7 @@ class MyPlugin {
 	 * @since    2.0.0
 	 */
 	public function __construct() {
-		$this->version = MYPLUGIN_VERSION;
+		$this->version = DOUBLEE_VERSION;
 
 		// Call the function that initialises our classes
 		// and sets up some values that can be used throughout this file
@@ -89,21 +89,21 @@ class MyPlugin {
 	 * @access   private
 	 */
 	private function load_classes(): void {
-		require_once MYPLUGIN_PLUGIN_PATH . '/includes/class-users.php';
-		self::$user_functions = new MyPlugin_Users();
+		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-users.php';
+		self::$user_functions = new Doublee_Users();
 
-		require_once MYPLUGIN_PLUGIN_PATH . '/includes/class-admin-notices.php';
-		new MyPlugin_Admin_Notices();
+		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-admin-notices.php';
+		new Doublee_Admin_Notices();
 
-		require_once MYPLUGIN_PLUGIN_PATH . '/includes/class-admin-ui.php';
-		new MyPlugin_Admin_UI();
+		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-admin-ui.php';
+		new Doublee_Admin_UI();
 
-		require_once MYPLUGIN_PLUGIN_PATH . '/includes/class-seo.php';
-		new MyPlugin_SEO();
+		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-seo.php';
+		new Doublee_SEO();
 
 		if (class_exists('WooCommerce')) {
-			require_once MYPLUGIN_PLUGIN_PATH . '/includes/class-woocommerce.php';
-			new MyPlugin_WooCommerce();
+			require_once DOUBLEE_PLUGIN_PATH . '/includes/class-woocommerce.php';
+			new Doublee_WooCommerce();
 		}
 	}
 
@@ -173,7 +173,7 @@ class MyPlugin {
 	 * @since     1.0.0
 	 */
 	public static function get_name(): string {
-		$plugin_data = get_plugin_data(MYPLUGIN_PLUGIN_PATH . 'myplugin.php');
+		$plugin_data = get_plugin_data(DOUBLEE_PLUGIN_PATH . 'doublee.php');
 
 		return $plugin_data['Name'];
 	}
@@ -194,7 +194,7 @@ class MyPlugin {
 			remove_filter('acf/settings/save_json', 'override_acf_json_save_location', 400);
 
 			// override save path in this case
-			return MYPLUGIN_PLUGIN_PATH . 'assets/acf-json';
+			return DOUBLEE_PLUGIN_PATH . 'assets/acf-json';
 		}, 9999);
 	}
 
@@ -205,7 +205,7 @@ class MyPlugin {
 	 */
 	public static function get_acf_json_filenames(): array {
 		$in_events_plugin = array();
-		$in_plugin = scandir(MYPLUGIN_PLUGIN_PATH . 'assets/acf-json/');
+		$in_plugin = scandir(DOUBLEE_PLUGIN_PATH . 'assets/acf-json/');
 		$in_parent_theme = scandir(get_template_directory() . '/acf-json/');
 		$in_theme = scandir(get_stylesheet_directory() . '/acf-json/');
 

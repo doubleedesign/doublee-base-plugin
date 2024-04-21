@@ -6,10 +6,10 @@
  * Note: Customisations specific to WooCommerce should be placed in class-woocommerce.php.
  *
  * @since      1.0.0
- * @package    MyPlugin
+ * @package    Doublee
  * @author     Leesa Ward
  */
-class MyPlugin_Admin_UI {
+class Doublee_Admin_UI {
 
 	public function __construct() {
 		add_action('acf/update_field_group', array($this, 'save_acf_global_options_to_plugin'), 1);
@@ -43,7 +43,7 @@ class MyPlugin_Admin_UI {
 	 * @return array
 	 */
 	function load_acf_fields_from_plugin($paths): array {
-		$paths[] = MYPLUGIN_PLUGIN_PATH . 'assets/acf-json/';
+		$paths[] = DOUBLEE_PLUGIN_PATH . 'assets/acf-json/';
 
 		return $paths;
 	}
@@ -59,11 +59,11 @@ class MyPlugin_Admin_UI {
 	 */
 	function show_where_acf_fields_are_loaded_from($column_key, $post_id): void {
 		if ($column_key === 'acf-json') {
-			$files = MyPlugin::get_acf_json_filenames();
+			$files = Doublee::get_acf_json_filenames();
 			$post = get_post($post_id);
 			$key = $post->post_name;
 			if (in_array($key . '.json', $files['plugin'])) {
-				echo ' in ' . MyPlugin::get_name() . ' plugin';
+				echo ' in ' . Doublee::get_name() . ' plugin';
 			}
 			if (in_array($key . '.json', $files['events_plugin'])) {
 				echo ' in Events plugin';
@@ -105,7 +105,7 @@ class MyPlugin_Admin_UI {
 	 */
 	function save_acf_global_options_to_plugin($group): void {
 		if ($group['key'] === 'group_5876ae3e825e9') {
-			MyPlugin::override_acf_json_save_location();
+			Doublee::override_acf_json_save_location();
 		}
 	}
 

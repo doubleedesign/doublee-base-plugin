@@ -1,4 +1,16 @@
-# Double-E Plugin Framework changelog
+# Double-E Plugin changelog
+
+## Version 2.1.0
+Date: 21 April 2024
+
+### Approach change
+- Renamed plugin and updated README to reflect using this plugin as-is across client sites because much of the functionality doesn't change, it just gets added to. So it makes sense to make this more easily updatable and put further customisations in a second, per-client plugin. 
+
+### General fixes and improvements
+- `show_where_acf_fields_are_loaded_from`: Account for Double-E Events plugin
+- Better account for WooCommerce and Ninja Forms in admin menu sectioning/ordering
+- Add basic SEO-friendly title for sites that don't require a full SEO plugin (intending to add more basic SEO functionality)
+- Add permissions to Editor Plus role for managing Smash Balloon Instagram and Facebook plugin settings
 
 ## Version 2.0.0
 Date: 4 November 2023
@@ -51,7 +63,7 @@ function save_acf_fields_to_plugin($group): void {
     });
 
     if($is_shown_on_cpt) {
-        MyPlugin::override_acf_json_save_location();
+        Doublee::override_acf_json_save_location();
     }
 }
 ```

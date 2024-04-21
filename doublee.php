@@ -1,21 +1,20 @@
 <?php
 /**
- * Plugin name: Double-E Plugin Framework
- * Description: Starter files for creating a plugin in an OOP fashion.
- * Rename and find & replace MyPlugin, myplugin etc to suit your needs, and update the name and this description.
+ * Plugin name: Double-E Design Base Plugin
+ * Description: Customisations and common custom functionality for Double-E Design websites.
  *
  * Author:      		Leesa Ward
  * Author URI:  		https://www.leesaward.dev
- * Version:     		2.0.0
+ * Version:     		2.1.0
  * Requires at least: 	6.3.2
  * Requires PHP: 		8.1.9
- * Text Domain: 		myplugin
+ * Text Domain: 		doublee
  *
- * @package MyPlugin
+ * @package Doublee
  */
 
 // Load the plugin files
-require_once('class-myplugin.php');
+require_once('class-doublee.php');
 
 /**
  * Create activation and deactivation hooks and functions, so we can do things
@@ -24,22 +23,22 @@ require_once('class-myplugin.php');
  * classes, we simply call a function (from the plugin class) inside the function that needs to be here.
  * @return void
  */
-function activate_myplugin(): void {
-	MyPlugin::activate();
+function activate_doublee(): void {
+	Doublee::activate();
 }
-function deactivate_myplugin(): void {
-	MyPlugin::deactivate();
+function deactivate_doublee(): void {
+	Doublee::deactivate();
 }
-function uninstall_myplugin(): void {
-	MyPlugin::uninstall();
+function uninstall_doublee(): void {
+	Doublee::uninstall();
 }
-register_activation_hook(__FILE__, 'activate_myplugin');
-register_deactivation_hook(__FILE__, 'deactivate_myplugin');
-register_uninstall_hook(__FILE__, 'uninstall_myplugin');
+register_activation_hook(__FILE__, 'activate_doublee');
+register_deactivation_hook(__FILE__, 'deactivate_doublee');
+register_uninstall_hook(__FILE__, 'uninstall_doublee');
 
 
 // Load and run the rest of the plugin
-new MyPlugin();
+new Doublee();
 
 
 /**
