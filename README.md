@@ -3,7 +3,7 @@
 Common customisations for client websites.
 
 ## What's included
-
+ - ACF fields for logo, contact information, social media links etc
  - Admin notices for required/recommended plugins
  - Defaults for hiding and positioning of certain metaboxes in the admin edit screens (for simplicity)
  - Defaults for hiding and positioning of certain columns in the admin list tables (for simplicity)
