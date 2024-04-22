@@ -428,7 +428,7 @@ class Doublee_Admin_UI {
 	 * @return void
 	 */
 	function admin_css(): void {
-		wp_enqueue_style('doublee-plugin-admin', '/wp-content/plugins/doublee-plugin-framework/assets/admin-styles.css');
+		wp_enqueue_style('doublee-plugin-admin', '/wp-content/plugins/doublee-base-plugin/assets/admin-styles.css');
 	}
 
 
