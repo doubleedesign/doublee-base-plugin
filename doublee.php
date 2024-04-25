@@ -4,7 +4,7 @@
  * Description: Customisations and common custom functionality for Double-E Design websites.
  *
  * Author:      		Leesa Ward
- * Author URI:  		https://www.leesaward.dev
+ * Author URI:  		https://www.doubleedesign.com.au
  * Version:     		2.1.0
  * Requires at least: 	6.3.2
  * Requires PHP: 		8.1.9
