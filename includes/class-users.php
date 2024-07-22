@@ -32,7 +32,7 @@ class Doublee_Users {
 
 		add_filter('editable_roles', array($this, 'rejig_the_role_list'));
 		add_action('init', array($this, 'customise_capabilities'));
-		add_action('admin_init', array($this, 'apply_manage_forms_capability'));
+		add_action('init', array($this, 'apply_manage_forms_capability'), 20);
 		add_action('init', array($this, 'apply_manage_socials_capability'), 20);
 		add_filter('user_row_actions', array($this, 'restrict_user_list_actions'), 10, 2);
 		add_filter('wp_list_table_class_name', array($this, 'custom_user_list_table'), 10, 2);
@@ -91,19 +91,24 @@ class Doublee_Users {
 
 		if(is_plugin_active('ninja-forms/ninja-forms.php')) {
 
+            // Parent Menu
 			add_filter('ninja_forms_admin_parent_menu_capabilities', array(
 				$this,
 				'get_manage_forms_capability'
-			));// Parent Menu
+			));
 			add_filter('ninja_forms_admin_all_forms_capabilities', array($this, 'get_manage_forms_capability'));// Forms
-			add_filter('ninja_forms_admin_submissions_capabilities', array(
+
+            // Submissions
+            add_filter('ninja_forms_admin_submissions_capabilities', array(
 				$this,
 				'get_manage_forms_capability'
-			));// Submissions
+			));
+
+            // Import/Export
 			add_filter('ninja_forms_admin_import_export_capabilities', array(
 				$this,
 				'get_manage_forms_capability'
-			));    // Import/Export
+			));
 
 			// New settings required as per Ninja Forms 3.6
 			add_filter('ninja_forms_api_allow_get_submissions', array($this, 'can_current_user_manage_forms'), 10, 2);

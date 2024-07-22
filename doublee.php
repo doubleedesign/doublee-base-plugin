@@ -5,7 +5,7 @@
  *
  * Author:      		Leesa Ward
  * Author URI:  		https://www.doubleedesign.com.au
- * Version:     		2.1.0
+ * Version:     		2.1.1
  * Requires at least: 	6.3.2
  * Requires PHP: 		8.1.9
  * Text Domain: 		doublee
