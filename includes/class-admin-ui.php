@@ -24,6 +24,7 @@ class Doublee_Admin_UI {
 		add_action('admin_init', array($this, 'remove_welcome_panel'));
 		add_action('admin_menu', array($this, 'promote_menu_items'));
 		add_action('admin_menu', array($this, 'rename_menu_items'));
+        add_action('admin_menu', array($this, 'remove_gutenberg_menu_item'), 999);
 		add_action('admin_menu', array($this, 'add_menu_section_titles'));
 		add_filter('menu_order', array($this, 'customise_admin_menu_order_and_sections'), 99);
 		add_filter('custom_menu_order', array($this, 'customise_admin_menu_order_and_sections'));
@@ -254,6 +255,11 @@ class Doublee_Admin_UI {
 			}
 		}
 	}
+
+
+    function remove_gutenberg_menu_item(): void {
+        remove_menu_page('gutenberg');
+    }
 
 
 	/**
