@@ -27,3 +27,7 @@ li.toplevel_page_section-title-people .wp-menu-name,
 li.toplevel_page_section-title-config .wp-menu-name {
 	font-weight: bold;
 }
+
+.block-editor-tabbed-sidebar {
+	width: 250px;
+}
