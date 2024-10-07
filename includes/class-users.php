@@ -60,20 +60,26 @@ class Doublee_Users {
 	 * @return void
 	 */
 	function customise_capabilities(): void {
-		foreach($this->custom_roles as $custom_role) {
-			$the_role = get_role($custom_role['key']);
-			foreach($custom_role['additional_capabilities'] as $capability) {
-				$the_role->add_cap($capability);
-			}
-			foreach($custom_role['custom_capabilities'] as $capability) {
-				$the_role->add_cap($capability);
-			}
-		}
+        if($this->custom_roles) {
+            foreach ($this->custom_roles as $custom_role) {
+                $the_role = get_role($custom_role['key']);
+                if ($the_role && $custom_role['additional_capabilities']) {
+                    foreach ($custom_role['additional_capabilities'] as $capability) {
+                        $the_role->add_cap($capability);
+                    }
+                }
+                if($the_role && $custom_role['custom_capabilities']) {
+                    foreach ($custom_role['custom_capabilities'] as $capability) {
+                        $the_role->add_cap($capability);
+                    }
+                }
+            }
+        }
 
-		$admin_role = get_role('administrator');
-		$admin_role->add_cap('manage_forms');
-		$admin_role->add_cap('manage_socials');
-	}
+        $admin_role = get_role('administrator');
+        $admin_role->add_cap('manage_forms');
+        $admin_role->add_cap('manage_socials');
+    }
 
 
 	function get_manage_forms_capability($cap): string {
