@@ -94,6 +94,9 @@ class Doublee_Users {
 	 * Use custom capability manage_forms to grant access to Ninja Forms admin stuff
 	 */
 	function apply_manage_forms_capability(): void {
+        if ( ! function_exists( 'is_plugin_active' ) ) {
+            include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+        }
 
 		if(is_plugin_active('ninja-forms/ninja-forms.php')) {
 

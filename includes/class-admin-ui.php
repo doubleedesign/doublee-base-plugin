@@ -12,24 +12,43 @@
 class Doublee_Admin_UI {
 
 	public function __construct() {
+        // Customise where ACF fields are loaded from and saved to
+        add_filter('acf/settings/load_json', array($this, 'load_acf_fields_from_plugin'));
+        add_filter('manage_acf-field-group_posts_custom_column', array($this, 'show_where_acf_fields_are_loaded_from'), 100, 2);
+        add_action('acf/init', array($this, 'setup_acf_global_options'), 5);
 		add_action('acf/update_field_group', array($this, 'save_acf_global_options_to_plugin'), 1);
-		add_filter('manage_acf-field-group_posts_custom_column', array(
-			$this,
-			'show_where_acf_fields_are_loaded_from'
-		), 100, 2);
-		add_action('acf/init', array($this, 'setup_acf_global_options'), 5);
-		add_filter('acf/settings/load_json', array($this, 'load_acf_fields_from_plugin'));
+
+        // Disable ACF's post type, taxonomy, and options pages features because I code these things in via this plugin and/or client-specific plugins
+        add_filter('acf/settings/enable_post_types', '__return_false');
+        add_filter('acf/settings/enable_options_pages_ui', '__return_false');
+
+        // Specify which ACF Extended features to enable and disable
+        add_filter('acfe/init', array($this, 'select_acfe_features'));
+        add_filter('acf/get_field_types', array($this, 'disable_some_acfe_fields'));
+        // Also disable some core ACF fields
+        add_filter('acf/get_field_types', array($this, 'disable_some_acf_fields'));
+
+        // General admin screen customisations
 		add_filter('hidden_meta_boxes', array($this, 'customise_default_hidden_metaboxes'), 10, 2);
 		add_filter('default_hidden_columns', array($this, 'customise_default_hidden_columns'), 10, 2);
 		add_action('admin_init', array($this, 'remove_welcome_panel'));
+        add_action('wp_network_dashboard_setup', array($this, 'remove_wp_news_and_events_widget'), 20);
+        add_action('wp_user_dashboard_setup', array($this, 'remove_wp_news_and_events_widget'), 20);
+        add_action('wp_dashboard_setup', array($this, 'remove_wp_news_and_events_widget'), 20);
+        add_action('edit_form_after_title', array($this, 'setup_after_title_meta_boxes'), 100);
+
+        // Customise the main admin menu
 		add_action('admin_menu', array($this, 'promote_menu_items'));
 		add_action('admin_menu', array($this, 'rename_menu_items'));
         add_action('admin_menu', array($this, 'remove_gutenberg_menu_item'), 999);
 		add_action('admin_menu', array($this, 'add_menu_section_titles'));
 		add_filter('menu_order', array($this, 'customise_admin_menu_order_and_sections'), 99);
 		add_filter('custom_menu_order', array($this, 'customise_admin_menu_order_and_sections'));
+
+        // Add custom CSS to the admin
 		add_action('admin_enqueue_scripts', array($this, 'admin_css'));
-		add_action('edit_form_after_title', array($this, 'setup_after_title_meta_boxes'), 100);
+
+        // Customise the ACF field group list page
 		add_filter('views_edit-acf-field-group', [$this, 'add_acf_field_list_tabs']);
 		add_filter('query_vars', [$this, 'register_acf_field_list_query_vars']);
 		add_action('pre_get_posts', [$this, 'populate_acf_field_list_tabs']);
@@ -99,7 +118,6 @@ class Doublee_Admin_UI {
 	/**
 	 * Save any changes to Global Options ACF fields to the JSON file in the plugin
 	 * rather than the default location (the theme)
-	 *
 	 * @param $group
 	 *
 	 * @return void
@@ -109,6 +127,81 @@ class Doublee_Admin_UI {
 			Doublee::override_acf_json_save_location();
 		}
 	}
+
+
+    /**
+     * Customise which ACF Extended modules are enabled
+     * Find the full list in the load() function in /plugins/acf-extended/acf-extended.php
+     * @since 3.0.0
+     */
+    function select_acfe_features(): void {
+        $modules_to_disable = ['author', 'categories', 'block_types', 'forms', 'forms/top_level', 'options', 'options_pages', 'post_types', 'taxonomies', 'multilang', 'performance'];
+        foreach ($modules_to_disable as $module) {
+            acf_update_setting("acfe/modules/$module", false);
+        }
+
+        $recaptcha_fields = ['site_key', 'secret_key', 'version', 'v2/theme', 'v2/size', 'v2/hide_logo'];
+        foreach ($recaptcha_fields as $field) {
+            acf_update_setting("acfe/forms/recaptcha/$field", false);
+        }
+
+        // Dev mode
+        acf_update_setting('acfe/dev', false); // TODO: How to turn this on but limit it to admins?
+
+        // UI enhancements
+        acf_update_setting('acfe/ui', true);
+    }
+
+
+    /**
+     * Disable some ACF fields
+     * @since 3.0.0
+     *
+     * @param $field_types
+     *
+     * return array
+     */
+    function disable_some_acf_fields($field_types): array {
+        $disable = array(
+            'Basic' => array('password'),
+            'Advanced' => array('icon_picker', 'color_picker')
+        );
+
+        foreach ($disable as $category => $fields) {
+            foreach ($fields as $field) {
+                unset($field_types[$category][$field]);
+            }
+        }
+
+        return $field_types;
+    }
+
+
+    /**
+     * Disable some fields added by ACF Extended
+     * @since 3.0.0
+     *
+     * @param $field_types
+     *
+     * @return array
+     */
+    function disable_some_acfe_fields($field_types): array {
+        $disable = array(
+            'Basic' => array('acfe_button', 'acfe_hidden', 'acfe_slug'),
+            'Content' => array('acfe_code_editor'),
+            'Relational' => array('acfe_advanced_link', 'acfe_forms', 'acfe_taxonomy_terms'),
+            'Advanced' => array('acfe_recaptcha'),
+            'WordPress' => array('acfe_post_statuses', 'acfe_post_types', 'acfe_taxonomies', 'acfe_user_roles')
+        );
+
+        foreach ($disable as $category => $fields) {
+            foreach ($fields as $field) {
+                unset($field_types[$category][$field]);
+            }
+        }
+
+        return $field_types;
+    }
 
 
 	/**
@@ -189,7 +282,28 @@ class Doublee_Admin_UI {
 	}
 
 
-	/**
+    /**
+     * Disable WordPress Events and News widget from the dashboard
+     * @since 3.0.0
+     * @return void
+     */
+    function remove_wp_news_and_events_widget(): void {
+        remove_meta_box( 'dashboard_primary', get_current_screen(), 'side' );
+    }
+
+
+    /**
+     * Add meta boxes added/moved to the custom 'after title' context
+     *
+     * @return void
+     */
+    function setup_after_title_meta_boxes(): void {
+        global $post, $wp_meta_boxes;
+        do_meta_boxes(get_current_screen(), 'after_title', $post);
+    }
+
+
+    /**
 	 * Move some submenu items to top-level menu items
 	 * @return void
 	 */
@@ -439,17 +553,6 @@ class Doublee_Admin_UI {
 
 
 	/**
-	 * Add meta boxes added/moved to the custom 'after title' context
-	 *
-	 * @return void
-	 */
-	function setup_after_title_meta_boxes(): void {
-		global $post, $wp_meta_boxes;
-		do_meta_boxes(get_current_screen(), 'after_title', $post);
-	}
-
-
-	/**
 	 * Add custom tabs to ACF field list
 	 * including adding post meta to use for the query (kinda a hacky place to do that but meh)
 	 * @param $views
@@ -555,7 +658,7 @@ class Doublee_Admin_UI {
 	 * @param $query
 	 * @return mixed
 	 */
-	function populate_acf_field_list_tabs($query) {
+	function populate_acf_field_list_tabs($query): mixed {
 		if (is_admin() && $query->is_main_query()) {
 			if (isset($query->query['post_type']) && $query->query['post_type'] == 'acf-field-group' && isset($query->query_vars['location'])) {
 				$query->set('meta_query', array(
@@ -567,6 +670,8 @@ class Doublee_Admin_UI {
 				));
 			}
 		}
+
+        return $query;
 	}
 
 
