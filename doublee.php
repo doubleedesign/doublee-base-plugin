@@ -3,7 +3,7 @@
  * Plugin name: Double-E Design Base Plugin
  * Description: Customisations and common custom functionality for Double-E Design websites.
  *
- * Author:      		Leesa Ward
+ * Author:      		Double-E Design
  * Author URI:  		https://www.doubleedesign.com.au
  * Version:     		3.0.0
  * Requires at least: 	6.3.2
