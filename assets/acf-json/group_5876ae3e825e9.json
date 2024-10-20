@@ -18,7 +18,8 @@
             },
             "placement": "left",
             "endpoint": 0,
-            "selected": 0
+            "selected": 0,
+            "repeatable": true
         },
         {
             "key": "field_65910e95e0efe",
@@ -43,32 +44,10 @@
             "max_height": "",
             "max_size": "",
             "mime_types": "",
-            "preview_size": "medium"
-        },
-        {
-            "key": "field_669ca8bc22c41",
-            "label": "Favicon",
-            "name": "favicon",
-            "aria-label": "",
-            "type": "image",
-            "instructions": "The icon that appears in browser tabs, bookmarks, etc.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "35",
-                "class": "",
-                "id": ""
-            },
-            "return_format": "id",
-            "library": "all",
-            "min_width": "",
-            "min_height": "",
-            "min_size": "",
-            "max_width": "",
-            "max_height": "",
-            "max_size": "",
-            "mime_types": "",
-            "preview_size": "thumbnail"
+            "preview_size": "medium",
+            "uploader": "",
+            "acfe_thumbnail": 0,
+            "repeatable": true
         },
         {
             "key": "field_60e6b91c89105",
@@ -86,7 +65,8 @@
             },
             "placement": "left",
             "endpoint": 0,
-            "selected": 0
+            "selected": 0,
+            "repeatable": true
         },
         {
             "key": "field_60e6b78dff698",
@@ -122,7 +102,8 @@
                     "placeholder": "",
                     "prepend": "",
                     "append": "",
-                    "maxlength": ""
+                    "maxlength": "",
+                    "repeatable": true
                 },
                 {
                     "key": "field_60e6b7b8ff69a",
@@ -142,7 +123,8 @@
                     "placeholder": "",
                     "prepend": "",
                     "append": "",
-                    "maxlength": ""
+                    "maxlength": "",
+                    "repeatable": true
                 },
                 {
                     "key": "field_60e6b7caff69b",
@@ -162,7 +144,8 @@
                     "placeholder": "",
                     "prepend": "",
                     "append": "",
-                    "maxlength": ""
+                    "maxlength": "",
+                    "repeatable": true
                 },
                 {
                     "key": "field_60e6b7d1ff69c",
@@ -182,7 +165,8 @@
                     "placeholder": "",
                     "prepend": "",
                     "append": "",
-                    "maxlength": ""
+                    "maxlength": "",
+                    "repeatable": true
                 },
                 {
                     "key": "field_60e6b7d8ff69d",
@@ -202,7 +186,8 @@
                     "placeholder": "",
                     "prepend": "",
                     "append": "",
-                    "maxlength": ""
+                    "maxlength": "",
+                    "repeatable": true
                 },
                 {
                     "key": "field_6636f261c4ba9",
@@ -222,9 +207,16 @@
                     "maxlength": "",
                     "placeholder": "",
                     "prepend": "",
-                    "append": ""
+                    "append": "",
+                    "repeatable": true
                 }
-            ]
+            ],
+            "acfe_seamless_style": 0,
+            "acfe_group_modal": 0,
+            "acfe_group_modal_close": 0,
+            "acfe_group_modal_button": "",
+            "acfe_group_modal_size": "large",
+            "repeatable": true
         },
         {
             "key": "field_6591102f913cb",
@@ -247,6 +239,8 @@
             "collapsed": "",
             "button_label": "Add link",
             "rows_per_page": 20,
+            "acfe_repeater_stylised_button": 0,
+            "repeatable": true,
             "sub_fields": [
                 {
                     "key": "field_6591103c913cc",
@@ -267,7 +261,8 @@
                     "placeholder": "",
                     "prepend": "",
                     "append": "",
-                    "parent_repeater": "field_6591102f913cb"
+                    "parent_repeater": "field_6591102f913cb",
+                    "repeatable": true
                 },
                 {
                     "key": "field_6591104b913cd",
@@ -288,7 +283,8 @@
                     "placeholder": "",
                     "prepend": "",
                     "append": "",
-                    "parent_repeater": "field_6591102f913cb"
+                    "parent_repeater": "field_6591102f913cb",
+                    "repeatable": true
                 },
                 {
                     "key": "field_65911055913ce",
@@ -306,9 +302,114 @@
                     },
                     "default_value": "",
                     "placeholder": "",
-                    "parent_repeater": "field_6591102f913cb"
+                    "parent_repeater": "field_6591102f913cb",
+                    "repeatable": true
                 }
             ]
+        },
+        {
+            "key": "field_67144bbfa473a",
+            "label": "Accounts & Assets",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_67144c12a473d",
+            "label": "External font URLs",
+            "name": "external_font_urls",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Note: Changing the URL here alone will not change the font(s) throughout the site. The relevant CSS file(s) need to be updated as well.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "acfe_repeater_stylised_button": 0,
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Add font URL",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_67144c2da473e",
+                    "label": "URL",
+                    "name": "url",
+                    "aria-label": "",
+                    "type": "url",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "parent_repeater": "field_67144c12a473d"
+                }
+            ]
+        },
+        {
+            "key": "field_67144be6a473b",
+            "label": "Font Awesome kit ID",
+            "name": "font_awesome_kit_id",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": 16,
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_67144bf8a473c",
+            "label": "Google Maps API key",
+            "name": "google_maps_api_key",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_6590ac197c0df",
@@ -326,7 +427,8 @@
             },
             "placement": "left",
             "endpoint": 0,
-            "selected": 0
+            "selected": 0,
+            "repeatable": true
         },
         {
             "key": "field_6590ab440f42e",
@@ -344,7 +446,8 @@
             },
             "message": "These settings come from the custom plugin created for your site by Double-E Design, and are designed for use with it and your custom theme. Other plugins and themes may use these settings, but compatibility is not guaranteed.",
             "new_lines": "wpautop",
-            "esc_html": 0
+            "esc_html": 0,
+            "repeatable": true
         }
     ],
     "location": [
@@ -365,5 +468,23 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1721542946
+    "acfe_display_title": "",
+    "acfe_autosync": [
+        "json"
+    ],
+    "acfe_form": 0,
+    "is_acf_component": 0,
+    "acf_component_defaults": {
+        "layout": "block",
+        "repeatable": "0",
+        "pagination": "0",
+        "rows_per_page": "20",
+        "min": "",
+        "max": "",
+        "button_label": "",
+        "appearances": ""
+    },
+    "acfe_meta": "",
+    "acfe_note": "",
+    "modified": 1729385995
 }
