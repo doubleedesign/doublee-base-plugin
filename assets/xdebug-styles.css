@@ -1,0 +1,273 @@
+/** Note: Some of these styles rely on additional classes and wrapping elements that are added using JS **/
+
+:root {
+	--xdebug-link-color: #a275ad;
+	--xdebug-link-hover-color: #9bdeac;
+	--xdebug-warning-color: #ffb57a;
+	--xdebug-code-variable-color: #9b48de;
+	--xdebug-code-string-color: #5b5b5b;
+	--xdebug-code-keyword-color: #472bc4;
+	--xdebug-code-class-color: #0a9bbb;
+	--xdebug-code-function-color: #28b06b;
+}
+
+.xdebug-error {
+	font-family: Arial, Helvetica, sans-serif;
+	background: white;
+	max-width: 900px;
+	margin: 1rem auto;
+	border: 0;
+	font-size: 0.9rem;
+
+	a {
+		color: var(--xdebug-link-color) !important;
+
+		&:hover, &:focus, &:active {
+			color: var(--xdebug-link-hover-color) !important;
+		}
+	}
+
+	/* Reverse the order of the stack trace because it's more useful that way */
+	/* But note this does make tab order the wrong way around if navigating via keyboard */
+	tbody {
+		display: flex;
+		flex-direction: column-reverse;
+
+		/* Put the main error messages back at the top */
+		tr:has(th[colspan="5"]) {
+			order: 10;
+		}
+	}
+
+	/* Error message block */
+	th[colspan="5"] {
+		padding: 0.5rem;
+		display: block;
+		margin-block-end: 1rem;
+		background: white;
+		border: 1px solid var(--xdebug-warning-color);
+		border-left: 2rem solid var(--xdebug-warning-color);
+		font-weight: normal;
+		line-height: 1.4;
+;
+		> span:first-child {
+			display: none;
+		}
+
+		a {
+			display: block;
+		}
+	}
+
+	/* Row that says "Call stack" */
+	tr:has(th[bgcolor="#e9b96e"]) {
+		display: none;
+	}
+
+	/* Call stack column headers */
+	tr:has(th:nth-child(5)) {
+		display: none;
+	}
+
+	/* Call stack rows */
+	tr:has(td:nth-child(5)) {
+		display: grid;
+		grid-template-columns: 2rem repeat(5, 1fr);
+		grid-template-rows: repeat(3, auto);
+		grid-gap: 0;
+		margin-block-end: 1rem;
+		border: 1px solid #ccc;
+
+		td {
+			border: 0;
+			text-align: left;
+			background: transparent;
+			align-items: center;
+			padding: 0.5rem;
+
+			&:before {
+				font-family: Arial, Helvetica, sans-serif;
+				font-weight: bold;
+				display: inline-block;
+			}
+
+			&:nth-child(1) {
+				grid-area: 1 / 1 / 4 / 2;
+				background: #EDEDED;
+			}
+
+			&:nth-child(2),
+			&:nth-child(3) {
+				text-align: right;
+				font-size: 0.7rem;
+			}
+
+			&:nth-child(2) {
+				grid-area: 1 / 5;
+
+				&:before {
+					content: 'Time: ';
+				}
+
+			}
+
+			&:nth-child(3) {
+				grid-area: 1 / 6;
+
+				&:before {
+					content: 'Memory: ';
+				}
+			}
+
+			&:nth-child(4) {
+				grid-area: 2 / 2 / 3 / 7;
+				font-family: 'Fira Code', monospace;
+				line-height: 1.4;
+				border-bottom: 1px solid #DDD;
+				border-top: 1px solid #DDD;
+				margin-inline: 0.25rem;
+
+				&:before {
+					content: 'Function: ';
+					display: block;
+					margin-block-end: 0.25rem;
+				}
+
+				font {
+					display: inline-block;
+					max-width: 750px;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					direction: rtl; /* Reverse the overflow direction */
+					vertical-align: middle;
+					margin-inline-start: -0.75rem;
+					margin-inline-end: -0.75rem;
+				}
+			}
+
+			&:nth-child(5) {
+				grid-area: 3 / 2 / 4 / 7;
+				display: flex;
+				align-items: center;
+
+				&:before {
+					content: 'Location: ';
+					display: block;
+				}
+
+				&:after {
+					content: attr(title);
+					margin-left: auto;
+					max-width: 600px;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					direction: rtl; /* Reverse the overflow direction */
+				}
+			}
+		}
+	}
+
+
+
+	/* highlightjs syntax highlighting overrides */
+	.hljs.language-php {
+	}
+
+	/** Colours **/
+	.hljs-keyword {
+		color: var(--xdebug-code-keyword-color);
+	}
+	.hljs-title.class_,
+	.hljs-class .hljs-title,
+	.hljs-namespace {
+		color: var(--xdebug-code-class-color);
+	}
+	.hljs-variable {
+		color: var(--xdebug-code-variable-color);
+	}
+	.hljs-title.function_ {
+		color: var(--xdebug-code-function-color);
+	}
+	.hljs-string,
+	.hljs-array-truncated,
+	.hljs-class-truncated {
+		color: var(--xdebug-code-string-color);
+	}
+
+	/** Spacing and hacky line breaks **/
+	.hljs-array {
+	}
+
+	.hljs-array-contents,
+	.hljs-class-contents {
+		margin-left: 2rem;
+	}
+
+	.hljs-array-item {
+		display: block;
+	}
+
+	/* Put args on the next line and indent them if there's 3 or more */
+	.hljs-function-args {
+
+		&:not(:has(:first-child)) { /* :empty doesn't work because there's whitespace */
+			display: none;
+		}
+
+		&:has(:nth-child(3)) {
+			display: block;
+			margin-left: 2rem;
+
+			> .hljs-variable {
+				&:before {
+					display: block;
+					margin-left: 1em;
+					height: 0;
+					width: 100%;
+					content: '\A'; /* Inserts a line break */
+					white-space: pre; /* Ensures the line break is rendered */
+				}
+			}
+		}
+	}
+
+	.hljs-class-contents > .hljs-keyword:not(.class_),
+	.hljs-array .hljs-variable {
+		&:before {
+			display: block;
+			height: 0;
+			width: 100%;
+			content: '\A'; /* Inserts a line break */
+			white-space: pre; /* Ensures the line break is rendered */
+		}
+	}
+
+	.hljs-title.function_ {
+	}
+
+	.hljs-wp-block {
+		display: block;
+		margin-left: 2rem;
+
+		.hljs-wp-block-line {
+			display: block;
+		}
+
+		.hljs-class-contents {
+			margin: 0;
+			display: contents;
+		}
+	}
+
+	/** Truncate long strings **/
+	.hljs-string:not(.hljs-wp-block) {
+		display: inline-block;
+		max-width: 600px;
+		vertical-align: middle;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}
