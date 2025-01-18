@@ -9,6 +9,7 @@
  * Requires at least: 	6.3.2
  * Requires PHP: 		8.1.9
  * Text Domain: 		doublee
+ * Requires plugins: 	advanced-custom-fields-pro
  *
  * @package Doublee
  */

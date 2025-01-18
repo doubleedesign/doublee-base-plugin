@@ -98,6 +98,9 @@ class Doublee {
 		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-admin-ui.php';
 		new Doublee_Admin_UI();
 
+		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-plugin-list-table.php';
+		new Doublee_Plugin_List_Table();
+
 		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-seo.php';
 		new Doublee_SEO();
 
