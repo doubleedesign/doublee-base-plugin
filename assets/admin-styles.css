@@ -28,6 +28,52 @@ li.toplevel_page_section-title-config .wp-menu-name {
 	font-weight: bold;
 }
 
-.block-editor-tabbed-sidebar {
-	width: 250px;
+/* Hide some tabs that can't be properly removed but I'm not using */
+.block-editor-tabbed-sidebar__tab[aria-controls*="patterns-view"],
+.block-editor-tabbed-sidebar__tab[aria-controls*="media-view"] {
+	pointer-events: none;
+	display: none;
+}
+
+
+.interface-interface-skeleton__body {
+	container-type: inline-size;
+}
+
+@container (width < 1400px) {
+	/** Block editor left sidebar width */
+	.editor-list-view-sidebar,
+	.interface-interface-skeleton__secondary-sidebar,
+	.block-editor-tabbed-sidebar,
+	.block-editor-tabbed-sidebar {
+		width: 250px !important;
+	}
+
+	/* Layout of the blocks list */
+	.block-editor-inserter__panel-content {
+		padding: 0.5rem;
+
+		.block-editor-block-types-list > div[role="presentation"] {
+			display: block;
+
+			.block-editor-block-types-list__list-item {
+				width: 100%;
+
+				> button {
+					flex-direction: row;
+					align-items: center;
+					justify-content: flex-start;
+
+					.block-editor-block-types-list__item-icon {
+						padding: 0 0.5rem 0 0;
+					}
+
+					.block-editor-block-types-list__item-title {
+						padding: 0;
+						font-size: inherit;
+					}
+				}
+			}
+		}
+	}
 }

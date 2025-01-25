@@ -8,7 +8,7 @@ class Doublee_Plugin_List_Table {
 		add_filter('plugin_action_links', [$this, 'remove_action_links'], 10, 3);
 		add_action('admin_head', [$this, 'add_embedded_plugin_row_css'], 100);
 		add_filter('views_plugins', [$this, 'add_custom_plugin_filter']);
-		add_filter('all_plugins', [$this, 'filter_plugins_list']);	
+		add_filter('all_plugins', [$this, 'filter_plugins_list']);
 	}
 
 	public function sort_plugins(): void {
@@ -115,8 +115,19 @@ class Doublee_Plugin_List_Table {
 					}
 				<?php
 				echo "}";
+			} ?>
+			.active[data-plugin*="comet-components-wp/vendor"] {
+				.check-column {
+					border-left-color: #845EC2 !important;
+				}
+				th, td {
+					background: color-mix(in srgb, #555d66 10%, white);
+
+					a {
+						color: color-mix(in srgb, #555d66 90%, black);
+					}
+				}
 			}
-			?>
 		</style>
 		<?php
 	}
