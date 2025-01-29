@@ -14,6 +14,8 @@
  * @package Doublee
  */
 
+define ('PAGE_FOR_POSTS', get_option('page_for_posts'));
+
 // Load the plugin files
 require_once('class-doublee.php');
 

@@ -31,7 +31,11 @@ class Doublee_SEO {
 		}
 
 		if(is_home()) {
-			$title = get_the_title(PAGE_FOR_POSTS);
+			if(defined(PAGE_FOR_POSTS)) {
+				$title = get_the_title(PAGE_FOR_POSTS);
+			} else {
+				$title = get_bloginfo('name');
+			}
 		}
 
 		if(is_page()) {
