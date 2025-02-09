@@ -105,11 +105,14 @@ class Doublee_Admin_UI {
 	 */
 	function setup_acf_global_options(): void {
 		if (function_exists('acf_add_options_page')) {
+			$firstWord = explode(' ', get_bloginfo('name'))[0];
+
 			acf_add_options_page(array(
 				'page_title' => 'Global Settings and Information for ' . get_bloginfo('name'),
-				'menu_title' => get_bloginfo('name'),
+				'menu_title' => $firstWord . ' settings',
+				'parent_slug' => 'themes.php',
 				'menu_slug'  => 'acf-options-global-options',
-				'position'   => 2
+				'position'   => 0
 			));
 		}
 	}
@@ -352,7 +355,7 @@ class Doublee_Admin_UI {
 	 * @return void
 	 */
 	function rename_menu_items(): void {
-		global $menu;
+		global $menu, $submenu;
 
 		foreach ($menu as $index => $item) {
 			if ($item[0] === 'Users') {
@@ -366,6 +369,15 @@ class Doublee_Admin_UI {
 			}
 			if ($item[0] === 'Settings') {
 				$menu[$index][0] = 'General Settings';
+			}
+		}
+
+
+		if (isset($submenu['themes.php'])) {
+			foreach ($submenu['themes.php'] as $key => $item) {
+				if ($item[0] === 'Patterns') {
+					$submenu['themes.php'][$key][0] = 'Shared content';
+				}
 			}
 		}
 	}
