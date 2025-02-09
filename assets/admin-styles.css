@@ -29,12 +29,60 @@ li.toplevel_page_section-title-config .wp-menu-name {
 }
 
 /* Hide some tabs that can't be properly removed but I'm not using */
-.block-editor-tabbed-sidebar__tab[aria-controls*="patterns-view"],
 .block-editor-tabbed-sidebar__tab[aria-controls*="media-view"] {
 	pointer-events: none;
 	display: none;
 }
 
+.toplevel_page_acf-options-global-options .wp-menu-name {
+	white-space: nowrap;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+	padding-left: 0 !important;
+}
+
+#wpadminbar,
+#adminmenu, #adminmenu, #adminmenuback, #adminmenuwrap {
+	background: #1e1e1e; /* make main menu and admin bar match the site editor */
+}
+
+.site-editor-php {
+	/* Keep standard admin menus visible when in the site editor / patterns area */
+	#site-editor {
+		padding-top: 2rem;
+		padding-left: 10rem;
+	}
+	#wpadminbar, #adminmenumain {
+		display: block !important;
+	}
+	#adminmenumain {
+		padding-top: 2rem;
+	}
+
+	/* Hide elements that are redundant in the site editor when the admin menus are visible */
+	.edit-site-layout__sidebar {
+		.edit-site-site-hub {
+			display: none;
+		}
+
+		.edit-site-sidebar-navigation-screen__title-icon {
+			padding: 1rem 1rem 0.5rem 1rem !important;
+
+			a[aria-label="Go to the Dashboard"] {
+				display: none !important;
+			}
+		}
+	}
+
+	/* Some tweaks to the site editor itself */
+	.edit-site-layout {
+		border-left: 1px solid rgba(255, 255, 255, 0.1);
+	}
+	.edit-site-layout__sidebar-region {
+		width: 220px;
+	}
+
+}
 
 .interface-interface-skeleton__body {
 	container-type: inline-size;
@@ -77,3 +125,4 @@ li.toplevel_page_section-title-config .wp-menu-name {
 		}
 	}
 }
+

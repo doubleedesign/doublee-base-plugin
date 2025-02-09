@@ -108,8 +108,9 @@ class Doublee_Admin_UI {
 			acf_add_options_page(array(
 				'page_title' => 'Global Settings and Information for ' . get_bloginfo('name'),
 				'menu_title' => get_bloginfo('name'),
+				//'parent_slug' => 'themes.php',
 				'menu_slug'  => 'acf-options-global-options',
-				'position'   => 2
+				'position'   => 0,
 			));
 		}
 	}
@@ -352,7 +353,7 @@ class Doublee_Admin_UI {
 	 * @return void
 	 */
 	function rename_menu_items(): void {
-		global $menu;
+		global $menu, $submenu;
 
 		foreach ($menu as $index => $item) {
 			if ($item[0] === 'Users') {
@@ -371,6 +372,11 @@ class Doublee_Admin_UI {
 	}
 
 
+	/**
+	 * If the Gutenberg plugin is installed and active (possible due to features/fixes not in core yet),
+	 * don't show the admin menu
+	 * @return void
+	 */
     function remove_gutenberg_menu_item(): void {
         remove_menu_page('gutenberg');
     }
@@ -483,6 +489,7 @@ class Doublee_Admin_UI {
 			'section-title-content',
 			'edit.php', // Posts
 			'edit.php?post_type=page', // Pages
+			'site-editor.php?path=/patterns', // Shared Blocks (Patterns relabelled and added to the main menu by Comet Components)
 			'upload.php', // Media
 			'edit-comments.php',
 
