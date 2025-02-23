@@ -1,5 +1,9 @@
 # Double-E Plugin changelog
 
+## Version 3.0.0
+
+// TODO
+
 ## Version 2.1.0
 Date: 21 April 2024
 

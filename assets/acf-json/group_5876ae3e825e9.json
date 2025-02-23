@@ -83,6 +83,12 @@
                 "id": ""
             },
             "layout": "block",
+            "acfe_seamless_style": 0,
+            "acfe_group_modal": 0,
+            "acfe_group_modal_close": 0,
+            "acfe_group_modal_button": "",
+            "acfe_group_modal_size": "large",
+            "repeatable": true,
             "sub_fields": [
                 {
                     "key": "field_60e6b7a1ff699",
@@ -210,13 +216,7 @@
                     "append": "",
                     "repeatable": true
                 }
-            ],
-            "acfe_seamless_style": 0,
-            "acfe_group_modal": 0,
-            "acfe_group_modal_close": 0,
-            "acfe_group_modal_button": "",
-            "acfe_group_modal_size": "large",
-            "repeatable": true
+            ]
         },
         {
             "key": "field_6591102f913cb",
@@ -326,71 +326,6 @@
             "selected": 0
         },
         {
-            "key": "field_67144c12a473d",
-            "label": "External font URLs",
-            "name": "external_font_urls",
-            "aria-label": "",
-            "type": "repeater",
-            "instructions": "Note: Changing the URL here alone will not change the font(s) throughout the site. The relevant CSS file(s) need to be updated as well.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "acfe_repeater_stylised_button": 0,
-            "layout": "table",
-            "pagination": 0,
-            "min": 0,
-            "max": 0,
-            "collapsed": "",
-            "button_label": "Add font URL",
-            "rows_per_page": 20,
-            "sub_fields": [
-                {
-                    "key": "field_67144c2da473e",
-                    "label": "URL",
-                    "name": "url",
-                    "aria-label": "",
-                    "type": "url",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "allow_in_bindings": 0,
-                    "placeholder": "",
-                    "parent_repeater": "field_67144c12a473d"
-                }
-            ]
-        },
-        {
-            "key": "field_67144be6a473b",
-            "label": "Font Awesome kit ID",
-            "name": "font_awesome_kit_id",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": 16,
-            "allow_in_bindings": 1,
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
             "key": "field_67144bf8a473c",
             "label": "Google Maps API key",
             "name": "google_maps_api_key",
@@ -468,23 +403,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "acfe_display_title": "",
-    "acfe_autosync": [
-        "json"
-    ],
-    "acfe_form": 0,
-    "is_acf_component": 0,
-    "acf_component_defaults": {
-        "layout": "block",
-        "repeatable": "0",
-        "pagination": "0",
-        "rows_per_page": "20",
-        "min": "",
-        "max": "",
-        "button_label": "",
-        "appearances": ""
-    },
-    "acfe_meta": "",
-    "acfe_note": "",
-    "modified": 1729385995
+    "modified": 1740105843
 }

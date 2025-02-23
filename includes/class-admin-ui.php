@@ -13,7 +13,7 @@ class Doublee_Admin_UI {
 
 	public function __construct() {
         // Customise where ACF fields are loaded from and saved to
-        add_filter('acf/settings/load_json', array($this, 'load_acf_fields_from_plugin'));
+        add_filter('acf/settings/load_json', array($this, 'load_acf_fields_from_plugin'), 10);
         add_filter('manage_acf-field-group_posts_custom_column', array($this, 'show_where_acf_fields_are_loaded_from'), 100, 2);
         add_action('acf/init', array($this, 'setup_acf_global_options'), 5);
 		add_action('acf/update_field_group', array($this, 'save_acf_global_options_to_plugin'), 1);
@@ -22,10 +22,7 @@ class Doublee_Admin_UI {
         add_filter('acf/settings/enable_post_types', '__return_false');
         add_filter('acf/settings/enable_options_pages_ui', '__return_false');
 
-        // Specify which ACF Extended features to enable and disable
-        add_filter('acfe/init', array($this, 'select_acfe_features'));
-        add_filter('acf/get_field_types', array($this, 'disable_some_acfe_fields'));
-        // Also disable some core ACF fields
+        // Also Disable some core ACF fields
         add_filter('acf/get_field_types', array($this, 'disable_some_acf_fields'));
 
         // General admin screen customisations
@@ -83,7 +80,10 @@ class Doublee_Admin_UI {
 			$post = get_post($post_id);
 			$key = $post->post_name;
 			if (in_array($key . '.json', $files['plugin'])) {
-				echo ' in ' . Doublee::get_name() . ' plugin';
+				echo ' in ' . Doublee::get_name();
+			}
+			if (in_array($key . '.json', $files['client_plugin'])) {
+				echo ' in client plugin';
 			}
 			if (in_array($key . '.json', $files['events_plugin'])) {
 				echo ' in Events plugin';
@@ -105,12 +105,14 @@ class Doublee_Admin_UI {
 	 */
 	function setup_acf_global_options(): void {
 		if (function_exists('acf_add_options_page')) {
+			$firstWord = explode(' ', get_bloginfo('name'))[0];
+
 			acf_add_options_page(array(
 				'page_title' => 'Global Settings and Information for ' . get_bloginfo('name'),
-				'menu_title' => get_bloginfo('name'),
-				//'parent_slug' => 'themes.php',
+				'menu_title' => $firstWord . ' settings',
+				'parent_slug' => 'themes.php',
 				'menu_slug'  => 'acf-options-global-options',
-				'position'   => 0,
+				'position'   => 0
 			));
 		}
 	}
@@ -129,31 +131,6 @@ class Doublee_Admin_UI {
 		}
 	}
 
-
-    /**
-     * Customise which ACF Extended modules are enabled
-     * Find the full list in the load() function in /plugins/acf-extended/acf-extended.php
-     * @since 3.0.0
-     */
-    function select_acfe_features(): void {
-        $modules_to_disable = ['author', 'categories', 'block_types', 'forms', 'forms/top_level', 'options', 'options_pages', 'post_types', 'taxonomies', 'multilang', 'performance'];
-        foreach ($modules_to_disable as $module) {
-            acf_update_setting("acfe/modules/$module", false);
-        }
-
-        $recaptcha_fields = ['site_key', 'secret_key', 'version', 'v2/theme', 'v2/size', 'v2/hide_logo'];
-        foreach ($recaptcha_fields as $field) {
-            acf_update_setting("acfe/forms/recaptcha/$field", false);
-        }
-
-        // Dev mode
-        acf_update_setting('acfe/dev', false); // TODO: How to turn this on but limit it to admins?
-
-        // UI enhancements
-        acf_update_setting('acfe/ui', true);
-    }
-
-
     /**
      * Disable some ACF fields
      * @since 3.0.0
@@ -166,33 +143,6 @@ class Doublee_Admin_UI {
         $disable = array(
             'Basic' => array('password'),
             'Advanced' => array('icon_picker', 'color_picker')
-        );
-
-        foreach ($disable as $category => $fields) {
-            foreach ($fields as $field) {
-                unset($field_types[$category][$field]);
-            }
-        }
-
-        return $field_types;
-    }
-
-
-    /**
-     * Disable some fields added by ACF Extended
-     * @since 3.0.0
-     *
-     * @param $field_types
-     *
-     * @return array
-     */
-    function disable_some_acfe_fields($field_types): array {
-        $disable = array(
-            'Basic' => array('acfe_button', 'acfe_hidden', 'acfe_slug'),
-            'Content' => array('acfe_code_editor'),
-            'Relational' => array('acfe_advanced_link', 'acfe_forms', 'acfe_taxonomy_terms'),
-            'Advanced' => array('acfe_recaptcha'),
-            'WordPress' => array('acfe_post_statuses', 'acfe_post_types', 'acfe_taxonomies', 'acfe_user_roles')
         );
 
         foreach ($disable as $category => $fields) {
@@ -367,6 +317,15 @@ class Doublee_Admin_UI {
 			}
 			if ($item[0] === 'Settings') {
 				$menu[$index][0] = 'General Settings';
+			}
+		}
+
+
+		if (isset($submenu['themes.php'])) {
+			foreach ($submenu['themes.php'] as $key => $item) {
+				if ($item[0] === 'Patterns') {
+					$submenu['themes.php'][$key][0] = 'Shared content';
+				}
 			}
 		}
 	}
