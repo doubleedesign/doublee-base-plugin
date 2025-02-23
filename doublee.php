@@ -83,6 +83,6 @@ function doublee_make_xdebug_pretty(): void {
         wp_enqueue_script('xdebug-markup', '/wp-content/plugins/doublee-base-plugin/assets/xdebug-markup.js', [], '1.0.0');
     }
 }
-add_action('wp_enqueue_scripts', 'doublee_make_xdebug_pretty');
-add_action('admin_enqueue_scripts', 'doublee_make_xdebug_pretty');
+//add_action('wp_enqueue_scripts', 'doublee_make_xdebug_pretty');
+//add_action('admin_enqueue_scripts', 'doublee_make_xdebug_pretty');
 

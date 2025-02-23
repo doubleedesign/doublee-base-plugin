@@ -13,7 +13,7 @@ class Doublee_Admin_UI {
 
 	public function __construct() {
         // Customise where ACF fields are loaded from and saved to
-        add_filter('acf/settings/load_json', array($this, 'load_acf_fields_from_plugin'));
+        add_filter('acf/settings/load_json', array($this, 'load_acf_fields_from_plugin'), 10);
         add_filter('manage_acf-field-group_posts_custom_column', array($this, 'show_where_acf_fields_are_loaded_from'), 100, 2);
         add_action('acf/init', array($this, 'setup_acf_global_options'), 5);
 		add_action('acf/update_field_group', array($this, 'save_acf_global_options_to_plugin'), 1);
@@ -80,7 +80,10 @@ class Doublee_Admin_UI {
 			$post = get_post($post_id);
 			$key = $post->post_name;
 			if (in_array($key . '.json', $files['plugin'])) {
-				echo ' in ' . Doublee::get_name() . ' plugin';
+				echo ' in ' . Doublee::get_name();
+			}
+			if (in_array($key . '.json', $files['client_plugin'])) {
+				echo ' in client plugin';
 			}
 			if (in_array($key . '.json', $files['events_plugin'])) {
 				echo ' in Events plugin';

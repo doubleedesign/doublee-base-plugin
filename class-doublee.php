@@ -198,7 +198,7 @@ class Doublee {
 
 			// override save path in this case
 			return DOUBLEE_PLUGIN_PATH . 'assets/acf-json';
-		}, 9999);
+		}, 9990);
 	}
 
 
@@ -208,9 +208,13 @@ class Doublee {
 	 */
 	public static function get_acf_json_filenames(): array {
 		$in_events_plugin = array();
-		$in_plugin = scandir(DOUBLEE_PLUGIN_PATH . 'assets/acf-json/');
-		$in_parent_theme = scandir(get_template_directory() . '/acf-json/');
+		$in_plugin = scandir(DOUBLEE_PLUGIN_PATH . 'assets/acf-json/'); // this plugin
+		$in_parent_theme = scandir(get_template_directory() . '/src/acf-json/');
 		$in_theme = scandir(get_stylesheet_directory() . '/acf-json/');
+
+		// Get the client plugin, on the assumption that its directory name matches the textdomain of the theme
+		$client = wp_get_theme()->get('TextDomain');
+		$in_client_plugin = scandir(WP_PLUGIN_DIR . '/' . $client . '/src/acf-json/');
 
 		if (class_exists('Doublee_Events') && defined('DOUBLEE_EVENTS_PLUGIN_PATH')) {
 			$in_events_plugin = scandir(DOUBLEE_EVENTS_PLUGIN_PATH . 'assets/acf-json/');
@@ -218,6 +222,7 @@ class Doublee {
 
 		return array(
 			'plugin'        => array_values(array_filter($in_plugin, fn($item) => str_contains($item, '.json'))),
+			'client_plugin' => array_values(array_filter($in_client_plugin, fn($item) => str_contains($item, '.json'))),
 			'parent_theme'  => array_values(array_filter($in_parent_theme, fn($item) => str_contains($item, '.json'))),
 			'theme'         => array_values(array_filter($in_theme, fn($item) => str_contains($item, '.json'))),
 			'events_plugin' => class_exists('Doublee_Events') ? array_values(array_filter($in_events_plugin, fn($item) => str_contains($item, '.json'))) : array()
