@@ -29,6 +29,7 @@ li.toplevel_page_section-title-config .wp-menu-name {
 }
 
 /* Hide some tabs that can't be properly removed but I'm not using */
+.block-editor-tabbed-sidebar__tab[aria-controls*="patterns-view"],
 .block-editor-tabbed-sidebar__tab[aria-controls*="media-view"] {
 	pointer-events: none;
 	display: none;
@@ -98,6 +99,10 @@ li.toplevel_page_section-title-config .wp-menu-name {
 		width: 250px !important;
 	}
 
+	.block-editor-inserter__category-panel {
+		left: 250px !important;
+	}
+
 	/* Layout of the blocks list */
 	.block-editor-inserter__panel-content {
 		padding: 0.5rem;
@@ -121,6 +126,82 @@ li.toplevel_page_section-title-config .wp-menu-name {
 						padding: 0;
 						font-size: inherit;
 					}
+				}
+			}
+		}
+	}
+}
+
+
+/** ACF fields - general **/
+.acf-label:empty {
+	display: none !important;
+}
+
+.acf-field[data-type="message"] {
+	padding: 0 1rem !important;
+	border: 0 !important;
+	margin: 0.5rem 0 !important;
+
+	.acf-input {
+		padding: 0.5rem;
+		box-sizing: border-box;
+		background: color-mix(in srgb, var(--wp-admin-theme-color-darker-10) 10%, white);
+		border: 1px solid var(--wp-admin-theme-color-darker-10)
+	}
+
+	/** These are added in the "Presentation" tab of the field editor **/
+	/* edit mode = notes to be shown while in edit mode */
+	/* preview mode = notes to be shown while in preview mode */
+	/* showing and hiding them are handled by further CSS below,
+	   because at the time of writing ACF doesn't provide conditions for when to render messages */
+	&.edit-mode-note,
+	&.preview-mode-note,
+	&.edit-mode-warning {
+		.acf-label {
+			display: none;
+		}
+	}
+
+	&.edit-mode-note {
+	}
+
+	&.preview-mode-note {
+	}
+
+	&.edit-mode-warning {
+
+		.acf-input {
+			background: #fef8ee;
+			border-color: #f0b849;
+		}
+	}
+}
+
+/** ACF fields - block editor (edit mode) **/
+.editor-visual-editor {
+	.acf-field[data-type="message"] {
+		&.preview-mode-note {
+			display: none;
+		}
+	}
+}
+
+/** ACF fields - block editor sidebar **/
+.editor-sidebar {
+	.acf-block-component.acf-block-panel {
+		.acf-field {
+			/*display: none;*/
+
+			&[data-type="message"],
+			&[data-type="true_false"],
+			&[data-type="component_field"] {
+				display: block;
+			}
+
+			&[data-type="message"] {
+				&.edit-mode-note {
+					display: none;
 				}
 			}
 		}
