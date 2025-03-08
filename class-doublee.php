@@ -104,6 +104,9 @@ class Doublee {
 		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-seo.php';
 		new Doublee_SEO();
 
+		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-page-behaviour.php';
+		new Doublee_Page_Behaviour();
+
 		if (class_exists('WooCommerce')) {
 			require_once DOUBLEE_PLUGIN_PATH . '/includes/class-woocommerce.php';
 			new Doublee_WooCommerce();

@@ -126,7 +126,7 @@ class Doublee_Admin_UI {
 	 * @return void
 	 */
 	function save_acf_global_options_to_plugin($group): void {
-		if ($group['key'] === 'group_5876ae3e825e9' || $group['key'] == 'group_67bac5d4bed29') {
+		if ($group['key'] === 'group_5876ae3e825e9' || $group['key'] == 'group_67bac5d4bed29' || $group['key'] == 'group_67ca2ef6a0243') {
 			Doublee::override_acf_json_save_location();
 		}
 	}
