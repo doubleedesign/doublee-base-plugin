@@ -208,3 +208,9 @@ li.toplevel_page_section-title-config .wp-menu-name {
 	}
 }
 
+.nf-iframe-overlay {
+
+	> iframe {
+		width: 100%;
+	}
+}
