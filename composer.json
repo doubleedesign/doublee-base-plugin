@@ -1,0 +1,12 @@
+{
+	"name": "doubleedesign/doublee-base-plugin",
+	"type": "wordpress-plugin",
+	"version": "3.0.0",
+	"homepage": "https://github.com/doubleedesign/doublee-base-plugin",
+	"authors": [
+		{
+			"name": "Leesa Ward",
+			"email": "leesa@doubleedesign.com.au"
+		}
+	]
+}
