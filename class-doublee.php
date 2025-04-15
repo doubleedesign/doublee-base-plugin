@@ -206,7 +206,7 @@ class Doublee {
 
 
 	/**
-	 * Utility function to get lists of filenames where ACF JSON files are stored in the plugin and theme
+	 * Utility function to get lists of filenames where ACF JSON files are stored in the plugins and theme
 	 * @return array
 	 */
 	public static function get_acf_json_filenames(): array {
@@ -219,10 +219,12 @@ class Doublee {
 		$client = wp_get_theme()->get('TextDomain');
 		$in_client_plugin = scandir(WP_PLUGIN_DIR . '/' . $client . '/src/acf-json/');
 
-		// Backwards compatibility with previous Events implementations
-		if (class_exists('Doubleedesign\Comet\WordPress\Calendar') && defined('COMET_EVENTS_PLUGIN_PATH')) {
-			$in_events_plugin = scandir(COMET_EVENTS_PLUGIN_PATH . 'src/acf-json/');
+		// Comet Components events implementation
+		if (class_exists('Doubleedesign\Comet\WordPress\Calendar\Events') && defined('COMET_CALENDAR_PLUGIN_PATH')) {
+			$in_events_plugin = scandir(COMET_CALENDAR_PLUGIN_PATH . 'src/acf-json/');
+			error_log(print_r($in_events_plugin, true));
 		}
+		// Backwards compatibility with previous Events implementations
 		else if (class_exists('Doublee_Events') && defined('DOUBLEE_EVENTS_PLUGIN_PATH')) {
 			$in_events_plugin = scandir(DOUBLEE_EVENTS_PLUGIN_PATH . 'assets/acf-json/');
 		}
@@ -232,7 +234,7 @@ class Doublee {
 			'client_plugin' => array_values(array_filter($in_client_plugin, fn($item) => str_contains($item, '.json'))),
 			'parent_theme'  => array_values(array_filter($in_parent_theme, fn($item) => str_contains($item, '.json'))),
 			'theme'         => array_values(array_filter($in_theme, fn($item) => str_contains($item, '.json'))),
-			'events_plugin' => class_exists('Doubleedesign\Comet\WordPress\Calendar' || class_exists('Doublee_Events')) ? array_values(array_filter($in_events_plugin, fn($item) => str_contains($item, '.json'))) : array()
+			'events_plugin' => class_exists('Doubleedesign\Comet\WordPress\Calendar\Events' || class_exists('Doublee_Events')) ? array_values(array_filter($in_events_plugin, fn($item) => str_contains($item, '.json'))) : array()
 		);
 	}
 
