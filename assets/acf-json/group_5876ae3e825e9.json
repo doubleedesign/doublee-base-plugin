@@ -267,7 +267,7 @@
                 {
                     "key": "field_6591104b913cd",
                     "label": "Font awesome icon",
-                    "name": "font_awesome_icon",
+                    "name": "icon",
                     "aria-label": "",
                     "type": "text",
                     "instructions": "",
