@@ -73,6 +73,7 @@ class Doublee_Admin_UI {
 	 * @param $post_id
 	 *
 	 * @return void
+	 * @noinspection t
 	 */
 	function show_where_acf_fields_are_loaded_from($column_key, $post_id): void {
 		if ($column_key === 'acf-json') {
@@ -86,7 +87,12 @@ class Doublee_Admin_UI {
 				echo ' in client plugin';
 			}
 			if (in_array($key . '.json', $files['events_plugin'])) {
-				echo ' in Events plugin';
+				if(is_plugin_active('comet-calendar/comet-calendar.php')) {
+					echo ' in Comet Calendar plugin';
+				}
+				else {
+					echo ' in Events plugin';
+				}
 			}
 			if (in_array($key . '.json', $files['parent_theme'])) {
 				echo ' in ' . wp_get_theme()->parent() . ' theme';
