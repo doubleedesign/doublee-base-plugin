@@ -45,24 +45,6 @@ new Doublee();
 
 
 /**
- * Log actions and filters that are run.
- * For debugging purposes only; comment out when not in use!
- * @wp-hook
- *
- * @return void
- */
-function doublee_log_all_actions(): void {
-	foreach($GLOBALS['wp_actions'] as $item => $count) {
-		error_log(print_r($item, true));
-	}
-	foreach($GLOBALS['wp_filter'] as $item => $count) {
-		error_log(print_r($item, true));
-	}
-}
-//add_action('shutdown', 'doublee_log_all_actions');
-
-
-/**
  * Enqueue styles and scripts to make xdebug output more readable for admins in local environments
  * Note: WP_ENVIRONMENT_TYPE is a constant defined in wp-config.php
  *
