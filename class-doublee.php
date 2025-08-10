@@ -212,18 +212,29 @@ class Doublee {
 	public static function get_acf_json_filenames(): array {
 		$in_events_plugin = array();
 		$in_plugin = scandir(DOUBLEE_PLUGIN_PATH . 'assets/acf-json/'); // this plugin
-		$in_parent_theme = scandir(get_template_directory() . '/src/acf-json/');
+		$has_parent_theme = is_child_theme() && file_exists(get_template_directory() . '/src/acf-json/');
+		if($has_parent_theme) {
+			$in_parent_theme = scandir(get_template_directory() . '/src/acf-json/');
+		}
+		else {
+			$in_parent_theme = array();
+		}
 		$in_theme = scandir(get_stylesheet_directory() . '/acf-json/');
 
 		// Get the client plugin, on the assumption that its directory name matches the textdomain of the theme
 		$client = wp_get_theme()->get('TextDomain');
-		$in_client_plugin = scandir(WP_PLUGIN_DIR . '/' . $client . '/src/acf-json/');
-
-		// Comet Components events implementation
-		if (class_exists('Doubleedesign\Comet\WordPress\Calendar\Events') && defined('COMET_CALENDAR_PLUGIN_PATH')) {
-			$in_events_plugin = scandir(COMET_CALENDAR_PLUGIN_PATH . 'src/acf-json/');
+		$has_plugin = file_exists(WP_PLUGIN_DIR . '/' . $client . '/src/acf-json/');
+		if ($has_plugin) {
+			$in_client_plugin = scandir(WP_PLUGIN_DIR . '/' . $client . '/src/acf-json/');
 		}
+		else {
+			$in_client_plugin = array();
+		}
+
 		// Backwards compatibility with previous Events implementations
+		if (class_exists('Doubleedesign\Comet\WordPress\Calendar') && defined('COMET_EVENTS_PLUGIN_PATH')) {
+			$in_events_plugin = scandir(COMET_EVENTS_PLUGIN_PATH . 'src/acf-json/');
+		}
 		else if (class_exists('Doublee_Events') && defined('DOUBLEE_EVENTS_PLUGIN_PATH')) {
 			$in_events_plugin = scandir(DOUBLEE_EVENTS_PLUGIN_PATH . 'assets/acf-json/');
 		}
@@ -233,7 +244,7 @@ class Doublee {
 			'client_plugin' => array_values(array_filter($in_client_plugin, fn($item) => str_contains($item, '.json'))),
 			'parent_theme'  => array_values(array_filter($in_parent_theme, fn($item) => str_contains($item, '.json'))),
 			'theme'         => array_values(array_filter($in_theme, fn($item) => str_contains($item, '.json'))),
-			'events_plugin' => array_values(array_filter($in_events_plugin, fn($item) => str_contains($item, '.json')))
+			'events_plugin' => class_exists('Doubleedesign\Comet\WordPress\Calendar' || class_exists('Doublee_Events')) ? array_values(array_filter($in_events_plugin, fn($item) => str_contains($item, '.json'))) : array()
 		);
 	}
 
