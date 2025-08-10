@@ -40,7 +40,7 @@ class Doublee_Admin_UI {
         add_action('admin_menu', array($this, 'remove_gutenberg_menu_item'), 999);
 		add_action('admin_menu', array($this, 'add_menu_section_titles'));
 		add_filter('menu_order', array($this, 'customise_admin_menu_order_and_sections'), 99);
-		add_filter('custom_menu_order', array($this, 'customise_admin_menu_order_and_sections'));
+		add_filter('custom_menu_order', '__return_true');
 
         // Add custom CSS to the admin
 		add_action('admin_enqueue_scripts', array($this, 'admin_css'));
