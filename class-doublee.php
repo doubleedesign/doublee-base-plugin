@@ -95,6 +95,9 @@ class Doublee {
 		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-admin-notices.php';
 		new Doublee_Admin_Notices();
 
+		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-fields.php';
+		new Doublee_Fields();
+
 		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-admin-ui.php';
 		new Doublee_Admin_UI();
 
