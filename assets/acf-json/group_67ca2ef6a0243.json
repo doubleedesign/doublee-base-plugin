@@ -1,109 +1,109 @@
 {
-    "key": "group_67ca2ef6a0243",
-    "title": "Page behaviour",
-    "fields": [
-        {
-            "key": "field_67ca2ef660ce2",
-            "label": "Redirect",
-            "name": "redirect",
-            "aria-label": "",
-            "type": "group",
-            "instructions": "When a visitor comes to this page, redirect them to another page. Useful for including a page link in section navigation that you want to go to another website, or for ensuring that users go to the right place after content has been moved but they might arrive via the old link.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "layout": "block",
-            "sub_fields": [
-                {
-                    "key": "field_67ca2f2a60ce3",
-                    "label": "URL",
-                    "name": "url",
-                    "aria-label": "",
-                    "type": "url",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "allow_in_bindings": 0,
-                    "placeholder": ""
-                },
-                {
-                    "key": "field_67ca2f3060ce4",
-                    "label": "Type",
-                    "name": "type",
-                    "aria-label": "",
-                    "type": "select",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "choices": {
-                        "301": "301 (Permanent)",
-                        "302": "302 (Temporary)"
-                    },
-                    "default_value": false,
-                    "return_format": "value",
-                    "multiple": 0,
-                    "allow_null": 0,
-                    "allow_in_bindings": 0,
-                    "ui": 0,
-                    "ajax": 0,
-                    "placeholder": ""
-                },
-                {
-                    "key": "field_67ca30aeb35cc",
-                    "label": "Open in new tab",
-                    "name": "open_in_new_tab",
-                    "aria-label": "",
-                    "type": "true_false",
-                    "instructions": "Only applies to links to the page within this site that account for it. If users put the URL directly into their browser, they will be redirected within that tab.",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "message": "",
-                    "default_value": 1,
-                    "allow_in_bindings": 0,
-                    "ui_on_text": "",
-                    "ui_off_text": "",
-                    "ui": 1
-                }
-            ]
-        }
-    ],
-    "location": [
-        [
-            {
-                "param": "post_type",
-                "operator": "==",
-                "value": "page"
-            }
-        ]
-    ],
-    "menu_order": 0,
-    "position": "side",
-    "style": "default",
-    "label_placement": "top",
-    "instruction_placement": "label",
-    "hide_on_screen": "",
-    "active": true,
-    "description": "",
-    "show_in_rest": 0,
-    "modified": 1741304378
+	"key": "group_67ca2ef6a0243",
+	"title": "Page behaviour",
+	"fields": [
+		{
+			"key": "field_67ca2ef660ce2",
+			"label": "Redirect",
+			"name": "redirect",
+			"aria-label": "",
+			"type": "group",
+			"instructions": "When a visitor comes to this page, redirect them to another page. Useful for including a page link in section navigation that you want to go to another website, or for ensuring that users go to the right place after content has been moved but they might arrive via the old link.",
+			"required": 0,
+			"conditional_logic": 0,
+			"wrapper": {
+				"width": "",
+				"class": "",
+				"id": ""
+			},
+			"layout": "block",
+			"sub_fields": [
+				{
+					"key": "field_67ca2f2a60ce3",
+					"label": "URL",
+					"name": "url",
+					"aria-label": "",
+					"type": "url",
+					"instructions": "",
+					"required": 0,
+					"conditional_logic": 0,
+					"wrapper": {
+						"width": "",
+						"class": "",
+						"id": ""
+					},
+					"default_value": "",
+					"allow_in_bindings": 0,
+					"placeholder": ""
+				},
+				{
+					"key": "field_67ca2f3060ce4",
+					"label": "Type",
+					"name": "type",
+					"aria-label": "",
+					"type": "select",
+					"instructions": "",
+					"required": 0,
+					"conditional_logic": 0,
+					"wrapper": {
+						"width": "",
+						"class": "",
+						"id": ""
+					},
+					"choices": {
+						"301": "301 (Permanent)",
+						"302": "302 (Temporary)"
+					},
+					"default_value": false,
+					"return_format": "value",
+					"multiple": 0,
+					"allow_null": 0,
+					"allow_in_bindings": 0,
+					"ui": 0,
+					"ajax": 0,
+					"placeholder": ""
+				},
+				{
+					"key": "field_67ca30aeb35cc",
+					"label": "Open in new tab",
+					"name": "open_in_new_tab",
+					"aria-label": "",
+					"type": "true_false",
+					"instructions": "Only applies to links to the page within this site that account for it. If users put the URL directly into their browser, they will be redirected within that tab.",
+					"required": 0,
+					"conditional_logic": 0,
+					"wrapper": {
+						"width": "",
+						"class": "",
+						"id": ""
+					},
+					"message": "",
+					"default_value": 0,
+					"allow_in_bindings": 0,
+					"ui_on_text": "",
+					"ui_off_text": "",
+					"ui": 1
+				}
+			]
+		}
+	],
+	"location": [
+		[
+			{
+				"param": "post_type",
+				"operator": "==",
+				"value": "page"
+			}
+		]
+	],
+	"menu_order": 0,
+	"position": "side",
+	"style": "default",
+	"label_placement": "top",
+	"instruction_placement": "label",
+	"hide_on_screen": "",
+	"active": true,
+	"description": "",
+	"show_in_rest": 0,
+	"modified": 1741304378
 }
