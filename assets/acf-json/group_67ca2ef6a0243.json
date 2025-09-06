@@ -11,11 +11,6 @@
 			"instructions": "When a visitor comes to this page, redirect them to another page. Useful for including a page link in section navigation that you want to go to another website, or for ensuring that users go to the right place after content has been moved but they might arrive via the old link.",
 			"required": 0,
 			"conditional_logic": 0,
-			"wrapper": {
-				"width": "",
-				"class": "",
-				"id": ""
-			},
 			"layout": "block",
 			"sub_fields": [
 				{
@@ -28,9 +23,7 @@
 					"required": 0,
 					"conditional_logic": 0,
 					"wrapper": {
-						"width": "",
-						"class": "",
-						"id": ""
+						"width": 50
 					},
 					"default_value": "",
 					"allow_in_bindings": 0,
@@ -46,9 +39,7 @@
 					"required": 0,
 					"conditional_logic": 0,
 					"wrapper": {
-						"width": "",
-						"class": "",
-						"id": ""
+						"width": 25
 					},
 					"choices": {
 						"301": "301 (Permanent)",
@@ -73,9 +64,7 @@
 					"required": 0,
 					"conditional_logic": 0,
 					"wrapper": {
-						"width": "",
-						"class": "",
-						"id": ""
+						"width": 25
 					},
 					"message": "",
 					"default_value": 0,
@@ -96,8 +85,8 @@
 			}
 		]
 	],
-	"menu_order": 0,
-	"position": "side",
+	"menu_order": 100,
+	"position": "normal",
 	"style": "default",
 	"label_placement": "top",
 	"instruction_placement": "label",
