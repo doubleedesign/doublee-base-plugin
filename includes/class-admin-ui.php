@@ -454,6 +454,7 @@ class Doublee_Admin_UI {
             'section-title-content',
             'edit.php', // Posts
             'edit.php?post_type=page', // Pages
+            'shared-content', // From Comet Components for ACF plugin
             'site-editor.php?path=/patterns', // Shared Blocks (Patterns relabelled and added to the main menu by Comet Components)
             'upload.php', // Media
             'edit-comments.php',

@@ -20,7 +20,7 @@ if (!defined('WPINC')) {
  * Current plugin version.
  * Rename this for your plugin and update it as you release new versions.
  */
-const DOUBLEE_VERSION = '2.1.0';
+const DOUBLEE_VERSION = '3.1.0';
 
 
 /**
@@ -91,6 +91,9 @@ class Doublee {
 	private function load_classes(): void {
 		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-users.php';
 		self::$user_functions = new Doublee_Users();
+
+		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-welcome-screen.php';
+		new Doublee_Welcome_Screen();
 
 		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-admin-notices.php';
 		new Doublee_Admin_Notices();
