@@ -328,14 +328,6 @@ class Doublee_Admin_UI {
                 $menu[$index][0] = 'General Settings';
             }
         }
-
-        if (isset($submenu['themes.php'])) {
-            foreach ($submenu['themes.php'] as $key => $item) {
-                if ($item[0] === 'Patterns') {
-                    $submenu['themes.php'][$key][0] = 'Shared content';
-                }
-            }
-        }
     }
 
     /**
