@@ -62,7 +62,11 @@ class Doublee_Welcome_Screen {
 		if(current_user_can('edit_posts')) {
 			foreach($post_types as $post_type) {
 				$primary_links[] = [
-					'label' => sprintf('Create or edit a %s', $post_type->labels->singular_name),
+					'label' => sprintf(
+						'Create or edit %s %s',
+						(preg_match('/^[aeiou]/i', $post_type->labels->singular_name)) ? 'an' : 'a',
+						$post_type->labels->singular_name
+					),
 					'url'   => admin_url('edit.php?post_type=' . $post_type->name),
 					'icon'  => $post_type->menu_icon,
 				];
