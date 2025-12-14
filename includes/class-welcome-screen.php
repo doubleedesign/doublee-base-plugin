@@ -12,6 +12,9 @@ class Doublee_Welcome_Screen {
 		add_action('admin_init', [$this, 'remove_default_welcome_panel']);
 		add_action('admin_init', [$this, 'remove_default_metaboxes'], 5);
 		add_action('welcome_panel', [$this, 'custom_dashboard_welcome_panel']);
+
+		add_action('admin_init', [$this, 'always_show_welcome_panel'], 1);
+		add_action('user_register', [$this, 'ensure_welcome_for_new_user']);
 	}
 
 	/**
@@ -142,5 +145,16 @@ class Doublee_Welcome_Screen {
 			</div>
 		</section>
 		HTML;
+	}
+
+	public function always_show_welcome_panel(): void {
+		$user_id = get_current_user_id();
+		if ($user_id && get_user_meta($user_id, 'show_welcome_panel', true) !== '1') {
+			update_user_meta($user_id, 'show_welcome_panel', 1);
+		}
+	}
+
+	public function ensure_welcome_for_new_user(int $user_id): void {
+		update_user_meta($user_id, 'show_welcome_panel', 1);
 	}
 }
