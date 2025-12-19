@@ -62,11 +62,13 @@ class Doublee_Welcome_Screen {
 		if(current_user_can('edit_posts')) {
 			foreach($post_types as $post_type) {
 				$primary_links[] = [
-					'label' => sprintf(
-						'Create or edit %s %s',
-						(preg_match('/^[aeiou]/i', $post_type->labels->singular_name)) ? 'an' : 'a',
-						$post_type->labels->singular_name
-					),
+					'label' => $post_type->labels->singular_name === 'Shared Content'
+						? 'Create or edit shared content'
+						: sprintf(
+							'Create or edit %s %s',
+							(preg_match('/^[aeiou]/i', $post_type->labels->singular_name)) ? 'an' : 'a',
+							$post_type->labels->singular_name
+						),
 					'url'   => admin_url('edit.php?post_type=' . $post_type->name),
 					'icon'  => $post_type->menu_icon,
 				];
@@ -115,7 +117,7 @@ class Doublee_Welcome_Screen {
 		foreach($primary_links as $link) {
 			$icon_html = $link['icon'] ? sprintf('<span class="dashicons %s"></span> ', esc_attr($link['icon'])) : '';
 			$primary_links_html .= sprintf(
-				'<li><a href="%s" class="button button-primary button-large">%s%s</a></li>',
+				'<li><a href="%s" class="button button-primary button-large">%s<span class="label">%s</span></a></li>',
 				esc_url($link['url']),
 				$icon_html,
 				esc_html($link['label'])
@@ -126,7 +128,7 @@ class Doublee_Welcome_Screen {
 		foreach($secondary_links as $link) {
 			$icon_html = $link['icon'] ? sprintf('<span class="dashicons %s"></span> ', esc_attr($link['icon'])) : '';
 			$secondary_links_html .= sprintf(
-				'<li><a href="%s">%s%s</a></li>',
+				'<li><a href="%s">%s <span class="label">%s</span></a></li>',
 				esc_url($link['url']),
 				$icon_html,
 				esc_html($link['label'])
