@@ -4,6 +4,7 @@ class Doublee_Fields {
 
     public function __construct() {
         add_action('acf/include_fields', [$this, 'register_global_settings_fields'], 5, 0);
+		add_action('acf/include_fields', [$this, 'register_page_behaviour_fields'], 10, 0);
         add_filter('acf/load_value/name=logo', [$this, 'load_classicpress_logo'], 10, 3);
         add_action('acf/save_post', [$this, 'save_classicpress_logo'], 10, 1);
     }
@@ -450,6 +451,84 @@ class Doublee_Fields {
 
         acf_add_local_field_group($final);
     }
+
+	public function register_page_behaviour_fields(): void {
+		if (!function_exists('acf_add_local_field_group')) {
+			return;
+		}
+
+		acf_add_local_field_group( array(
+				'key' => 'group_67ca2ef6a0243',
+				'title' => 'Page behaviour',
+				'fields' => array(
+					array(
+						'key' => 'field_67ca2ef660ce2',
+						'label' => 'Redirect',
+						'name' => 'redirect',
+						'aria-label' => '',
+						'type' => 'group',
+						'instructions' => 'When a visitor comes to this page, redirect them to another page. Useful for including a page link in section navigation that you want to go to another website, or for ensuring that users go to the right place after content has been moved but they might arrive via the old link.',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'layout' => 'block',
+						'sub_fields' => array(
+							array(
+								'key' => 'field_67ca2f2a60ce3',
+								'label' => 'URL',
+								'name' => 'url',
+								'type' => 'url',
+							),
+							array(
+								'key' => 'field_67ca2f3060ce4',
+								'label' => 'Type',
+								'name' => 'type',
+								'type' => 'select',
+								'choices' => array(
+									301 => '301 (Permanent)',
+									302 => '302 (Temporary)',
+								),
+								'default_value' => false,
+								'return_format' => 'value',
+								'multiple' => 0,
+								'allow_null' => 0,
+								'allow_in_bindings' => 0,
+								'ui' => 0,
+								'ajax' => 0,
+								'create_options' => 0,
+								'save_options' => 0,
+							),
+							array(
+								'key' => 'field_67ca30aeb35cc',
+								'label' => 'Open in new tab',
+								'name' => 'open_in_new_tab',
+								'type' => 'true_false',
+								'instructions' => 'Only applies to links to the page within this site that account for it. If users put the URL directly into their browser, they will be redirected within that tab.',
+								'ui' => 1,
+							),
+						),
+					),
+				),
+				'location' => array(
+					array(
+						array(
+							'param' => 'post_type',
+							'operator' => '==',
+							'value' => 'page',
+						),
+					),
+				),
+				'menu_order' => 100,
+				'position' => 'side',
+				'style' => 'default',
+				'label_placement' => 'top',
+				'instruction_placement' => 'label',
+				'hide_on_screen' => '',
+				'active' => true,
+				'description' => '',
+				'show_in_rest' => 0,
+				'display_title' => '',
+			) );
+	}
 
     public function load_classicpress_logo($value, $post_id, $field) {
         // If we're in ClassicPress, sync the logo field it provides to the ACF field on load
