@@ -6,4 +6,6 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Doubleedesign\\BasePlugin\\Tests\\' => array($baseDir . '/tests'),
+    'Doubleedesign\\BasePlugin\\' => array($baseDir . '/src'),
 );

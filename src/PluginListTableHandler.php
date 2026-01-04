@@ -1,5 +1,7 @@
 <?php
-class Doublee_Plugin_List_Table {
+namespace Doubleedesign\BasePlugin;
+
+class PluginListTableHandler {
 
 	function __construct() {
 		add_action('admin_head', [$this, 'add_plugin_row_css'], 100);

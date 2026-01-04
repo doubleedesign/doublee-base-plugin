@@ -1,8 +1,42 @@
 # Double-E Plugin changelog
 
+## Version 4.0.0
+Date: 4 January 2026
+
+- Refactor: Refactor plugin structure to use PSR-4 autoloading via Composer
+
+## Version 3.1.0 
+Date: 20 December 2025
+
+- Feature: Add custom welcome screen and disable the default one
+- Refactor: Move Page Behaviour field group definition into PHP
+- Cleanup: Remove block pattern menu item customisation and block instructions fields (now handled in my block plugin)
+
+## Version 4.0.0
+Date: 4 January 2026
+
+- Refactor: Refactor plugin structure to use PSR-4 autoloading via Composer
+- Cleanup: Remove leftover field definitions from my brief experimentation with ACF Extended
+
+## Version 3.1.0 
+Date: 20 December 2025
+
+- Feature: Add custom welcome screen and disable the default one
+- Refactor: Move Page Behaviour field group definition into PHP
+- Cleanup: Remove block pattern menu item customisation and block instructions fields (now handled in my block plugin)
+
 ## Version 3.0.0
 
-// TODO
+- Feature: Add Page Behaviour options
+- Feature: Highlight my plugins in the plugins list
+- Enhancement: Improved messaging and ability to override global settings fields from other plugins/themes
+- Refactor: Move global options ACF field registration into PHP (instead of JSON)
+- Refactor: Simplify custom admin menu implementation
+- Fix: Set PAGE_FOR_POSTS constant within the plugin
+- Fix: Add ACF Pro as a required plugin
+- Fix: Show where event fields are saved in backend
+- Fix: Remove WP version requirement to enable ClassicPress support
+- Cleanup: Remove dev logging functions that I now have in separate local dev plugin
 
 ## Version 2.1.0
 Date: 21 April 2024
@@ -45,32 +79,6 @@ Date: 4 November 2023
 - Load an admin stylesheet for plugin-specific admin CSS customisations
 - Add a new `after_title` metabox context
   - If WooCommerce is active, this is used to move the Product Data box above the description by default (users can still drag and drop it to an alternative location as normal though)
-
-#### Example of how to tie CPT ACF fields to the plugin, rather than the active theme
-```php
-
-public function __construct() {
-    add_action('acf/update_field_group', array($this, 'save_acf_fields_to_plugin'), 1, 1);
-}
-
-/**
- * Override the save location for ACF JSON files for field groups set to be shown on this CPT
- * @param $group
- * @return void
- */
-function save_acf_fields_to_plugin($group): void {
-    // Flatten all location rules into a single-dimensional array
-    $locations = call_user_func_array('array_merge', $group['location']);
-    // Check if the locations include this CPT
-    $is_shown_on_cpt = array_filter($locations, function($location) {
-        return $location['param'] === 'post_type' && $location['value'] === 'event';
-    });
-
-    if($is_shown_on_cpt) {
-        Doublee::override_acf_json_save_location();
-    }
-}
-```
 
 ### Fixes
 - Added requirement for Classic Editor as an admin notice if it isn't installed and active

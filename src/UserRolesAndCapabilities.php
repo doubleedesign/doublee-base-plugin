@@ -1,4 +1,8 @@
 <?php
+namespace Doubleedesign\BasePlugin;
+
+use WP_Role;
+use WP_User_Query;
 
 /**
  * This class defines functions to set up custom user roles and capabilities.
@@ -7,7 +11,7 @@
  * @package    Doublee
  * @author     Leesa Ward
  */
-class Doublee_Users {
+class UserRolesAndCapabilities {
 	protected array $custom_roles;
 
 	public function __construct() {
@@ -182,7 +186,7 @@ class Doublee_Users {
 	 */
 	function reassign_users_roles(): void {
 		foreach($this->custom_roles as $custom_role) {
-			$user_query = new WP_User_Query(array(
+			$user_query = new \WP_User_Query(array(
 				'capability' => $custom_role['key']
 			));
 			foreach($user_query->results as $user) {
@@ -275,10 +279,9 @@ class Doublee_Users {
 	 * @return string
 	 */
 	function custom_user_list_table($class_name, $args): string {
-		include('class-users-list-table.php');
-
-		if($args['screen']->id === 'users') {
-			$class_name = 'Doublee_Users_List_Table';
+		if(class_exists('WP_Users_List_Table') && $args['screen']->id === 'users') {
+			include('UsersListTable.php');
+			$class_name = 'UsersListTable';
 		}
 
 		return $class_name;

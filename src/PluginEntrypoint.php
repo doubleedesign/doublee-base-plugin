@@ -1,4 +1,5 @@
 <?php
+namespace Doubleedesign\BasePlugin;
 
 /**
  * The plugin bootstrap file
@@ -20,7 +21,7 @@ if (!defined('WPINC')) {
  * Current plugin version.
  * Rename this for your plugin and update it as you release new versions.
  */
-const DOUBLEE_VERSION = '3.1.0';
+const DOUBLEE_VERSION = '4.0.0';
 
 
 /**
@@ -37,7 +38,7 @@ define('DOUBLEE_PLUGIN_PATH', plugin_dir_path(__FILE__));
  * @subpackage Doublee/includes
  * @author     Leesa Ward
  */
-class Doublee {
+class PluginEntrypoint {
 
 	/**
 	 * The current version of the plugin.
@@ -62,7 +63,7 @@ class Doublee {
 	 * - Is one method more efficient than another?
 	 * - Which way might be clearer and easier to understand? Are there any downsides to the "easier" way?
 	 */
-	private static Doublee_Users $user_functions;
+	private static UserRolesAndCapabilities $user_functions;
 
 
 	/**
@@ -89,33 +90,17 @@ class Doublee {
 	 * @access   private
 	 */
 	private function load_classes(): void {
-		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-users.php';
-		self::$user_functions = new Doublee_Users();
-
-		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-welcome-screen.php';
-		new Doublee_Welcome_Screen();
-
-		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-admin-notices.php';
-		new Doublee_Admin_Notices();
-
-		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-fields.php';
-		new Doublee_Fields();
-
-		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-admin-ui.php';
-		new Doublee_Admin_UI();
-
-		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-plugin-list-table.php';
-		new Doublee_Plugin_List_Table();
-
-		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-seo.php';
-		new Doublee_SEO();
-
-		require_once DOUBLEE_PLUGIN_PATH . '/includes/class-page-behaviour.php';
-		new Doublee_Page_Behaviour();
+		self::$user_functions = new UserRolesAndCapabilities();
+		new WelcomeScreen();
+		new AdminNotices();
+		new GlobalOptions();
+		new AdminUI();
+		new PluginListTableHandler();
+		new SEO();
+		new PageBehaviour();
 
 		if (class_exists('WooCommerce')) {
-			require_once DOUBLEE_PLUGIN_PATH . '/includes/class-woocommerce.php';
-			new Doublee_WooCommerce();
+			new WooCommerceHandler();
 		}
 	}
 

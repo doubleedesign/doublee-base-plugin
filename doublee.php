@@ -5,18 +5,28 @@
  *
  * Author:      		Double-E Design
  * Author URI:  		https://www.doubleedesign.com.au
- * Version:     		3.1.0
- * Requires PHP: 		8.1.9
+ * Version:     		4.0.0
+ * Requires PHP: 		8.3
  * Text Domain: 		doublee
  * Requires plugins: 		advanced-custom-fields-pro
  *
  * @package Doublee
  */
 
+use Doubleedesign\BasePlugin\PluginEntrypoint;
+
 define ('PAGE_FOR_POSTS', get_option('page_for_posts'));
 
-// Load the plugin files
-require_once('class-doublee.php');
+/**
+ * Load Composer autoloader
+ */
+require_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
+
+/**
+ * Initialize the core plugin class
+ */
+new PluginEntrypoint();
+
 
 /**
  * Create activation and deactivation hooks and functions, so we can do things
@@ -26,22 +36,17 @@ require_once('class-doublee.php');
  * @return void
  */
 function activate_doublee(): void {
-	Doublee::activate();
+	PluginEntrypoint::activate();
 }
 function deactivate_doublee(): void {
-	Doublee::deactivate();
+	PluginEntrypoint::deactivate();
 }
 function uninstall_doublee(): void {
-	Doublee::uninstall();
+	PluginEntrypoint::uninstall();
 }
 register_activation_hook(__FILE__, 'activate_doublee');
 register_deactivation_hook(__FILE__, 'deactivate_doublee');
 register_uninstall_hook(__FILE__, 'uninstall_doublee');
-
-
-// Load and run the rest of the plugin
-new Doublee();
-
 
 /**
  * Enqueue styles and scripts to make xdebug output more readable for admins in local environments

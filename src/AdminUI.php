@@ -1,4 +1,7 @@
 <?php
+namespace Doubleedesign\BasePlugin;
+
+use WP_Query;
 
 /**
  * This class defines functions to customise the WordPress admin,
@@ -11,7 +14,7 @@
  *
  * @author     Leesa Ward
  */
-class Doublee_Admin_UI {
+class AdminUI {
 
     public function __construct() {
         // Customise where ACF fields are loaded from and saved to

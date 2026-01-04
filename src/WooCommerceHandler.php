@@ -1,4 +1,5 @@
 <?php
+namespace Doubleedesign\BasePlugin;
 
 /**
  * This class defines functions to customise WooCommerce functionality.
@@ -7,7 +8,7 @@
  * @package    Doublee
  * @author     Leesa Ward
  */
-class Doublee_WooCommerce {
+class WooCommerceHandler {
 
 	public function __construct() {
 		add_filter('woocommerce_product_data_tabs', array($this, 'customise_product_data_tabs'), 50);

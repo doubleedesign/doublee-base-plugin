@@ -1,5 +1,6 @@
 <?php
-class Doublee_Page_Behaviour {
+namespace Doubleedesign\BasePlugin;
+class PageBehaviour {
 
 	public function __construct() {
 		add_action('template_redirect', [$this, 'redirect_page']);

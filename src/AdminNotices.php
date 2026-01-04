@@ -1,4 +1,5 @@
 <?php
+namespace Doubleedesign\BasePlugin;
 
 /**
  * This class defines functions to add admin messages.
@@ -7,7 +8,7 @@
  * @package    Doublee
  * @author     Leesa Ward
  */
-class Doublee_Admin_Notices {
+class AdminNotices {
 
     public function __construct() {
         add_action('admin_notices', array($this, 'required_plugins_notification'));

@@ -1,4 +1,6 @@
 <?php
+namespace Doubleedesign\BasePlugin;
+
 /**
  * This class customises the WordPress dashboard welcome screen.
  *
@@ -6,7 +8,7 @@
  * @package    Doublee
  * @author     Leesa Ward
  */
-class Doublee_Welcome_Screen {
+class WelcomeScreen {
 
 	public function __construct() {
 		add_action('admin_init', [$this, 'remove_default_welcome_panel']);

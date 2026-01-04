@@ -1,4 +1,5 @@
 <?php
+namespace Doubleedesign\BasePlugin;
 
 /**
  * This class defines basic SEO functionality for sensible defaults in the absence of an SEO plugin.
@@ -7,7 +8,7 @@
  * @package    Doublee
  * @author     Leesa Ward
  */
-class Doublee_SEO {
+class SEO {
 
 	public function __construct() {
 		add_filter('wp_title', [$this, 'basic_seo_title'], 10, 2);

@@ -3,6 +3,7 @@
 Common customisations for client websites.
 
 ## What's included
+ - Customised welcome screen 
  - ACF fields for logo, contact information, social media links etc
  - Admin notices for required/recommended plugins
  - Defaults for hiding and positioning of certain metaboxes in the admin edit screens (for simplicity)
@@ -27,6 +28,6 @@ Please see the [changelog](CHANGELOG.md) for more information and the latest upd
 
 ## General intentions and advice
 
-I use this with my own theme starterkits, and client-specific custom plugins, and other plugins I have developed (such as my Breadcrumbs and Events plugins) to create custom sites with clear separation of concerns as much as is practical. As a  guide:
+I use this with my own theme starterkits, and client-specific custom plugins, and other plugins I have developed to create custom sites with clear separation of concerns as much as is practical. As a  guide:
 - Code related to front-end design and content display belongs in the theme
 - Custom functionality, custom post types, custom taxonomies, modifications to WordPress functionality (including the admin UI), site-specific data structures and management belong in plugins.

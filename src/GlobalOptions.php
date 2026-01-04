@@ -1,6 +1,14 @@
 <?php
+namespace Doubleedesign\BasePlugin;
 
-class Doublee_Fields {
+/**
+ * This class defines and handles the side-wide/global options fields.
+ *
+ * @since      1.0.0
+ * @package    Doublee
+ * @author     Leesa Ward
+ */
+class GlobalOptions {
 
     public function __construct() {
         add_action('acf/include_fields', [$this, 'register_global_settings_fields'], 5, 0);
