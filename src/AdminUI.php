@@ -18,8 +18,6 @@ class AdminUI {
 
     public function __construct() {
         // Customise where ACF fields are loaded from and saved to
-        add_filter('acf/settings/load_json', array($this, 'load_acf_fields_from_plugin'), 10);
-        add_filter('manage_acf-field-group_posts_custom_column', array($this, 'show_where_acf_fields_are_loaded_from'), 100, 2);
         add_action('acf/init', array($this, 'setup_acf_global_options'), 5);
         add_action('acf/update_field_group', array($this, 'save_acf_global_options_to_plugin'), 1);
 
@@ -58,57 +56,6 @@ class AdminUI {
         // Customise selected ACF field instruction rendering
         add_filter('acf/prepare_field', [$this, 'prepare_fields_that_should_have_instructions_as_tooltips'], 11, 1);
         add_filter('acf/get_field_label', [$this, 'render_some_acf_field_instructions_as_tooltips'], 11, 3);
-    }
-
-    /**
-     * Enable loading JSON files of ACF fields from the plugin
-     *
-     * @param  $paths
-     *
-     * @return array
-     */
-    public function load_acf_fields_from_plugin($paths): array {
-        $paths[] = DOUBLEE_PLUGIN_PATH . 'assets/acf-json/';
-
-        return $paths;
-    }
-
-    /**
-     * Update the Local JSON column in the ACF Field Groups admin list to show where the fields are being loaded from
-     *
-     * @param  $column_key
-     * @param  $post_id
-     *
-     * @return void
-     *
-     * @noinspection t
-     */
-    public function show_where_acf_fields_are_loaded_from($column_key, $post_id): void {
-        if ($column_key === 'acf-json') {
-            $files = Doublee::get_acf_json_filenames();
-            $post = get_post($post_id);
-            $key = $post->post_name;
-            if (in_array($key . '.json', $files['plugin'])) {
-                echo ' in ' . Doublee::get_name();
-            }
-            if (in_array($key . '.json', $files['client_plugin'])) {
-                echo ' in client plugin';
-            }
-            if (in_array($key . '.json', $files['events_plugin'])) {
-                if (is_plugin_active('comet-calendar/comet-calendar.php')) {
-                    echo ' in Comet Calendar plugin';
-                }
-                else {
-                    echo ' in Events plugin';
-                }
-            }
-            if (in_array($key . '.json', $files['parent_theme'])) {
-                echo ' in ' . wp_get_theme()->parent() . ' theme';
-            }
-            if (in_array($key . '.json', $files['theme'])) {
-                echo ' in ' . wp_get_theme()->name . ' theme';
-            }
-        }
     }
 
     /**

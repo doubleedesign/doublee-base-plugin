@@ -4,7 +4,7 @@
 Date: 4 January 2026
 
 - Refactor: Refactor plugin structure to use PSR-4 autoloading via Composer
-
+- Cleanup: Cleanup: Remove unused code from when ACF JSON was used for field group storage
 ## Version 3.1.0 
 Date: 20 December 2025
 
