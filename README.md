@@ -3,17 +3,20 @@
 Common customisations for client websites.
 
 - [Features](#features)
-  - [Customised welcome screen](#customised-welcome-screen)
-  - [Global settings page](#global-settings-page)
-  - ["Editor Plus" custom role](#editor-plus-custom-role)
-  - [Other features](#other-features)
+	- [Welcome screen](#welcome-screen)
+	- [Global settings](#global-settings)
+	- ["Editor Plus" custom role](#editor-plus-custom-role)
+	- [CPT Index post type](#cpt-index-post-type)
+	- [Other features](#other-features)
 - [General intentions and advice](#general-intentions-and-advice)
-- [Development](#development)
+- [Information for developers](#information-for-developers)
+	- [Available filter hooks](#filter-hook-summary)
 - [Changelog](#changelog)
 
+---
 ## Features
 
-### Customised welcome screen
+### Welcome screen
 
 The default WordPress welcome screen is replaced with a custom welcome screen that provides links to common actions relevant to the current site, using its post types, and the presence of particular plugins and options pages, and the current user's permissions to determine which actions to show.
 
@@ -28,7 +31,7 @@ add_filter('doublee_welcome_screen_post_types', function(array $post_types): arr
 });
 ```
 
-### Global settings page
+### Global settings
 
 An ACF Options page is included for site-wide, client-specific global settings such as logos and contact information. By default it is located under `Appearance → (Site name) Settings` in the admin menu. Where this information is used on the front-end is determined by the active theme and plugins.
 
@@ -37,6 +40,9 @@ An ACF Options page is included for site-wide, client-specific global settings s
 If you are using ClassicPress, the logo field here automatically syncs with the ClassicPress logo setting in the General Settings page. It's kept in this options page as well because of the assumption that clients would expect to find it here.
 
 The fields can be customised by plugins and themes using the `doublee_global_settings_fields` filter. If adding fields, please use the `doublee_global_settings_contributors` filter to ensure that the "About" tab content is accurate - this is helpful for troubleshooting.
+
+> [!WARNING]  
+> Filtering out fields from the settings in code _does not_ delete existing data for them from the database.
 
 ### "Editor Plus" custom role
 
@@ -73,31 +79,34 @@ add_filter('doublee_indexable_custom_post_types', function(array $post_types): a
 
 ### Other features
 - Customised admin menu ordering and sectioning
- - Admin notices for required/recommended plugins
- - Defaults for hiding and positioning of certain metaboxes in the admin edit screens (for simplicity)
- - Defaults for hiding and positioning of certain columns in the admin list tables (for simplicity)
- - Conditionally loading and saving certain ACF field groups within the plugin, rather than the active theme
- - An additional context for displaying metaboxes (`after_title`)
- - Automatic basic `<title>` tags (for sites that don't need a full SEO plugin)
-
-Please see the [changelog](CHANGELOG.md) for more information and the latest updates.
+- Admin notices for required/recommended plugins
+- Defaults for hiding and positioning of certain metaboxes in the admin edit screens (for simplicity)
+- Defaults for hiding and positioning of certain columns in the admin list tables (for simplicity)
+- Conditionally loading and saving certain ACF field groups within the plugin, rather than the active theme
+- An additional context for displaying metaboxes (`after_title`)
+- Automatic basic `<title>` tags (for sites that don't need a full SEO plugin).
 
 ---
+## Information for developers
 
-## General intentions and advice
+### Available filter hooks
 
-I use this with my own theme starterkits, and client-specific custom plugins, and other plugins I have developed to create custom sites with clear separation of concerns as much as is practical. As a  guide:
+| Filter                                       | Arguments           | Description                                                                                               |
+|----------------------------------------------|---------------------|-----------------------------------------------------------------------------------------------------------|
+| `doublee_welcome_screen_included_post_types` | `array $post_types` | Modify the post types for which "Add or edit" buttons are shown on the [welcome screen](#welcome-screen). |
+| `doublee_welcome_screen_primary_links`	      | `array $links`      | Modify the primary action links shown on the [welcome screen](#welcome-screen).                           |
+| `doublee_welcome_screen_secondary_links`     | `array $links`      | Modify the secondary action links shown on the [welcome screen](#welcome-screen).                         |
+| `doublee_indexable_custom_post_types`		      | `array $post_types` | Modify the post types for which [CPT Indexes](#cpt-index-post-type) are created.                          |
+| `doublee_global_settings_fields`             | `array $fields`     | Modify the ACF fields available on the [global settings](#global-settings).                               |
+| `doublee_global_settings_contributors`       | `array $names`      | Modify the list of contributors shown on the "About" tab of the [global settings](#global-settings).      |
+
+### General intentions and advice
+
+I use this with my own theme starterkits, and client-specific custom plugins, and other plugins I have developed to create custom sites with clear separation of concerns as much as is practical. As a guide:
 - Code related to front-end design and content display belongs in the theme
 - Custom functionality, custom post types, custom taxonomies, modifications to WordPress functionality (including the admin UI), site-specific data structures and management belong in plugins.
 
 ---
-
-## Development
-
-More info to come.
-
----
-
 ## Changelog
 
 Please see [CHANGELOG.md](CHANGELOG.md).
