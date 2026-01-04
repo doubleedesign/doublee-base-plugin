@@ -92,7 +92,6 @@ class GlobalOptions {
                     'mime_types'        => '',
                     'preview_size'      => 'medium',
                     'uploader'          => '',
-                    'acfe_thumbnail'    => 0,
                     'repeatable'        => true,
                 ),
                 array(
@@ -129,11 +128,6 @@ class GlobalOptions {
                         'id'    => '',
                     ),
                     'layout'                  => 'block',
-                    'acfe_seamless_style'     => 0,
-                    'acfe_group_modal'        => 0,
-                    'acfe_group_modal_close'  => 0,
-                    'acfe_group_modal_button' => '',
-                    'acfe_group_modal_size'   => 'large',
                     'repeatable'              => true,
                     'sub_fields'              => array(
                         array(
@@ -285,7 +279,6 @@ class GlobalOptions {
                     'collapsed'                     => '',
                     'button_label'                  => 'Add link',
                     'rows_per_page'                 => 20,
-                    'acfe_repeater_stylised_button' => 0,
                     'repeatable'                    => true,
                     'sub_fields'                    => array(
                         array(
