@@ -52,8 +52,27 @@ The fields can be customised by plugins and themes using the `doublee_global_set
 - Upon reactivation (without uninstallation), users who had the Editor Plus role should get it back (note: this is because a capability by the same name is left there unless the plugin is uninstalled; if you intend to use `current_user_can('editor_plus')` then this may not suit your needs)
 - Upon uninstallation, the remnants of the role are totally wiped so if the plugin is reactivated again, custom roles must be manually reassigned.
 
+### CPT Index post type
+
+A "CPT Index" custom post type is registered, which creates post objects corresponding to custom post types. This enables CPT archives to be treated like posts in query contexts such as using them in ACF post object and relationship fields. Indexes are created and deleted automatically according to post type eligibility.
+
+![cpt-indexes-2.png](docs/cpt-indexes-2.png)
+
+Indexes are a mostly "under the hood" post type used to provide functionality using features where we want to treat a CPT archive like a post or page.
+- On the front-end, they redirect to their corresponding CPT archive pages by default, and functions like `get_the_permalink` should return the archive URL. Theme templates like `single-cpt_index.php` and `archive-cpt_index.php` should have no effect because the post type is not publicly queryable.
+- On the back-end, admins can edit the index title, featured image, and excerpt as it is expected that those are the fields that will be used when treating indexes like pages in theme templates. Indexes cannot be manually created or deleted in the admin - their existence is entirely managed by the plugin logic.
+
+Out of the box, indexes are created for non-built-in post types that are publicly queryable. Themes and plugins can alter which post types are "indexable" using the `doublee_cpt_indexable_post_types` filter.
+
+```php
+add_filter('doublee_indexable_custom_post_types', function(array $post_types): array {
+	$post_types[] = 'product';
+	return $post_types;
+});
+```
+
 ### Other features
- - Customised admin menu ordering and sectioning
+- Customised admin menu ordering and sectioning
  - Admin notices for required/recommended plugins
  - Defaults for hiding and positioning of certain metaboxes in the admin edit screens (for simplicity)
  - Defaults for hiding and positioning of certain columns in the admin list tables (for simplicity)

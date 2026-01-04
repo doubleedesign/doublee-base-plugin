@@ -98,6 +98,7 @@ class PluginEntrypoint {
 		new PluginListTableHandler();
 		new SEO();
 		new PageBehaviour();
+		new CPTIndexHandler();
 
 		if (class_exists('WooCommerce')) {
 			new WooCommerceHandler();
