@@ -1,1 +1,4 @@
 .idea/copilot*
+vendor/*
+!vendor/composer
+!vendor/autoload.php
