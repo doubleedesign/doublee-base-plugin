@@ -18,10 +18,7 @@ class AdminUI {
 
     public function __construct() {
         // Customise where ACF fields are loaded from and saved to
-        add_filter('acf/settings/load_json', array($this, 'load_acf_fields_from_plugin'), 10);
-        add_filter('manage_acf-field-group_posts_custom_column', array($this, 'show_where_acf_fields_are_loaded_from'), 100, 2);
         add_action('acf/init', array($this, 'setup_acf_global_options'), 5);
-        add_action('acf/update_field_group', array($this, 'save_acf_global_options_to_plugin'), 1);
 
         // Disable ACF's post type, taxonomy, and options pages features because I code these things in via this plugin and/or client-specific plugins
         add_filter('acf/settings/enable_post_types', '__return_false');
@@ -61,57 +58,6 @@ class AdminUI {
     }
 
     /**
-     * Enable loading JSON files of ACF fields from the plugin
-     *
-     * @param  $paths
-     *
-     * @return array
-     */
-    public function load_acf_fields_from_plugin($paths): array {
-        $paths[] = DOUBLEE_PLUGIN_PATH . 'assets/acf-json/';
-
-        return $paths;
-    }
-
-    /**
-     * Update the Local JSON column in the ACF Field Groups admin list to show where the fields are being loaded from
-     *
-     * @param  $column_key
-     * @param  $post_id
-     *
-     * @return void
-     *
-     * @noinspection t
-     */
-    public function show_where_acf_fields_are_loaded_from($column_key, $post_id): void {
-        if ($column_key === 'acf-json') {
-            $files = Doublee::get_acf_json_filenames();
-            $post = get_post($post_id);
-            $key = $post->post_name;
-            if (in_array($key . '.json', $files['plugin'])) {
-                echo ' in ' . Doublee::get_name();
-            }
-            if (in_array($key . '.json', $files['client_plugin'])) {
-                echo ' in client plugin';
-            }
-            if (in_array($key . '.json', $files['events_plugin'])) {
-                if (is_plugin_active('comet-calendar/comet-calendar.php')) {
-                    echo ' in Comet Calendar plugin';
-                }
-                else {
-                    echo ' in Events plugin';
-                }
-            }
-            if (in_array($key . '.json', $files['parent_theme'])) {
-                echo ' in ' . wp_get_theme()->parent() . ' theme';
-            }
-            if (in_array($key . '.json', $files['theme'])) {
-                echo ' in ' . wp_get_theme()->name . ' theme';
-            }
-        }
-    }
-
-    /**
      * Set up Global Options page
      *
      * @return void
@@ -127,20 +73,6 @@ class AdminUI {
                 'menu_slug'   => 'acf-options-global-options',
                 'position'    => 0
             ));
-        }
-    }
-
-    /**
-     * Save any changes to Global Options ACF fields to the JSON file in the plugin
-     * rather than the default location (the theme)
-     *
-     * @param  $group
-     *
-     * @return void
-     */
-    public function save_acf_global_options_to_plugin($group): void {
-        if ($group['key'] === 'group_5876ae3e825e9' || $group['key'] == 'group_67bac5d4bed29' || $group['key'] == 'group_67ca2ef6a0243') {
-            Doublee::override_acf_json_save_location();
         }
     }
 
