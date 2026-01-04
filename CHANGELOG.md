@@ -14,20 +14,8 @@ Date: 20 December 2025
 - Refactor: Move Page Behaviour field group definition into PHP
 - Cleanup: Remove block pattern menu item customisation and block instructions fields (now handled in my block plugin)
 
-## Version 4.0.0
-Date: 4 January 2026
-
-- Refactor: Refactor plugin structure to use PSR-4 autoloading via Composer
-- Cleanup: Remove leftover field definitions from my brief experimentation with ACF Extended
-
-## Version 3.1.0 
-Date: 20 December 2025
-
-- Feature: Add custom welcome screen and disable the default one
-- Refactor: Move Page Behaviour field group definition into PHP
-- Cleanup: Remove block pattern menu item customisation and block instructions fields (now handled in my block plugin)
-
 ## Version 3.0.0
+Date: 6 September 2025
 
 - Feature: Add Page Behaviour options
 - Feature: Highlight my plugins in the plugins list
