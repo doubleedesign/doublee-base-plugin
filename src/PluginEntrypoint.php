@@ -13,7 +13,7 @@ namespace Doubleedesign\BasePlugin;
  */
 
 // If this file is called directly, abort.
-if (!defined('WPINC')) {
+if(!defined('WPINC')) {
 	die;
 }
 
@@ -21,7 +21,7 @@ if (!defined('WPINC')) {
  * Current plugin version.
  * Rename this for your plugin and update it as you release new versions.
  */
-const DOUBLEE_VERSION = '4.0.0';
+const DOUBLEE_VERSION = '4.1.0';
 
 
 /**
@@ -100,7 +100,7 @@ class PluginEntrypoint {
 		new PageBehaviour();
 		new CPTIndexHandler();
 
-		if (class_exists('WooCommerce')) {
+		if(class_exists('WooCommerce')) {
 			new WooCommerceHandler();
 		}
 	}

@@ -82,7 +82,6 @@ add_filter('doublee_indexable_custom_post_types', function(array $post_types): a
 - Admin notices for required/recommended plugins
 - Defaults for hiding and positioning of certain metaboxes in the admin edit screens (for simplicity)
 - Defaults for hiding and positioning of certain columns in the admin list tables (for simplicity)
-- Conditionally loading and saving certain ACF field groups within the plugin, rather than the active theme
 - An additional context for displaying metaboxes (`after_title`)
 - Automatic basic `<title>` tags (for sites that don't need a full SEO plugin).
 

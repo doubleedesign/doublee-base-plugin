@@ -3,19 +3,19 @@
  * Plugin name: Double-E Design Base Plugin
  * Description: Customisations and common custom functionality for Double-E Design websites.
  *
- * Author:      		Double-E Design
- * Author URI:  		https://www.doubleedesign.com.au
- * Version:     		4.0.0
- * Requires PHP: 		8.3
- * Text Domain: 		doublee
- * Requires plugins: 		advanced-custom-fields-pro
+ * Author:              Double-E Design
+ * Author URI:          https://www.doubleedesign.com.au
+ * Version:             4.1.0
+ * Requires PHP:        8.3
+ * Text Domain:         doublee
+ * Requires plugins:    advanced-custom-fields-pro
  *
- * @package Doublee
+ * @package Doubleedesign\BasePlugin
  */
 
 use Doubleedesign\BasePlugin\PluginEntrypoint;
 
-define ('PAGE_FOR_POSTS', get_option('page_for_posts'));
+define('PAGE_FOR_POSTS', get_option('page_for_posts'));
 
 /**
  * Load Composer autoloader
@@ -55,19 +55,19 @@ register_uninstall_hook(__FILE__, 'uninstall_doublee');
  * @return void
  */
 function doublee_make_xdebug_pretty(): void {
-    if (defined('WP_ENVIRONMENT_TYPE') && WP_ENVIRONMENT_TYPE === 'local' && current_user_can('administrator')) {
-        wp_enqueue_style(
-            'xdebug-styles',
-            '/wp-content/plugins/doublee-base-plugin/assets/xdebug-styles.css',
-            [],
-            '1.0.0'
-        );
+	if(defined('WP_ENVIRONMENT_TYPE') && WP_ENVIRONMENT_TYPE === 'local' && current_user_can('administrator')) {
+		wp_enqueue_style(
+			'xdebug-styles',
+			'/wp-content/plugins/doublee-base-plugin/assets/xdebug-styles.css',
+			[],
+			'1.0.0'
+		);
 
-        wp_enqueue_style('highlight-code', 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css', [], '11.8.0'); // base theme
-        wp_enqueue_script('highlight-js', 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js', [], '11.8.0');
-        wp_enqueue_script('highlight-php', 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/php.min.js', [], '11.8.0');
-        wp_enqueue_script('xdebug-markup', '/wp-content/plugins/doublee-base-plugin/assets/xdebug-markup.js', [], '1.0.0');
-    }
+		wp_enqueue_style('highlight-code', 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css', [], '11.8.0'); // base theme
+		wp_enqueue_script('highlight-js', 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js', [], '11.8.0');
+		wp_enqueue_script('highlight-php', 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/php.min.js', [], '11.8.0');
+		wp_enqueue_script('xdebug-markup', '/wp-content/plugins/doublee-base-plugin/assets/xdebug-markup.js', [], '1.0.0');
+	}
 }
 //add_action('wp_enqueue_scripts', 'doublee_make_xdebug_pretty');
 //add_action('admin_enqueue_scripts', 'doublee_make_xdebug_pretty');
