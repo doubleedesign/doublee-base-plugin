@@ -2,7 +2,8 @@
 namespace Doubleedesign\BasePlugin;
 
 /**
- * This class defines basic SEO functionality for sensible defaults in the absence of an SEO plugin.
+ * This class defines basic SEO functionality for sensible defaults in the absence of an SEO plugin
+ * ...and customisations for some SEO plugins.
  *
  * @since      1.0.0
  * @package    Doublee
@@ -12,6 +13,7 @@ class SEO {
 
 	public function __construct() {
 		add_filter('wp_title', [$this, 'basic_seo_title'], 10, 2);
+		add_filter('the_seo_framework_pre_get_document_title', [$this, 'fix_archive_titles'], 10, 2);
 	}
 
 	/**
@@ -65,6 +67,20 @@ class SEO {
 		// Add a page number if necessary.
 		if($paged >= 2 || $page >= 2) {
 			$title = "$title $override_sep " . sprintf(__('Page %s', 'starterkit'), max($paged, $page));
+		}
+
+		return $title;
+	}
+
+	/**
+	 * Override the Archive: prefix when The SEO Framework is active (it doesn't have an admin option for this)
+	 * @param $title
+	 * @param $id
+	 * @return string
+	 */
+	function fix_archive_titles($title, $id = null): string {
+		if(is_post_type_archive() && str_starts_with($title, 'Archives: ')) {
+			return str_replace('Archives: ', '', $title);
 		}
 
 		return $title;
