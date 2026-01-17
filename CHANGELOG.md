@@ -1,5 +1,15 @@
 # Double-E Plugin changelog
 
+## Version 4.1.1
+Date: 17 January 2026
+
+- Refactor: Move integrations settings out of Global Settings screen and into their own admin menu page
+- Refactor: Move Global and Integrations settings into General Settings submenu (rather than being under Appearance)
+- Feature: Allow Editor Plus users access to certain core settings (General, Reading, Writing, Permalinks, Privacy)
+- Fix: Disable display some unused settings in the admin (Post by email, Update Services)
+- Fix: Client-side disable of editing the admin email if the user is not an administrator
+- Fix: Explicitly assign Smashballoon Instagram Feed permission to Editor Plus because of how they're checking for it for the setup flow
+
 ## Version 4.1.0
 Date: 4 Janurary 2026
 
