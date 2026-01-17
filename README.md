@@ -33,7 +33,7 @@ add_filter('doublee_welcome_screen_post_types', function(array $post_types): arr
 
 ### Global settings
 
-An ACF Options page is included for site-wide, client-specific global settings such as logos and contact information. By default it is located under `Appearance → (Site name) Settings` in the admin menu. Where this information is used on the front-end is determined by the active theme and plugins.
+An ACF Options page is included for site-wide, client-specific global settings such as logos and contact information. As of version 4.1.1 it is located under `General Settings → (Site name)` in the admin menu (in older versions, you may find it under Appearance or as a top-level item). Where this information is used on the front-end is determined by the active theme and plugins.
 
 ![global-settings.png](docs/global-settings.png)
 
@@ -42,7 +42,16 @@ If you are using ClassicPress, the logo field here automatically syncs with the 
 The fields can be customised by plugins and themes using the `doublee_global_settings_fields` filter. If adding fields, please use the `doublee_global_settings_contributors` filter to ensure that the "About" tab content is accurate - this is helpful for troubleshooting.
 
 > [!WARNING]  
-> Filtering out fields from the settings in code _does not_ delete existing data for them from the database.
+> Filtering out fields from the global settings in code _does not_ delete existing data for them from the database.
+
+### Integrations settings
+
+This was split off from the Global Settings in version 4.1.1 because it's more intuitive to have its own page. It provides a place to enter API Keys for things like Font Awesome and other third-party services to be used by custom themes and plugins.
+
+The fields can be customised using the `doublee_integrations_settings_fields` filter. If adding fields, please use the `doublee_integrations_settings_contributors` filter to ensure that the "About" tab content is accurate - this is helpful for troubleshooting.
+
+> [!WARNING]  
+> Filtering out fields from the integrations settings in code _does not_ delete existing data for them from the database.
 
 ### "Editor Plus" custom role
 
@@ -83,21 +92,27 @@ add_filter('doublee_indexable_custom_post_types', function(array $post_types): a
 - Defaults for hiding and positioning of certain metaboxes in the admin edit screens (for simplicity)
 - Defaults for hiding and positioning of certain columns in the admin list tables (for simplicity)
 - An additional context for displaying metaboxes (`after_title`)
-- Automatic basic `<title>` tags (for sites that don't need a full SEO plugin).
+- Automatic basic `<title>` tags (for sites that don't need a full SEO plugin)
+- "Page Behaviour" options on edit screens for selected post types, providing options such as redirecting to a different URL.
 
 ---
 ## Information for developers
 
 ### Available filter hooks
 
-| Filter                                       | Arguments           | Description                                                                                               |
-|----------------------------------------------|---------------------|-----------------------------------------------------------------------------------------------------------|
-| `doublee_welcome_screen_included_post_types` | `array $post_types` | Modify the post types for which "Add or edit" buttons are shown on the [welcome screen](#welcome-screen). |
-| `doublee_welcome_screen_primary_links`	      | `array $links`      | Modify the primary action links shown on the [welcome screen](#welcome-screen).                           |
-| `doublee_welcome_screen_secondary_links`     | `array $links`      | Modify the secondary action links shown on the [welcome screen](#welcome-screen).                         |
-| `doublee_indexable_custom_post_types`		      | `array $post_types` | Modify the post types for which [CPT Indexes](#cpt-index-post-type) are created.                          |
-| `doublee_global_settings_fields`             | `array $fields`     | Modify the ACF fields available on the [global settings](#global-settings).                               |
-| `doublee_global_settings_contributors`       | `array $names`      | Modify the list of contributors shown on the "About" tab of the [global settings](#global-settings).      |
+| Filter                                                 | Arguments           | Description                                                                                                                                                                                             |
+|--------------------------------------------------------|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `doublee_welcome_screen_included_post_types`           | `array $post_types` | Modify the post types for which "Add or edit" buttons are shown on the [welcome screen](#welcome-screen).                                                                                               |
+| `doublee_welcome_screen_primary_links`	                | `array $links`      | Modify the primary action links shown on the [welcome screen](#welcome-screen).                                                                                                                         |
+| `doublee_welcome_screen_secondary_links`               | `array $links`      | Modify the secondary action links shown on the [welcome screen](#welcome-screen).                                                                                                                       |
+| `doublee_indexable_custom_post_types`		                | `array $post_types` | Modify the post types for which [CPT Indexes](#cpt-index-post-type) are created.                                                                                                                        |
+| `doublee_enable_page_behaviour_options_for_post_types` | `array $post_types` | Modify the post types for which "Page Behaviour" options are enabled on the edit screen.                                                                                                                |
+| `doublee_global_settings_fields`                       | `array $fields`     | Modify the ACF fields available on the [global settings](#global-settings) screen.                                                                                                                      |
+| `doublee_integrations_settings_fields`                 | `array $fields`     | Modify the ACF fields available on the [integrations settings](#integrations-settings) screen.                                                                                                          |
+| `doublee_global_settings_contributors`                 | `array $names`      | Modify the list of contributors shown on the "About" tab of the [global settings](#global-settings).                                                                                                    |
+| `doublee_integrations_settings_contributors`           | `array $names`      | Modify the list of contributors shown on the "About" tab of the [integrations settings](#integrations-settings).                                                                                        |
+| `doublee_include_google_maps_api_key_global_setting`   | `bool $include`     | Whether to include the Google Maps API Key field in the [global settings](#global-settings). If a value was already stored before version 4.1.1, this defaults to true, otherwise it defaults to false. |
+| `doublee_integrations_settings_third_party_settings_links` | `array $links`      | Edit the links to third-party plugin settings pages listed in the Integrations settings screen. They are an associative array of label → URL pairs.                                                     |
 
 ### General intentions and advice
 

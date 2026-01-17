@@ -51,6 +51,7 @@
 
 		.button {
 			width: 100%;
+			min-height: 80px !important;
 			height: 100%;
 			padding: 0.5rem !important;
 			text-align: center;
@@ -253,7 +254,33 @@ li.toplevel_page_section-title-config .wp-menu-name {
 		padding: 0.5rem;
 		box-sizing: border-box;
 		background: color-mix(in srgb, var(--wp-admin-theme-color-darker-10) 10%, white);
-		border: 1px solid var(--wp-admin-theme-color-darker-10)
+		border: 1px solid var(--wp-admin-theme-color-darker-10);
+
+		&:has(.third-party-integration-settings-links) {
+			background: transparent;
+			border: 0;
+			padding: 0;
+		}
+
+		.third-party-integration-settings-links {
+			margin: 0;
+			padding-bottom: 1rem;
+
+			li {
+				display: flex;
+				align-items: center;
+
+				.dashicons {
+					font-size: 1em;
+					display: flex;
+					align-items: center;
+					margin-left: 0.25rem;
+					position: relative;
+					top: 1px;
+					color: #2271b1;
+				}
+			}
+		}
 	}
 
 	/** These are added in the "Presentation" tab of the field editor **/

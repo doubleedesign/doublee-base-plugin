@@ -206,6 +206,9 @@ class CPTIndexHandler {
 		if(!$queried_object) {
 			return;
 		}
+		if(!$queried_object instanceof WP_Post) {
+			return;
+		}
 		if($queried_object->post_type !== 'cpt_index') {
 			return;
 		}
