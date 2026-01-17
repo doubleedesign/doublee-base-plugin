@@ -13,8 +13,17 @@ use WP_User_Query;
  */
 class UserRolesAndCapabilities {
 	protected array $custom_roles;
+	protected array $pages_to_allow_for_manage_options_lite = [];
 
 	public function __construct() {
+		$this->pages_to_allow_for_manage_options_lite = array(
+			'options-general.php',
+			'options-reading.php',
+			'options-writing.php',
+			'options-permalink.php',
+			'options-privacy.php',
+		);
+
 		$this->custom_roles = array(
 			array(
 				'key'                     => 'editor_plus',
@@ -28,8 +37,10 @@ class UserRolesAndCapabilities {
 					'delete_users'
 				),
 				'custom_capabilities'     => array(
+					'manage_options_lite',
 					'manage_forms',
-					'manage_socials'
+					'manage_socials',
+					'manage_instagram_feed_options' // this needs to be added explicitly because the plugin checks current_user_can() directly for the setup page
 				)
 			),
 		);
@@ -41,6 +52,9 @@ class UserRolesAndCapabilities {
 		add_filter('user_row_actions', array($this, 'restrict_user_list_actions'), 10, 2);
 		add_filter('wp_list_table_class_name', array($this, 'custom_user_list_table'), 10, 2);
 		add_action('current_screen', array($this, 'restrict_user_edit_screen'));
+		add_filter('user_has_cap', array($this, 'selectively_override_manage_options_capability'), 10);
+		add_action('admin_menu', array($this, 'fix_admin_menu_for_manage_options_lite_capability'), 20);
+		add_action('admin_footer', array($this, 'hackily_disable_editing_admin_email'));
 	}
 
 
@@ -64,26 +78,26 @@ class UserRolesAndCapabilities {
 	 * @return void
 	 */
 	function customise_capabilities(): void {
-        if($this->custom_roles) {
-            foreach ($this->custom_roles as $custom_role) {
-                $the_role = get_role($custom_role['key']);
-                if ($the_role && $custom_role['additional_capabilities']) {
-                    foreach ($custom_role['additional_capabilities'] as $capability) {
-                        $the_role->add_cap($capability);
-                    }
-                }
-                if($the_role && $custom_role['custom_capabilities']) {
-                    foreach ($custom_role['custom_capabilities'] as $capability) {
-                        $the_role->add_cap($capability);
-                    }
-                }
-            }
-        }
+		if($this->custom_roles) {
+			foreach($this->custom_roles as $custom_role) {
+				$the_role = get_role($custom_role['key']);
+				if($the_role && $custom_role['additional_capabilities']) {
+					foreach($custom_role['additional_capabilities'] as $capability) {
+						$the_role->add_cap($capability);
+					}
+				}
+				if($the_role && $custom_role['custom_capabilities']) {
+					foreach($custom_role['custom_capabilities'] as $capability) {
+						$the_role->add_cap($capability);
+					}
+				}
+			}
+		}
 
-        $admin_role = get_role('administrator');
-        $admin_role->add_cap('manage_forms');
-        $admin_role->add_cap('manage_socials');
-    }
+		$admin_role = get_role('administrator');
+		$admin_role->add_cap('manage_forms');
+		$admin_role->add_cap('manage_socials');
+	}
 
 
 	function get_manage_forms_capability($cap): string {
@@ -98,26 +112,26 @@ class UserRolesAndCapabilities {
 	 * Use custom capability manage_forms to grant access to Ninja Forms admin stuff
 	 */
 	function apply_manage_forms_capability(): void {
-        if ( ! function_exists( 'is_plugin_active' ) ) {
-            include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-        }
+		if(!function_exists('is_plugin_active')) {
+			include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+		}
 
 		if(is_plugin_active('ninja-forms/ninja-forms.php')) {
 
-            // Parent Menu
+			// Parent Menu
 			add_filter('ninja_forms_admin_parent_menu_capabilities', array(
 				$this,
 				'get_manage_forms_capability'
 			));
 			add_filter('ninja_forms_admin_all_forms_capabilities', array($this, 'get_manage_forms_capability'));// Forms
 
-            // Submissions
-            add_filter('ninja_forms_admin_submissions_capabilities', array(
+			// Submissions
+			add_filter('ninja_forms_admin_submissions_capabilities', array(
 				$this,
 				'get_manage_forms_capability'
 			));
 
-            // Import/Export
+			// Import/Export
 			add_filter('ninja_forms_admin_import_export_capabilities', array(
 				$this,
 				'get_manage_forms_capability'
@@ -247,6 +261,7 @@ class UserRolesAndCapabilities {
 
 	/**
 	 * Function to be used to reorder the list of roles in the WordPress admin
+	 * and filter some out in certain locations
 	 * @wp-hook
 	 *
 	 * @param $roles
@@ -254,13 +269,27 @@ class UserRolesAndCapabilities {
 	 * @return WP_Role[]
 	 */
 	function rejig_the_role_list($roles): array {
+		if(!is_admin()) {
+			return $roles;
+		}
+
 		$updated = $roles;
 		uasort($updated, function($a, $b) {
-			return ($a < $b) ? - 1 : 1;
+			return ($a < $b) ? -1 : 1;
 		});
 
-		if( !current_user_can('administrator')) {
+		if(!current_user_can('administrator')) {
 			unset($updated['administrator']);
+		}
+
+		global $pagenow;
+		// Only allow new user default role to be set to subscriber or customer
+		if($pagenow === 'options-general.php') {
+			foreach($updated as $key => $role) {
+				if(!in_array($key, array('subscriber', 'customer'))) {
+					unset($updated[$key]);
+				}
+			}
 		}
 
 		return array_reverse($updated);
@@ -299,7 +328,7 @@ class UserRolesAndCapabilities {
 	 * @return array
 	 */
 	function restrict_user_list_actions($actions, $user_object): array {
-		if( !current_user_can('administrator') && in_array('administrator', $user_object->roles)) {
+		if(!current_user_can('administrator') && in_array('administrator', $user_object->roles)) {
 			unset($actions['edit']);
 			unset($actions['delete']);
 			unset($actions['resetpassword']);
@@ -326,5 +355,113 @@ class UserRolesAndCapabilities {
 					403);
 			}
 		}
+	}
+
+	/**
+	 * Allow Editor Plus users to access specific settings that are normally restricted to users with the manage_options capability,
+	 * without actually giving them that capability site-wide.
+	 * @param $allcaps
+	 * @return mixed
+	 */
+	function selectively_override_manage_options_capability($allcaps) {
+		if(!is_admin()) {
+			return $allcaps;
+		}
+
+		// Bail early if the user already has manage_options
+		if(isset($allcaps['manage_options']) && $allcaps['manage_options'] == true) {
+			return $allcaps;
+		}
+
+		// Check if current user has "manage_options_lite" capability (i.e. is Editor Plus) before proceeding,
+		if(!isset($allcaps['manage_options_lite']) && $allcaps['manage_options_lite'] != true) {
+			return $allcaps;
+		}
+
+		// Temporarily grant manage_options capability on specific settings pages
+		global $pagenow;
+		if(in_array($pagenow, $this->pages_to_allow_for_manage_options_lite)) {
+			$allcaps['manage_options'] = true;
+		}
+
+		return $allcaps;
+	}
+
+	/**
+	 * Using the user_has_cap filter to selectively grant manage_options capability means they have it for the entire page including the menu while on that page,
+	 * but not when not on that page. This presents two problems:
+	 *      - Access to menu items they shouldn't see when on those pages, and
+	 *      - no access to menu items with the overridden capability when not on those pages.
+	 * Here, we fix that at the menu level.
+	 *
+	 * @return void
+	 */
+	function fix_admin_menu_for_manage_options_lite_capability() {
+		// Bail early if the user is an admin (checking manage_options here doesn't work because of the overrides that have already happened at this point)
+		if(current_user_can('administrator')) {
+			return;
+		}
+		// ...or if they do not have manage_options_lite
+		if(!current_user_can('manage_options_lite')) {
+			return;
+		}
+
+		global $menu, $submenu;
+
+		foreach($menu as $index => $item) {
+			$capability = $item[1];
+			$path = $item[2];
+			// Temporarily increase the required capability for other menu items to prevent access if the user does not have that capability
+			if(!in_array($path, $this->pages_to_allow_for_manage_options_lite) && $capability == 'manage_options') {
+				$menu[$index][1] = 'install_plugins'; // an arbitrary capability they most likely don't have
+			}
+			// ...except options-general.php which we need to explicitly allow
+			if($path == 'options-general.php' && $capability == 'manage_options') {
+				$menu[$index][1] = 'manage_options_lite';
+			}
+		}
+
+		// Loop through all the submenus and fix any other instances of menu items with manage_options capability
+		foreach($submenu as $parent_slug => $submenus) {
+			foreach($submenus as $index => $item) {
+				$capability = $item[1];
+				$path = $item[2];
+				// If the item uses a different capability and the user already has access, leave it alone
+				if($capability != 'manage_options' && current_user_can($capability)) {
+					continue;
+				}
+				if(in_array($path, $this->pages_to_allow_for_manage_options_lite)) {
+					$submenu[$parent_slug][$index][1] = 'manage_options_lite';
+				}
+				// Temporarily increase the required capability for other submenu items to prevent access if the user does not have that capability
+				else if($capability == 'manage_options') {
+					$submenu[$parent_slug][$index][1] = 'install_plugins'; // an arbitrary capability they most likely don't have
+				}
+			}
+		}
+
+		// FIXME: The submenus still aren't totally right because if the user is not on an options-general page, options-general.php does not show up in $submenu,
+		// so the only items visible are the top-level "General Settings" and my custom options pages which use a different capability.
+	}
+
+	/**
+	 * If non-admin user has been granted access to the General Settings, there's no server-side way to disable changing the admin email,
+	 * so JavaScript on load it is.
+	 * @return void
+	 */
+	function hackily_disable_editing_admin_email() {
+		if(current_user_can('administrator')) {
+			return;
+		}
+
+		echo "<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const emailField = document.getElementById('new_admin_email');
+				if (emailField) {
+					emailField.setAttribute('readonly', 'readonly');
+					emailField.setAttribute('disabled', true);
+				}
+			});
+		</script>";
 	}
 }
