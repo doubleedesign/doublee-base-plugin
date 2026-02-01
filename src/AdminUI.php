@@ -636,6 +636,10 @@ class AdminUI {
 			return;
 		}
 
+		if($current_screen->is_block_editor()) {
+			return;
+		}
+
 		if(post_type_supports($current_screen->post_type, 'thumbnail')) {
 			$post_type = $current_screen->post_type;
 			$post_type_object = get_post_type_object($current_screen->post_type);
