@@ -31,6 +31,7 @@ class UserRolesAndCapabilities {
 				'base_role'               => 'editor',
 				'additional_capabilities' => array(
 					'edit_theme_options',
+					'create_users',
 					'list_users',
 					'edit_users',
 					'promote_users',
