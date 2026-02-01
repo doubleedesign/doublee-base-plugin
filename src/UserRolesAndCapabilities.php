@@ -53,9 +53,9 @@ class UserRolesAndCapabilities {
 		add_filter('user_row_actions', array($this, 'restrict_user_list_actions'), 10, 2);
 		add_filter('wp_list_table_class_name', array($this, 'custom_user_list_table'), 10, 2);
 		add_action('current_screen', array($this, 'restrict_user_edit_screen'));
-		add_filter('user_has_cap', array($this, 'selectively_override_manage_options_capability'), 10);
-		add_action('admin_menu', array($this, 'fix_admin_menu_for_manage_options_lite_capability'), 20);
-		add_action('admin_footer', array($this, 'hackily_disable_editing_admin_email'));
+		//add_filter('user_has_cap', array($this, 'selectively_override_manage_options_capability'), 10);
+		//add_action('admin_menu', array($this, 'fix_admin_menu_for_manage_options_lite_capability'), 20);
+		//add_action('admin_footer', array($this, 'hackily_disable_editing_admin_email'));
 	}
 
 
