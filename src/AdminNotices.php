@@ -31,7 +31,7 @@ class AdminNotices {
 
         if (count($warnings) > 0) {
             echo '<div class="notice notice-error">';
-            echo '<p>The ' . Doublee::get_name() . ' plugin requires the following plugins to be installed and activated for full functionality. Without them, some features may be missing or not work as expected.</p>';
+            echo '<p>Double-E Design Base Plugin requires the following plugins to be installed and activated for full functionality. Without them, some features may be missing or not work as expected.</p>';
             echo '<ul>';
             foreach ($warnings as $warning) {
                 echo '<li>' . $warning . '</li>';
