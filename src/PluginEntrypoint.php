@@ -21,7 +21,7 @@ if(!defined('WPINC')) {
  * Current plugin version.
  * Rename this for your plugin and update it as you release new versions.
  */
-const DOUBLEE_VERSION = '4.1.0';
+const DOUBLEE_VERSION = '4.2.0';
 
 
 /**

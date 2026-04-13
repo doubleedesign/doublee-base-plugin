@@ -1,0 +1,23 @@
+{
+	"name": "@doubleedesign/doublee-base-plugin",
+	"version": "4.2.0",
+	"homepage": "https://github.com/doubleedesign/doublee-base-plugin",
+	"authors": [
+		{
+			"name": "Leesa Ward",
+			"email": "leesa@doubleedesign.com.au"
+		}
+	],
+	"scripts": {
+		"build": "rollup -c",
+		"watch": "rollup -c -w"
+	},
+	"dependencies": {
+		"@doubleedesign/vanilla-resize-handle": "^0.0.4"
+	},
+	"devDependencies": {
+		"@rollup/plugin-commonjs": "^29.0.2",
+		"@rollup/plugin-node-resolve": "^16.0.3",
+		"rollup": "^4.60.1"
+	}
+}

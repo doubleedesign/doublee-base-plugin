@@ -1,0 +1,117 @@
+.vt-resizable {
+  position: relative;
+}
+
+.vt-resizable--left, .vt-resizable--right {
+  overflow-x: visible;
+  overflow-y: clip;
+}
+
+.vt-resizable--top, .vt-resizable--bottom {
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+.vt-resizable__drag-handle {
+  box-sizing: border-box;
+  background-color: var(--vt-resize-handle-color, AccentColor);
+  background-clip: padding-box;
+  padding: 0;
+  cursor: grab;
+  position: absolute;
+  z-index: 20;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-resizable__drag-handle {
+    transition: none;
+  }
+}
+.vt-resizable__drag-handle:hover, .vt-resizable__drag-handle:focus {
+  opacity: 1;
+  outline: none;
+}
+
+.vt-resizable__drag-handle:active {
+  cursor: grabbing;
+}
+
+.vt-resizable__drag-handle__icon {
+  width: 2rem;
+  height: 2rem;
+  font-style: normal;
+  text-align: center;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  transform: translateX(-0.85rem);
+  color: var(--vt-resize-handle-color, AccentColor);
+}
+
+.vt-resizable__drag-handle__icon svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.vt-resizable--left .vt-resizable__drag-handle, .vt-resizable--right .vt-resizable__drag-handle {
+  width: 2rem;
+  border-block: 0;
+  border-inline: 0.875rem solid transparent;
+  top: 0;
+  bottom: 0;
+}
+
+.vt-resizable--left .vt-resizable__drag-handle, .vt-resizable--right .vt-resizable__drag-handle {
+  width: 2rem;
+  border-block: 0;
+  border-inline: 0.875rem solid transparent;
+  top: 0;
+  bottom: 0;
+}
+
+.vt-resizable--top .vt-resizable__drag-handle, .vt-resizable--bottom .vt-resizable__drag-handle {
+  height: 2rem;
+  border-block: 0.875rem solid transparent;
+  border-inline: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vt-resizable--left .vt-resizable__drag-handle {
+  left: 0;
+  transform: translateX(-0.875rem);
+}
+
+.vt-resizable--right .vt-resizable__drag-handle {
+  right: 0;
+  transform: translateX(0.875rem);
+}
+
+.vt-resizable--top .vt-resizable__drag-handle {
+  top: 0;
+  transform: translateY(-0.875rem);
+}
+
+.vt-resizable--bottom .vt-resizable__drag-handle {
+  bottom: 0;
+  transform: translateY(0.875rem);
+}
+
+
+.acf-block-form-modal {
+  --vt-resize-handle-color: var(--wp-admin-theme-color);
+}
+.acf-block-form-modal__drag-handle {
+  display: flex;
+  align-items: flex-end;
+  padding-block-end: 2rem;
+}
+
+/*# sourceMappingURL=acf-drag-handle.css.map */

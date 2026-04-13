@@ -1,0 +1,11 @@
+@use '../node_modules/@doubleedesign/vanilla-resize-handle/dist/resize-handle.css';
+
+.acf-block-form-modal {
+	--vt-resize-handle-color: var(--wp-admin-theme-color);
+
+	&__drag-handle {
+		display: flex;
+		align-items: flex-end;
+		padding-block-end: 2rem;
+	}
+}

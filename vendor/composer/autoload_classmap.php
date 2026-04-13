@@ -7,4 +7,17 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'Doubleedesign\\BasePlugin\\AdminNotices' => $baseDir . '/src/AdminNotices.php',
+    'Doubleedesign\\BasePlugin\\AdminUI' => $baseDir . '/src/AdminUI.php',
+    'Doubleedesign\\BasePlugin\\CPTIndexHandler' => $baseDir . '/src/CPTIndexHandler.php',
+    'Doubleedesign\\BasePlugin\\GlobalOptions' => $baseDir . '/src/GlobalOptions.php',
+    'Doubleedesign\\BasePlugin\\PageBehaviour' => $baseDir . '/src/PageBehaviour.php',
+    'Doubleedesign\\BasePlugin\\PluginEntrypoint' => $baseDir . '/src/PluginEntrypoint.php',
+    'Doubleedesign\\BasePlugin\\PluginListTableHandler' => $baseDir . '/src/PluginListTableHandler.php',
+    'Doubleedesign\\BasePlugin\\SEO' => $baseDir . '/src/SEO.php',
+    'Doubleedesign\\BasePlugin\\Tests\\TestCase' => $baseDir . '/tests/TestCase.php',
+    'Doubleedesign\\BasePlugin\\UserRolesAndCapabilities' => $baseDir . '/src/UserRolesAndCapabilities.php',
+    'Doubleedesign\\BasePlugin\\UsersListTable' => $baseDir . '/src/UsersListTable.php',
+    'Doubleedesign\\BasePlugin\\WelcomeScreen' => $baseDir . '/src/WelcomeScreen.php',
+    'Doubleedesign\\BasePlugin\\WooCommerceHandler' => $baseDir . '/src/WooCommerceHandler.php',
 );

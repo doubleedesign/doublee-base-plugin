@@ -41,8 +41,9 @@ class AdminUI {
         add_filter('menu_order', array($this, 'customise_admin_menu_order_and_sections'), 99);
         add_filter('custom_menu_order', '__return_true');
 
-        // Add custom CSS to the admin
+        // Add custom CSS and JS to the admin
         add_action('admin_enqueue_scripts', array($this, 'admin_css'));
+        add_action('admin_enqueue_scripts', array($this, 'admin_js'), 50);
 
         // Customise the ACF field group list page
         add_filter('views_edit-acf-field-group', [$this, 'add_acf_field_list_tabs']);
@@ -433,7 +434,12 @@ class AdminUI {
      */
     public function admin_css(): void {
         wp_enqueue_style('doublee-plugin-admin', '/wp-content/plugins/doublee-base-plugin/assets/admin-styles.css');
+        wp_enqueue_style('doublee-acf-drag-handle', '/wp-content/plugins/doublee-base-plugin/assets/acf-drag-handle.css', ['acf-input'], DOUBLEE_VERSION);
     }
+
+	public function admin_js(): void {
+		wp_enqueue_script('doublee-acf-drag-handle', '/wp-content/plugins/doublee-base-plugin/assets/dist/acf-drag-handle.dist.js', ['acf-blocks'], DOUBLEE_VERSION, true);
+	}
 
     /**
      * Add custom tabs to ACF field list

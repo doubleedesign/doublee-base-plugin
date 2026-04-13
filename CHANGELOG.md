@@ -1,9 +1,16 @@
 # Double-E Plugin changelog
 
+## Version 4.2.0
+Date: 8 April 2026
+
+- Feature: Add drag handle to ACF block edit modal.
+
+
 ## Version 4.1.2
 Date: 6 April 2026
 
 - Fix: Hardcode plugin name because `Doublee::get_name()` method no longer exists.
+
 
 ## Version 4.1.1
 Date: 17 January 2026
