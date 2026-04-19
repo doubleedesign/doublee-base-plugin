@@ -45,11 +45,6 @@ class AdminUI {
         add_action('admin_enqueue_scripts', array($this, 'admin_css'));
         add_action('admin_enqueue_scripts', array($this, 'admin_js'), 50);
 
-        // Customise the ACF field group list page
-        add_filter('views_edit-acf-field-group', [$this, 'add_acf_field_list_tabs']);
-        add_filter('query_vars', [$this, 'register_acf_field_list_query_vars']);
-        add_action('pre_get_posts', [$this, 'populate_acf_field_list_tabs']);
-
         // Customise selected ACF field instruction rendering
         add_filter('acf/prepare_field', [$this, 'prepare_fields_that_should_have_instructions_as_tooltips'], 11, 1);
         add_filter('acf/get_field_label', [$this, 'render_some_acf_field_instructions_as_tooltips'], 11, 3);
@@ -434,140 +429,12 @@ class AdminUI {
      */
     public function admin_css(): void {
         wp_enqueue_style('doublee-plugin-admin', '/wp-content/plugins/doublee-base-plugin/assets/admin-styles.css');
-        wp_enqueue_style('doublee-acf-drag-handle', '/wp-content/plugins/doublee-base-plugin/assets/acf-drag-handle.css', ['acf-input'], DOUBLEE_VERSION);
+        wp_enqueue_style('doublee-acf-drag-handle', '/wp-content/plugins/doublee-base-plugin/assets/acf-drag-handle.css', [], DOUBLEE_VERSION);
     }
 
 	public function admin_js(): void {
-		wp_enqueue_script('doublee-acf-drag-handle', '/wp-content/plugins/doublee-base-plugin/assets/dist/acf-drag-handle.dist.js', ['acf-blocks'], DOUBLEE_VERSION, true);
+		wp_enqueue_script('doublee-acf-drag-handle', '/wp-content/plugins/doublee-base-plugin/assets/dist/acf-drag-handle.dist.js', [], DOUBLEE_VERSION, true);
 	}
-
-    /**
-     * Add custom tabs to ACF field list
-     * including adding post meta to use for the query (kinda a hacky place to do that but meh)
-     *
-     * @param  $views
-     *
-     * @return mixed
-     */
-    public function add_acf_field_list_tabs($views): mixed {
-        $counts = array();
-        $query = new WP_Query(array(
-            'post_type' => array('acf-field-group'),
-        ));
-
-        // Expand the field group content into an array to access the relevant data
-        $field_groups = array_map(function($field_group) {
-            return acf_get_field_group($field_group->ID);
-        }, $query->posts);
-
-        //		// Also get the fields from the plugin, which are somehow not saved as posts
-        // TODO: Dunno how to handle this because they aren't posts I can add meta to, apparently...
-        //		$assumed_plugin_filename = wp_get_theme()->get('TextDomain');
-        //		$assumed_plugin_folder = "$assumed_plugin_filename-plugin";
-        //		$assumed_path_constant = strtoupper($assumed_plugin_filename) . '_PLUGIN_PATH';
-        //		if (is_plugin_active("$assumed_plugin_folder/$assumed_plugin_filename.php")) {
-        //			$in_plugin = array_diff(scandir(constant($assumed_path_constant) . 'assets/acf-json/'), ['..', '.']);
-        //			if (!empty($in_plugin)) {
-        //				foreach ($in_plugin as $file) {
-        //					$field_groups[] = acf_get_fields(str_replace('.json', '', $file));
-        //				}
-        //			}
-        //		}
-
-        // Get a list of all the locations
-        $locations = array_filter(array_unique(self::array_flatten(array_map(function($field_group) {
-            if (!empty($field_group['location'])) {
-                return array_map(function($location) {
-                    if (isset($location[0]['param']) && $location[0]['param'] === 'block' && $location[0]['operator'] === '==') {
-                        return 'block_settings';
-                    }
-                    else if (isset($location[0]['param']) && $location[0]['param'] === 'post_type' && $location[0]['operator'] === '==') {
-                        return $location[0]['value'];
-                    }
-
-                    return '';
-                }, $field_group['location']);
-            }
-
-            return [];
-        }, $field_groups))));
-
-        // Add them to the $counts array to be used in the tabs
-        foreach ($locations as $location) {
-            $counts[$location] = 0;
-        }
-
-        // Add the location(s) as post meta for the field groups
-        array_walk($field_groups, function($field_group) use (&$counts) {
-            if (!empty($field_group['location'])) {
-                array_walk($field_group['location'], function($locations) use (&$counts, $field_group) {
-                    foreach ($locations as $location) {
-                        if (isset($location['param']) && $location['param'] === 'block') {
-                            update_post_meta($field_group['ID'], 'location', 'block_settings');
-                            $counts['block_settings']++;
-                        }
-                        else if (isset($location['param']) && $location['param'] === 'post_type') {
-                            update_post_meta($field_group['ID'], 'location', $location['value']);
-                            $counts[$location['value']]++;
-                        }
-                    }
-                });
-            }
-        });
-
-        // Add their tabs
-        foreach ($locations as $location) {
-            $views[$location] = sprintf(
-                '<a href="%s" class="%s">%s</a>',
-                add_query_arg('location', $location, admin_url('edit.php?post_type=acf-field-group')),
-                acf_maybe_get_GET('location') === $location ? 'current' : '',
-                sprintf(_n(
-                    '%s <span class="count">(%s)</span>',
-                    '%s <span class="count">(%s)</span>',
-                    $counts[$location],
-                    'starterkit'
-                ), ucfirst(str_replace('_', ' ', $location)), number_format_i18n($counts[$location]))
-            );
-        }
-
-        return $views;
-    }
-
-    /**
-     * Register the custom query vars to be used by the custom ACF field list tabs
-     *
-     * @param  $vars
-     *
-     * @return mixed
-     */
-    public function register_acf_field_list_query_vars($vars): mixed {
-        $vars[] = 'location';
-
-        return $vars;
-    }
-
-    /**
-     * Return the correct results for the custom ACF field list tabs
-     *
-     * @param  $query
-     *
-     * @return mixed
-     */
-    public function populate_acf_field_list_tabs($query): mixed {
-        if (is_admin() && $query->is_main_query()) {
-            if (isset($query->query['post_type']) && $query->query['post_type'] == 'acf-field-group' && isset($query->query_vars['location'])) {
-                $query->set('meta_query', array(
-                    array(
-                        'key'     => 'location',
-                        'value'   => acf_sanitize_request_args($query->query_vars['location']),
-                        'compare' => '='
-                    )
-                ));
-            }
-        }
-
-        return $query;
-    }
 
     /**
      * Utility function to flatten a multidimensional array
