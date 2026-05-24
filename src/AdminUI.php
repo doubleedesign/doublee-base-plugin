@@ -356,12 +356,12 @@ class AdminUI {
             return !str_starts_with($post_type, 'wp_')
                 && !str_starts_with($post_type, 'acf-')
                 && !str_starts_with($post_type, 'shop_')
-                && !in_array($post_type, array('post', 'page', 'product', 'attachment', 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset', 'oembed_cache', 'user_request'));
-        }, ARRAY_FILTER_USE_KEY);
+				&& !in_array($post_type, array('post', 'page', 'product', 'attachment', 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset', 'oembed_cache', 'user_request'));
+		}, ARRAY_FILTER_USE_KEY);
 
-        $cpt_links = array_map(function($cpt) {
-            return "edit.php?post_type=$cpt";
-        }, array_keys($cpts));
+		$cpts = array_map(function($cpt) {
+			return "edit.php?post_type=$cpt";
+		}, array_keys($cpts));
 
         $woocommerce = array(
             'section-title-shop',
@@ -377,77 +377,48 @@ class AdminUI {
         $ninja_forms = array(
             'section-title-enquiries',
             'ninja-forms',
-        );
+		);
 
-        $base = array(
-            'index.php', // Dashboard
-            'googlesitekit-splash',
-            'googlesitekit-dashboard',
+		$base = array(
+			'top'     => [
+				'index.php', // Dashboard
+				'googlesitekit-splash',
+				'googlesitekit-dashboard',
+			],
+			'content' => [
+				'section-title-content',
+				'edit.php', // Posts
+				'edit.php?post_type=page', // Pages
+				...$cpts,
+				'shared-content', // From Comet Components for ACF plugin
+				'upload.php', // Media
+				'edit-comments.php',
+				'nav-menus.php'
+			],
+			'forms'   => $ninja_forms,
+			'shop'    => $woocommerce,
+			'users'   => [
+				'section-title-people',
+				'users.php',
+			],
+			'config'  => [
+				'section-title-config',
+				'acf-options-global-options',
+				'options-general.php', // Settings
+				'woocommerce',
+				'themes.php', // Appearance
+				'wpseo_dashboard', // Yoast SEO
+				'theseoframework-settings', // The SEO Framework
+				'plugins.php',
+				'edit.php?post_type=acf-field-group', // Advanced Custom Fields
+				'tools.php',
+			]
+		);
 
-            // Content
-            'section-title-content',
-            'edit.php', // Posts
-            'edit.php?post_type=page', // Pages
-            'shared-content', // From Comet Components for ACF plugin
-            'site-editor.php?path=/patterns', // Shared Blocks (Patterns relabelled and added to the main menu by Comet Components)
-            'upload.php', // Media
-            'edit-comments.php',
+		return self::array_flatten(apply_filters('doublee_admin_menu_order_and_sections', $base));
+	}
 
-            // Users
-            'section-title-people',
-            'users.php',
-
-            // Config
-            'section-title-config',
-            'acf-options-global-options',
-            'woocommerce',
-            'options-general.php', // Settings
-            'themes.php', // Appearance
-            'plugins.php',
-            'edit.php?post_type=acf-field-group', // Advanced Custom Fields
-            'tools.php',
-            'wpseo_dashboard', // Yoast SEO
-        );
-
-        $after_pages = array_search('edit.php?post_type=page', $base) + 1;
-        $updated = array_merge(
-            array_slice($base, 0, $after_pages),
-            $cpt_links,
-            array_slice($base, $after_pages)
-        );
-
-        if (is_plugin_active('ninja-forms/ninja-forms.php')) {
-            $before_users = array_search('users.php', $updated) - 1;
-            $updated = array_merge(
-                array_slice($updated, 0, $before_users),
-                $ninja_forms,
-                array_slice($updated, $before_users)
-            );
-        }
-
-        if (is_plugin_active('woocommerce/woocommerce.php')) {
-            if (is_plugin_active('ninja-forms/ninja-forms.php')) {
-                $after_ninja_forms = array_search('ninja-forms', $updated) + 1;
-                $updated = array_merge(
-                    array_slice($updated, 0, $after_ninja_forms),
-                    $woocommerce,
-                    array_slice($updated, $after_ninja_forms)
-                );
-            }
-            else {
-                $before_users = array_search('users.php', $updated) - 1;
-                $updated = array_merge(
-                    array_slice($updated, 0, $before_users),
-                    $woocommerce,
-                    array_slice($updated, $before_users)
-                );
-            }
-        }
-
-        return $updated;
-    }
-
-    /**
+	/**
      * Add custom CSS to the admin for stuff added by the plugin
      * (the starterkit theme also adds an admin stylesheet)
      *
@@ -463,18 +434,18 @@ class AdminUI {
 	}
 
     /**
-     * Utility function to flatten a multidimensional array
-     *
-     * @param  $array
-     * @param  array  $flatArray
-     *
-     * @return array|mixed
-     */
-    public static function array_flatten($array, array &$flatArray = []): mixed {
-        foreach ($array as $element) {
-            if (is_array($element)) {
-                // If the element is an array, recursively call the function
-                self::array_flatten($element, $flatArray);
+	 * Utility function to flatten a multidimensional array
+	 *
+	 * @param  $array
+	 * @param array $flatArray
+	 *
+	 * @return array|mixed
+	 */
+	public static function array_flatten($array, array &$flatArray = []): mixed {
+		foreach($array as $element) {
+			if (is_array($element)) {
+				// If the element is an array, recursively call the function
+				self::array_flatten($element, $flatArray);
             }
             else {
                 // If the element is not an array, add it to the result array
