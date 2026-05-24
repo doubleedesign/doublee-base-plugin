@@ -35,11 +35,13 @@ class AdminUI {
 
         // Customise the main admin menu
         add_action('admin_menu', array($this, 'promote_menu_items'));
-        add_action('admin_menu', array($this, 'rename_menu_items'));
-        add_action('admin_menu', array($this, 'remove_gutenberg_menu_item'), 999);
-        add_action('admin_menu', array($this, 'add_menu_section_titles'));
-        add_filter('menu_order', array($this, 'customise_admin_menu_order_and_sections'), 99);
-        add_filter('custom_menu_order', '__return_true');
+		add_action('admin_menu', array($this, 'rename_menu_items'));
+		add_action('admin_menu', array($this, 'remove_gutenberg_menu_item'), 999);
+		add_action('admin_menu', array($this, 'add_menu_section_titles'));
+		add_action('admin_menu', array($this, 'move_nav_menus_to_content_section'), 999);
+		add_filter('parent_file', array($this, 'fix_nav_menus_item_highlighting'), 10, 1);
+		add_filter('menu_order', array($this, 'customise_admin_menu_order_and_sections'), 99);
+		add_filter('custom_menu_order', '__return_true');
 
         // Add custom CSS and JS to the admin
         add_action('admin_enqueue_scripts', array($this, 'admin_css'));
@@ -310,12 +312,36 @@ class AdminUI {
             'section-title-config',
             '',
             'dashicons-admin-settings',
-            0
-        );
-    }
+			0
+		);
+	}
 
-    /**
-     * Customise the menu order and sectioning
+	public function move_nav_menus_to_content_section(): void {
+		add_menu_page(
+			__('Menus', 'doublee'),
+			'Menus',
+			'edit_theme_options',
+			'nav-menus.php',
+			'',
+			'dashicons-menu',
+			0
+		);
+
+		remove_submenu_page('themes.php', 'nav-menus.php');
+	}
+
+	public function fix_nav_menus_item_highlighting($parent_file): ?string {
+		global $current_screen;
+
+		if ($current_screen->id === 'nav-menus') {
+			return null;
+		}
+
+		return $parent_file;
+	}
+
+	/**
+	 * Customise the menu order and sectioning
      *
      * @param  $menu_order
      *
