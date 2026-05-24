@@ -64,7 +64,7 @@ class CPTIndexHandler {
 			'hierarchical'        => false,
 			'public'              => true,
 			'show_ui'             => true,
-			'show_in_menu'        => true,
+			'show_in_menu'        => apply_filters('doublee_show_cpt_indexes_in_admin', true),
 			'menu_position'       => 20,
 			'menu_icon'           => 'dashicons-editor-ul',
 			'show_in_admin_bar'   => false,
