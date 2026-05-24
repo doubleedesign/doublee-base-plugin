@@ -434,11 +434,18 @@ class AdminUI {
      */
     public function admin_css(): void {
         wp_enqueue_style('doublee-plugin-admin', '/wp-content/plugins/doublee-base-plugin/assets/admin-styles.css');
-        wp_enqueue_style('doublee-acf-drag-handle', '/wp-content/plugins/doublee-base-plugin/assets/acf-drag-handle.css', [], DOUBLEE_VERSION);
+
+	    $current_screen = get_current_screen();
+	    if(method_exists($current_screen, 'is_block_editor') && $current_screen->is_block_editor()) {
+		    wp_enqueue_style('doublee-acf-drag-handle', '/wp-content/plugins/doublee-base-plugin/assets/acf-drag-handle.css', [], DOUBLEE_VERSION);
+	    }
     }
 
 	public function admin_js(): void {
-		wp_enqueue_script('doublee-acf-drag-handle', '/wp-content/plugins/doublee-base-plugin/assets/dist/acf-drag-handle.dist.js', [], DOUBLEE_VERSION, true);
+		$current_screen = get_current_screen();
+		if(method_exists($current_screen, 'is_block_editor') && $current_screen->is_block_editor()) {
+			wp_enqueue_script('doublee-acf-drag-handle', '/wp-content/plugins/doublee-base-plugin/assets/dist/acf-drag-handle.dist.js', [], DOUBLEE_VERSION, true);
+		}
 	}
 
 	/**
