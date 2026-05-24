@@ -512,4 +512,68 @@ class GlobalOptions {
             }
         }
     }
+
+	protected static function insert_global_settings_tab(array &$fields, string $label): void {
+		$newTab = array(
+			'key'       => sanitize_title($label) . '_tab',
+			'label'     => $label,
+			'type'      => 'tab',
+			'placement' => 'left',
+		);
+
+		// Find the "About this screen" tab in the fields and insert the new tab before it
+		$aboutTabIndex = array_find_key($fields, fn($item) => isset($item['type']) && $item['type'] === 'tab' && isset($item['label']) && $item['label'] === 'About this screen');
+		if (is_numeric($aboutTabIndex)) {
+			array_splice($fields, $aboutTabIndex, 0, [$newTab]);
+		}
+		// If the "About this screen" tab isn't found, just append the new tab to the end of the fields array
+		else {
+			$fields[] = $newTab;
+		}
+	}
+
+	/**
+	 * Insert a new global setting field after an existing one
+	 *
+	 * @param  array  $fields  The settings fields array from ACF field group
+	 * @param  string  $insertAfter  The name or key of the field to insert after
+	 * @param  array  $newField  The new field definition to insert
+	 *
+	 * @return void
+	 */
+	protected static function insert_global_setting_after(array &$fields, string $insertAfter, array $newField): void {
+		$index = array_find_key($fields, fn($item) => ($item['name'] ?? null) === $insertAfter || ($item['key'] ?? null) === $insertAfter);
+		if (is_numeric($index)) {
+			array_splice($fields, $index + 1, 0, [$newField]);
+		}
+		// If the field to insert after wasn't found at the first level, recurse into group fields and look for it in their sub-fields
+		else {
+			$groups = array_filter($fields, fn($field) => isset($field['type']) && $field['type'] === 'group' && isset($field['sub_fields']));
+			foreach ($groups as $groupIndex => $group) {
+				self::insert_global_setting_after($fields[$groupIndex]['sub_fields'], $insertAfter, $newField);
+			}
+		}
+	}
+
+	/**
+	 * Remove a global setting field by name or key
+	 *
+	 * @param  array  $fields
+	 * @param  string  $nameOrKey
+	 *
+	 * @return void
+	 */
+	protected static function remove_global_setting(array &$fields, string $nameOrKey): void {
+		$index = array_find_key($fields, fn($item) => ($item['name'] ?? null) === $nameOrKey || ($item['key'] ?? null) === $nameOrKey);
+		if (is_numeric($index)) {
+			array_splice($fields, $index, 1);
+		}
+		// If the field to remove wasn't found at the first level, recurse into group fields and look for it in their sub-fields
+		else {
+			$groups = array_filter($fields, fn($field) => isset($field['type']) && $field['type'] === 'group' && isset($field['sub_fields']));
+			foreach ($groups as $groupIndex => $group) {
+				self::remove_global_setting($fields[$groupIndex]['sub_fields'], $nameOrKey);
+			}
+		}
+	}
 }
