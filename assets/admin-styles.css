@@ -8,7 +8,12 @@
 }
 
 #welcome-panel {
-	box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.15)
+	box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.15);
+	background: #1e1e1e;
+}
+
+.welcome-panel-close {
+	display: none !important;
 }
 
 .welcome-panel__content {
@@ -62,8 +67,10 @@
 			font-size: 1rem;
 			font-weight: 300;
 
-			.dashicons-before {
-				line-height: 1;
+			.dashicons,
+			.dashicons-before,
+			.dashicons::before {
+				line-height: 1 !important;
 			}
 
 			.label {
