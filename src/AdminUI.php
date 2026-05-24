@@ -274,13 +274,13 @@ class AdminUI {
             'dashicons-welcome-write-blog',
             0
         );
-        if (is_plugin_active('woocommerce/woocommerce.php')) {
-            add_menu_page(
-                __('Shop', 'woocommerce'),
-                'Shop',
-                'edit_posts',
-                'section-title-shop',
-                '',
+		if (is_plugin_active('woocommerce/woocommerce.php')) {
+			add_menu_page(
+				__('Shop', 'woocommerce'),
+				apply_filters('doublee_admin_menu_shop_title', 'Shop'),
+				'edit_posts',
+				'section-title-shop',
+				'',
                 'dashicons-groups',
                 0
             );
