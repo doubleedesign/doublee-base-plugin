@@ -36,6 +36,7 @@
 .welcome-panel__content__body {
 	padding: 2rem;
 	background: #FFF;
+	container-type: inline-size;
 }
 
 .welcome-panel-list {
@@ -43,15 +44,13 @@
 }
 
 .welcome-panel-list--primary {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.5rem;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+	grid-gap: 0.5rem;
 	margin: 0;
 	padding: 0;
 
 	li {
-		width: 100%;
-		flex-basis: 100%;
 		margin: 0;
 
 		.button {
@@ -83,12 +82,24 @@
 	}
 }
 
-@container (min-width: 600px) {
+@container (min-width: 1024px) {
 	.welcome-panel-list--primary {
-		li {
-			width: 200px;
-			flex-basis: 200px;
-		}
+		grid-template-columns: repeat(auto-fit, 14rem);
+	}
+
+	/* Exactly 6 items */
+	.welcome-panel-list--primary:has(:nth-child(6)) {
+		grid-template-columns: repeat(3, 14rem);
+	}
+
+	/* 7-8 items */
+	.welcome-panel-list--primary:has(:nth-child(7)) {
+		grid-template-columns: repeat(4, minmax(200px, 14rem));
+	}
+
+	/* 9 or more items */
+	.welcome-panel-list--primary:has(:nth-child(10)) {
+		grid-template-columns: repeat(5, minmax(200px, 14rem));
 	}
 }
 
