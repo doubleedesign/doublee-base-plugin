@@ -34,6 +34,7 @@ class AdminUI {
 		add_action('edit_form_after_title', array($this, 'setup_after_title_meta_boxes'), 100);
 
 		// Customise the main admin menu
+		add_action('admin_menu', array($this, 'remove_unsupported_features_from_admin_menu'), 999);
 		add_action('admin_menu', array($this, 'promote_menu_items'));
 		add_action('admin_menu', array($this, 'rename_menu_items'));
 		add_action('admin_menu', array($this, 'remove_gutenberg_menu_item'), 999);
@@ -179,6 +180,13 @@ class AdminUI {
 		global $post, $wp_meta_boxes;
 		do_meta_boxes(get_current_screen(), 'after_title', $post);
 	}
+
+
+	public function remove_unsupported_features_from_admin_menu(): void {
+		remove_submenu_page('options-general.php', 'options-connectors.php');
+		remove_submenu_page('themes.php', 'font-library.php');
+	}
+
 
 	/**
 	 * Move some submenu items to top-level menu items
