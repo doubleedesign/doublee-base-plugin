@@ -19,6 +19,7 @@ class SEO {
 		// Disable Homepage Settings in the central SEO Framework settings - just use the settings on the page itself
 		add_filter('the_seo_framework_home_metabox', '__return_false');
 		add_action('plugins_loaded', [$this, 'customise_seo_framework_handling_of_cpt_archives']);
+		add_filter('the_seo_framework_blog_name', [$this, 'customise_the_seo_framework_default_site_title'], 10, 1);
 	}
 
 	/**
@@ -150,5 +151,9 @@ class SEO {
 
 			return $public_post_types;
 		});
+	}
+
+	function customise_the_seo_framework_default_site_title($title): string {
+		return get_bloginfo('name') . ' - ' . get_bloginfo('description');
 	}
 }
