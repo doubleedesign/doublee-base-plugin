@@ -1,3 +1,12 @@
+.wp-core-ui {
+
+	.button,
+	a {
+		transition: all 0.3s ease-in-out;
+	}
+}
+
+
 #dashboard-widgets-wrap .meta-box-sortables.ui-sortable.empty-container {
 	display: none;
 }
@@ -109,42 +118,66 @@
 
 	li {
 		margin-block-end: 0.5rem;
-
-		.label {
-			display: inline-block;
-		}
 	}
 }
 
+#adminmenu {
+	li.toplevel_page_section-title-content,
+	li.toplevel_page_section-title-content a,
+	li.toplevel_page_section-title-shop,
+	li.toplevel_page_section-title-shop a,
+	li.toplevel_page_section-title-enquiries,
+	li.toplevel_page_section-title-enquiries a,
+	li.toplevel_page_section-title-people,
+	li.toplevel_page_section-title-people a,
+	li.toplevel_page_section-title-config,
+	li.toplevel_page_section-title-config a {
+		pointer-events: none;
+	}
 
-li.toplevel_page_section-title-content,
-li.toplevel_page_section-title-content a,
-li.toplevel_page_section-title-shop,
-li.toplevel_page_section-title-shop a,
-li.toplevel_page_section-title-enquiries,
-li.toplevel_page_section-title-enquiries a,
-li.toplevel_page_section-title-people,
-li.toplevel_page_section-title-people a,
-li.toplevel_page_section-title-config,
-li.toplevel_page_section-title-config a {
-	pointer-events: none;
-}
+	li.toplevel_page_section-title-content a,
+	li.toplevel_page_section-title-shop a,
+	li.toplevel_page_section-title-enquiries a,
+	li.toplevel_page_section-title-people a,
+	li.toplevel_page_section-title-config a {
+		border-top: 1px solid rgba(255, 255, 255, 0.2);
+		background: rgba(255, 255, 255, 0.075);
+	}
 
-li.toplevel_page_section-title-content a,
-li.toplevel_page_section-title-shop a,
-li.toplevel_page_section-title-enquiries a,
-li.toplevel_page_section-title-people a,
-li.toplevel_page_section-title-config a {
-	border-top: 1px solid rgba(255, 255, 255, 0.2);
-	background: rgba(255, 255, 255, 0.075);
-}
+	li.toplevel_page_section-title-content .wp-menu-name,
+	li.toplevel_page_section-title-shop .wp-menu-name,
+	li.toplevel_page_section-title-enquiries .wp-menu-name,
+	li.toplevel_page_section-title-people .wp-menu-name,
+	li.toplevel_page_section-title-config .wp-menu-name {
+		font-weight: bold;
+	}
 
-li.toplevel_page_section-title-content .wp-menu-name,
-li.toplevel_page_section-title-shop .wp-menu-name,
-li.toplevel_page_section-title-enquiries .wp-menu-name,
-li.toplevel_page_section-title-people .wp-menu-name,
-li.toplevel_page_section-title-config .wp-menu-name {
-	font-weight: bold;
+	li {
+		a {
+			&:hover, &:focus {
+				background: var(--wp-admin-theme-color) !important;
+			}
+		}
+	}
+
+	li.menu-top {
+		&:hover {
+			background: var(--wp-admin-theme-color) !important;
+		}
+	}
+
+	li.menu-top:hover,
+	li.opensub > a.menu-top,
+	li > a.menu-top:focus,
+	li a.wp-has-submenu.wp-not-current-submenu:hover,
+	li a.wp-has-submenu.wp-not-current-submenu:focus {
+		background: var(--wp-admin-theme-color) !important;
+	}
+
+
+	li a.wp-has-current-submenu {
+		background: var(--wp-admin-theme-color) !important;
+	}
 }
 
 /* Hide some tabs that can't be properly removed but I'm not using */
@@ -160,11 +193,6 @@ li.toplevel_page_section-title-config .wp-menu-name {
 	overflow-x: hidden;
 	text-overflow: ellipsis;
 	padding-left: 0 !important;
-}
-
-#wpadminbar,
-#adminmenu, #adminmenu, #adminmenuback, #adminmenuwrap {
-	background: #1e1e1e; /* make main menu and admin bar match the site editor */
 }
 
 .interface-interface-skeleton__body {

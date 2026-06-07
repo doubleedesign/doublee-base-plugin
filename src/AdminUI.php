@@ -56,6 +56,14 @@ class AdminUI {
 		// Disable unused Writing settings
 		add_filter('enable_post_by_email_configuration', '__return_false');
 		add_filter('enable_update_services_configuration', '__return_false');
+
+		// Customise admin theme
+		if(apply_filters('doublee_use_client_theme_in_admin', false)) {
+			add_action('admin_init', [$this, 'register_custom_admin_color_schemes'], 2);
+			add_action('admin_init', [$this, 'clear_other_admin_themes'], 3);
+			add_filter('get_user_option_admin_color', [$this, 'lock_admin_color_scheme']);
+			add_action('admin_body_class', [$this, 'admin_body_class']);
+		}
 	}
 
 	/**
@@ -535,5 +543,59 @@ class AdminUI {
 			add_meta_box('submitdiv', __('Publish', 'doublee'), 'post_submit_meta_box', $post_type, 'side', 'high');
 			add_meta_box('postimagediv', $label, 'post_thumbnail_meta_box', $post_type, 'side', 'high');
 		}
+	}
+
+	public function register_custom_admin_color_schemes(): void {
+		// Check that the theme's colours file exists first
+		if (!file_exists(get_stylesheet_directory() . '/colours.css')) {
+			return;
+		}
+
+		$active_theme = wp_get_theme();
+		$name = $active_theme->get('Name');
+		$slug = $active_theme->get('TextDomain');
+
+		wp_admin_css_color(
+			"{$slug}-admin-theme",
+			$name,
+			'/wp-content/plugins/doublee-base-plugin/assets/admin-theme.css',
+			array("var(--color-primary)", "var(--color-secondary)", "var(--color-accent)", "var(--color-dark)", "var(--color-light)"),
+			array(
+				'base' => "var(--color-light)",
+				'focus'   => '#fff',
+				'current' => '#fff',
+			)
+		);
+	}
+
+	public function clear_other_admin_themes(): void {
+		// remove_action for the function that registers the default themes wasn't working at the time of writing, nor is there a way to filter them
+		global $_wp_admin_css_colors;
+		$active_theme = wp_get_theme();
+		$slug = $active_theme->get('TextDomain') . "-admin-theme";
+
+		if(in_array($slug, array_keys($_wp_admin_css_colors))) {
+			foreach($_wp_admin_css_colors as $key => $color_scheme) {
+				if ($key !== $slug) {
+					unset($_wp_admin_css_colors[$key]);
+				}
+			}
+		}
+	}
+
+	public function lock_admin_color_scheme(): string {
+		global $_wp_admin_css_colors;
+		$active_theme = wp_get_theme();
+		$slug = $active_theme->get('TextDomain') . "-admin-theme";
+
+		if(in_array($slug, array_keys($_wp_admin_css_colors))) {
+			return $slug;
+		}
+
+		return 'modern';
+	}
+
+	public function admin_body_class($body_class): string {
+		return "$body_class admin-doubleedesign";
 	}
 }

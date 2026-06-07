@@ -1,0 +1,144 @@
+@import '../../../../wp-admin/css/colors/modern/colors.css';
+
+/** see admin-styles.css for more comprehensive admin customisations
+	that apply even if a client colour theme file does not provide these variables */
+
+body.admin-doubleedesign {
+	--wp-admin-theme-color: var(--color-primary);
+	--wp-admin-theme-color--rgb: var(--color-primary);
+	--wp-admin-theme-color-darker-10: color-mix(in srgb, var(--wp-admin-theme-color) 90%, black);
+	--wp-admin-theme-color-darker-10--rgb: var(--wp-admin-theme-color-darker-10);
+	--wp-admin-theme-color-darker-20: color-mix(in srgb, var(--wp-admin-theme-color) 80%, black);
+	--wp-admin-theme-color-darker-20--rgb: var(--wp-admin-theme-color-darker-20);
+	--wp-block-synced-color: var(--color-secondary);
+	--wp-bound-block-color: var(--color-secondary);
+	--wp-admin-border-width-focus: 2px;
+}
+
+@media (min-resolution: 192dpi) {
+	body.admin-doubleedesign {
+		--wp-admin-border-width-focus: 1.5px;
+	}
+}
+
+.wp-core-ui {
+	a {
+		color: var(--color-dark);
+	}
+
+	#category-add-toggle,
+	#set-post-thumbnail,
+	#misc-publishing-actions a {
+		color: var(--color-dark);
+
+		&:hover, &:focus {
+			color: var(--wp-admin-theme-color);
+		}
+	}
+
+	#wpadminbar,
+	#adminmenu, #adminmenu, #adminmenuback, #adminmenuwrap {
+		background: var(--color-dark, #1e1e1e);
+	}
+
+	#adminmenu {
+		.menu-counter,
+		.awaiting-mod,
+		.update-plugins {
+			background: var(--color-accent);
+			color: contrast-color(var(--color-accent));
+		}
+
+		li.wp-menu-open .wp-submenu {
+			background: color-mix(in srgb, var(--color-dark) 90%, white) !important;
+		}
+
+		.wp-submenu {
+			background: var(--color-dark);
+
+			a {
+				&:hover,
+				&:focus {
+					color: white !important;
+					background: transparent !important;
+				}
+			}
+		}
+
+		li.wp-has-submenu.wp-not-current-submenu.opensub:hover::after,
+		li.wp-has-submenu.wp-not-current-submenu:focus-within::after {
+			border-right-color: var(--color-dark);
+		}
+	}
+
+	a.page-title-action,
+	.button {
+		color: var(--color-dark);
+		border-color: currentColor;
+		text-decoration: underline;
+		text-decoration-color: transparent;
+
+		&:hover, &:focus, &:active {
+			color: var(--wp-admin-theme-color);
+			border-color: currentColor;
+			text-decoration-color: currentColor;
+			text-decoration-thickness: 1px;
+
+			.dashicons {
+				text-decoration: none;
+			}
+		}
+	}
+
+	.components-button.is-primary,
+	.button-primary {
+		color: white;
+		border-color: var(--wp-admin-theme-color);
+		text-decoration: underline;
+		text-decoration-color: transparent;
+
+		&:hover, &:focus, &:active {
+			color: white !important;
+			background-color: var(--wp-admin-theme-color-darker-20);
+			border-color: var(--wp-admin-theme-color-darker-20) !important;
+			filter: saturate(120%);
+		}
+	}
+
+	input[type=reset]:hover,
+	input[type=reset]:active {
+		color: var(--wp-admin-theme-color-darker-10);
+	}
+
+	.welcome-panel__content__header {
+		background: var(--color-dark, #1e1e1e);
+		color: white;
+	}
+
+	.welcome-panel-list--secondary {
+
+		li {
+			a {
+				color: var(--color-dark);
+
+				.label {
+					transition: all 0.3s ease-in-out;
+					display: inline-block;
+					text-decoration: underline;
+					text-decoration-color: transparent;
+					color: var(--color-dark);
+				}
+
+				&:hover, &:focus, &:active {
+					.label {
+						text-decoration-color: currentColor;
+						text-decoration-thickness: 1px;
+						text-decoration-skip-ink: all;
+					}
+				}
+			}
+		}
+	}
+
+}
+
