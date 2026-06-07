@@ -64,6 +64,9 @@ class AdminUI {
 			add_filter('get_user_option_admin_color', [$this, 'lock_admin_color_scheme']);
 			add_action('admin_body_class', [$this, 'admin_body_class']);
 		}
+
+		// Login screen
+		add_action('login_enqueue_scripts', [$this, 'login_logo']);
 	}
 
 	/**
@@ -597,5 +600,59 @@ class AdminUI {
 
 	public function admin_body_class($body_class): string {
 		return "$body_class admin-doubleedesign";
+	}
+
+	public function login_logo(): void {
+		wp_enqueue_style( 'theme-colours', get_stylesheet_directory_uri() . '/colours.css' );
+		wp_enqueue_style( 'theme-fonts', get_stylesheet_directory_uri() . '/fonts.css' );
+
+		$custom_logo_id = get_option('options_logo');
+		if ($custom_logo_id) {
+			$logo = wp_get_attachment_image_src($custom_logo_id, 'full');
+			$use_dark_bg = apply_filters('doublee_use_dark_bg_on_login_screen', false);
+			?>
+			<style>
+				body.login.wp-core-ui {
+					font-family: var(--font-family-body, system-ui), system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+					<?php if($use_dark_bg) { ?>
+						background-color: var(--color-dark) !important;
+					<?php } ?>
+				}
+
+				#login h1 a {
+					width: 75%;
+					min-height: 80px;
+					background-image: url('<?php echo $logo[0]; ?>') !important;
+					padding-bottom: 0 !important;
+					background-size: contain !important;
+					background-position: center bottom;
+				}
+
+				#login #nav a, #login #backtoblog a {
+					text-decoration: underline;
+					text-decoration-color: transparent;
+					transition: all 0.3s ease;
+
+					<?php if($use_dark_bg) { ?>
+						color: white !important;
+					<?php } ?>
+
+					&:hover, &:focus {
+						text-decoration-color: currentColor;
+					}
+				}
+
+				#wp-submit {
+					background: var(--color-primary);
+					border: var(--color-primary);
+					transition: all 0.3s ease;
+
+					&:hover, &:focus {
+						background: color-mix(in srgb, var(--color-primary) 80%, black);
+					}
+				}
+			</style>
+		<?php }
 	}
 }
