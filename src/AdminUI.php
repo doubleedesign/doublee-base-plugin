@@ -1,8 +1,6 @@
 <?php
 namespace Doubleedesign\BasePlugin;
 
-use WP_Query;
-
 /**
  * This class defines functions to customise the WordPress admin,
  * including adding options pages, leveraging ACF etc.
@@ -185,6 +183,7 @@ class AdminUI {
 	public function remove_unsupported_features_from_admin_menu(): void {
 		remove_submenu_page('options-general.php', 'options-connectors.php');
 		remove_submenu_page('themes.php', 'font-library.php');
+		remove_submenu_page('themes.php', 'site-editor.php');
 	}
 
 
