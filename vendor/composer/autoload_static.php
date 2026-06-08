@@ -27,19 +27,6 @@ class ComposerStaticInitfd3380296df54f35329004bf3f565b2e
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'Doubleedesign\\BasePlugin\\AdminNotices' => __DIR__ . '/../..' . '/src/AdminNotices.php',
-        'Doubleedesign\\BasePlugin\\AdminUI' => __DIR__ . '/../..' . '/src/AdminUI.php',
-        'Doubleedesign\\BasePlugin\\CPTIndexHandler' => __DIR__ . '/../..' . '/src/CPTIndexHandler.php',
-        'Doubleedesign\\BasePlugin\\GlobalOptions' => __DIR__ . '/../..' . '/src/GlobalOptions.php',
-        'Doubleedesign\\BasePlugin\\PageBehaviour' => __DIR__ . '/../..' . '/src/PageBehaviour.php',
-        'Doubleedesign\\BasePlugin\\PluginEntrypoint' => __DIR__ . '/../..' . '/src/PluginEntrypoint.php',
-        'Doubleedesign\\BasePlugin\\PluginListTableHandler' => __DIR__ . '/../..' . '/src/PluginListTableHandler.php',
-        'Doubleedesign\\BasePlugin\\SEO' => __DIR__ . '/../..' . '/src/SEO.php',
-        'Doubleedesign\\BasePlugin\\Tests\\TestCase' => __DIR__ . '/../..' . '/tests/TestCase.php',
-        'Doubleedesign\\BasePlugin\\UserRolesAndCapabilities' => __DIR__ . '/../..' . '/src/UserRolesAndCapabilities.php',
-        'Doubleedesign\\BasePlugin\\UsersListTable' => __DIR__ . '/../..' . '/src/UsersListTable.php',
-        'Doubleedesign\\BasePlugin\\WelcomeScreen' => __DIR__ . '/../..' . '/src/WelcomeScreen.php',
-        'Doubleedesign\\BasePlugin\\WooCommerceHandler' => __DIR__ . '/../..' . '/src/WooCommerceHandler.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
