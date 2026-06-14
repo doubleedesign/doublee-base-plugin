@@ -20,6 +20,7 @@ class SEO {
 		add_filter('the_seo_framework_home_metabox', '__return_false');
 		add_action('plugins_loaded', [$this, 'customise_seo_framework_handling_of_cpt_archives']);
 		add_filter('the_seo_framework_blog_name', [$this, 'customise_the_seo_framework_default_site_title'], 10, 1);
+		add_filter('the_seo_framework_metabox_priority', function() { return 'low'; });
 	}
 
 	/**
