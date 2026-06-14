@@ -53,6 +53,12 @@ body.admin-doubleedesign {
 			background: color-mix(in srgb, var(--color-dark) 90%, white) !important;
 		}
 
+		a {
+			&:hover, &:focus, &:active {
+				background: var(--wp-admin-theme-color) !important;
+			}
+		}
+
 		.wp-submenu {
 			background: var(--color-dark);
 
@@ -139,6 +145,5 @@ body.admin-doubleedesign {
 			}
 		}
 	}
-
 }
 

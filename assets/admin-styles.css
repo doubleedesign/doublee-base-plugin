@@ -152,20 +152,6 @@
 		font-weight: bold;
 	}
 
-	li {
-		a {
-			&:hover, &:focus {
-				background: var(--wp-admin-theme-color) !important;
-			}
-		}
-	}
-
-	li.menu-top {
-		&:hover {
-			background: var(--wp-admin-theme-color) !important;
-		}
-	}
-
 	li.menu-top:hover,
 	li.opensub > a.menu-top,
 	li > a.menu-top:focus,
