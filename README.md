@@ -88,30 +88,32 @@ add_filter('doublee_indexable_custom_post_types', function(array $post_types): a
 
 ### Other features
 - Customised admin menu ordering and sectioning
-- Admin notices for required/recommended plugins
 - Defaults for hiding and positioning of certain metaboxes in the admin edit screens (for simplicity)
 - Defaults for hiding and positioning of certain columns in the admin list tables (for simplicity)
 - An additional context for displaying metaboxes (`after_title`)
 - Automatic basic `<title>` tags (for sites that don't need a full SEO plugin)
-- "Page Behaviour" options on edit screens for selected post types, providing options such as redirecting to a different URL.
+- "Page Behaviour" options on edit screens for selected post types, providing options such as redirecting to a different URL
+- Handling of must-use plugins (that follow an expected naming convention or are explicitly accounted for) to:
+	- ignore them in dependency checks that would normally return false (because those checks only look in the main `plugins` directory)
+	- display them in the main plugin list as active, so they aren't hidden away by only being in the "Must-use" list.
 
 ---
 ## Information for developers
 
 ### Available filter hooks
 
-| Filter                                                 | Arguments           | Description                                                                                                                                                                                             |
-|--------------------------------------------------------|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `doublee_welcome_screen_included_post_types`           | `array $post_types` | Modify the post types for which "Add or edit" buttons are shown on the [welcome screen](#welcome-screen).                                                                                               |
-| `doublee_welcome_screen_primary_links`	                | `array $links`      | Modify the primary action links shown on the [welcome screen](#welcome-screen).                                                                                                                         |
-| `doublee_welcome_screen_secondary_links`               | `array $links`      | Modify the secondary action links shown on the [welcome screen](#welcome-screen).                                                                                                                       |
-| `doublee_indexable_custom_post_types`		                | `array $post_types` | Modify the post types for which [CPT Indexes](#cpt-index-post-type) are created.                                                                                                                        |
-| `doublee_enable_page_behaviour_options_for_post_types` | `array $post_types` | Modify the post types for which "Page Behaviour" options are enabled on the edit screen.                                                                                                                |
-| `doublee_global_settings_fields`                       | `array $fields`     | Modify the ACF fields available on the [global settings](#global-settings) screen.                                                                                                                      |
-| `doublee_integrations_settings_fields`                 | `array $fields`     | Modify the ACF fields available on the [integrations settings](#integrations-settings) screen.                                                                                                          |
-| `doublee_global_settings_contributors`                 | `array $names`      | Modify the list of contributors shown on the "About" tab of the [global settings](#global-settings).                                                                                                    |
-| `doublee_integrations_settings_contributors`           | `array $names`      | Modify the list of contributors shown on the "About" tab of the [integrations settings](#integrations-settings).                                                                                        |
-| `doublee_include_google_maps_api_key_global_setting`   | `bool $include`     | Whether to include the Google Maps API Key field in the [global settings](#global-settings). If a value was already stored before version 4.1.1, this defaults to true, otherwise it defaults to false. |
+| Filter                                                     | Arguments           | Description                                                                                                                                                                                             |
+|------------------------------------------------------------|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `doublee_welcome_screen_included_post_types`               | `array $post_types` | Modify the post types for which "Add or edit" buttons are shown on the [welcome screen](#welcome-screen).                                                                                               |
+| `doublee_welcome_screen_primary_links`	                    | `array $links`      | Modify the primary action links shown on the [welcome screen](#welcome-screen).                                                                                                                         |
+| `doublee_welcome_screen_secondary_links`                   | `array $links`      | Modify the secondary action links shown on the [welcome screen](#welcome-screen).                                                                                                                       |
+| `doublee_indexable_custom_post_types`		                    | `array $post_types` | Modify the post types for which [CPT Indexes](#cpt-index-post-type) are created.                                                                                                                        |
+| `doublee_enable_page_behaviour_options_for_post_types`     | `array $post_types` | Modify the post types for which "Page Behaviour" options are enabled on the edit screen.                                                                                                                |
+| `doublee_global_settings_fields`                           | `array $fields`     | Modify the ACF fields available on the [global settings](#global-settings) screen.                                                                                                                      |
+| `doublee_integrations_settings_fields`                     | `array $fields`     | Modify the ACF fields available on the [integrations settings](#integrations-settings) screen.                                                                                                          |
+| `doublee_global_settings_contributors`                     | `array $names`      | Modify the list of contributors shown on the "About" tab of the [global settings](#global-settings).                                                                                                    |
+| `doublee_integrations_settings_contributors`               | `array $names`      | Modify the list of contributors shown on the "About" tab of the [integrations settings](#integrations-settings).                                                                                        |
+| `doublee_include_google_maps_api_key_global_setting`       | `bool $include`     | Whether to include the Google Maps API Key field in the [global settings](#global-settings). If a value was already stored before version 4.1.1, this defaults to true, otherwise it defaults to false. |
 | `doublee_integrations_settings_third_party_settings_links` | `array $links`      | Edit the links to third-party plugin settings pages listed in the Integrations settings screen. They are an associative array of label → URL pairs.                                                     |
 
 ### General intentions and advice

@@ -22,10 +22,7 @@ class AdminNotices {
      */
     function required_plugins_notification(): void {
         $warnings = array();
-//        if (!is_plugin_active('classic-editor/classic-editor.php')) {
-//            $warnings[] = 'Classic Editor';
-//        }
-        if (!is_plugin_active('advanced-custom-fields-pro/acf.php')) {
+        if (!is_plugin_active('advanced-custom-fields-pro/acf.php') && !in_array('advanced-custom-fields-pro/acf.php', MustUsePluginHandler::$mustUse)) {
             $warnings[] = 'Advanced Custom Fields Pro';
         }
 

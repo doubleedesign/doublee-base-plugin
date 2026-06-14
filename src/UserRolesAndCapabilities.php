@@ -96,8 +96,10 @@ class UserRolesAndCapabilities {
 		}
 
 		$admin_role = get_role('administrator');
-		$admin_role->add_cap('manage_forms');
-		$admin_role->add_cap('manage_socials');
+		if(isset($admin_role)) {
+			$admin_role->add_cap('manage_forms');
+			$admin_role->add_cap('manage_socials');
+		}
 	}
 
 

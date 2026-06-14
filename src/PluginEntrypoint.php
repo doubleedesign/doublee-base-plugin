@@ -21,7 +21,7 @@ if(!defined('WPINC')) {
  * Current plugin version.
  * Rename this for your plugin and update it as you release new versions.
  */
-const DOUBLEE_VERSION = '4.3.0';
+const DOUBLEE_VERSION = '4.4.0';
 
 
 /**
@@ -90,6 +90,7 @@ class PluginEntrypoint {
 	 * @access   private
 	 */
 	private function load_classes(): void {
+		new MustUsePluginHandler();
 		self::$user_functions = new UserRolesAndCapabilities();
 		new WelcomeScreen();
 		new AdminNotices();

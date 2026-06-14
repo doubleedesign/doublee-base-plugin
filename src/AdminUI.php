@@ -4,7 +4,6 @@ namespace Doubleedesign\BasePlugin;
 /**
  * This class defines functions to customise the WordPress admin,
  * including adding options pages, leveraging ACF etc.
- * Note: Customisations specific to WooCommerce should be placed in class-woocommerce.php.
  *
  * @since      1.0.0
  *
@@ -13,8 +12,14 @@ namespace Doubleedesign\BasePlugin;
  * @author     Leesa Ward
  */
 class AdminUI {
+	protected string $pluginDir;
+	protected string $pluginUrl;
 
 	public function __construct() {
+		$isMustUsePlugin = $this->is_must_use_plugin();
+		$this->pluginDir = $isMustUsePlugin ? WP_CONTENT_DIR . '/mu-plugins/doublee-base-plugin/' : WP_CONTENT_DIR . '/plugins/doublee-base-plugin/';
+		$this->pluginUrl = get_bloginfo('url') . '/wp-content/' . ($isMustUsePlugin ? 'mu-plugins' : 'plugins') . '/doublee-base-plugin/';
+
 		// Disable ACF's post type, taxonomy, and options pages features because I code these things in via this plugin and/or client-specific plugins
 		add_filter('acf/settings/enable_post_types', '__return_false');
 		add_filter('acf/settings/enable_options_pages_ui', '__return_false');
@@ -58,15 +63,30 @@ class AdminUI {
 		add_filter('enable_update_services_configuration', '__return_false');
 
 		// Customise admin theme
-		if(apply_filters('doublee_use_client_theme_in_admin', false)) {
-			add_action('admin_init', [$this, 'register_custom_admin_color_schemes'], 2);
-			add_action('admin_init', [$this, 'clear_other_admin_themes'], 3);
-			add_filter('get_user_option_admin_color', [$this, 'lock_admin_color_scheme']);
-			add_action('admin_body_class', [$this, 'admin_body_class']);
-		}
+		add_action('admin_init', [$this, 'register_custom_admin_color_schemes'], 2);
+		add_action('admin_init', [$this, 'clear_other_admin_themes'], 3);
+		add_filter('get_user_option_admin_color', [$this, 'lock_admin_color_scheme']);
+		add_action('admin_body_class', [$this, 'admin_body_class']);
+		add_action('admin_enqueue_scripts', [$this, 'admin_bar_css_on_front_and_back_end']);
+		add_action('wp_enqueue_scripts', [$this, 'admin_bar_css_on_front_and_back_end']);
 
 		// Login screen
 		add_action('login_enqueue_scripts', [$this, 'login_logo']);
+	}
+
+	function is_must_use_plugin(): bool {
+		$mu_plugins = wp_get_mu_plugins(); // MustUsePluginHandler::$mustUse may not have been populated yet
+		return array_find($mu_plugins, function($plugin) {
+			return str_contains($plugin, 'doublee-base-plugin');
+		}) !== null;
+	}
+
+	function should_apply_client_theme_in_admin(): bool {
+		if(!is_admin()) {
+			return false;
+		}
+
+		return apply_filters('doublee_use_client_theme_in_admin', false);
 	}
 
 	/**
@@ -438,23 +458,21 @@ class AdminUI {
 
 	/**
 	 * Add custom CSS to the admin for stuff added by the plugin
-	 * (the starterkit theme also adds an admin stylesheet)
-	 *
 	 * @return void
      */
     public function admin_css(): void {
-        wp_enqueue_style('doublee-plugin-admin', '/wp-content/plugins/doublee-base-plugin/assets/admin-styles.css');
+        wp_enqueue_style('doublee-plugin-admin', $this->pluginUrl . 'assets/admin-styles.css', [], DOUBLEE_VERSION);
 
 	    $current_screen = get_current_screen();
 	    if(method_exists($current_screen, 'is_block_editor') && $current_screen->is_block_editor()) {
-		    wp_enqueue_style('doublee-acf-drag-handle', '/wp-content/plugins/doublee-base-plugin/assets/acf-drag-handle.css', [], DOUBLEE_VERSION);
+		    wp_enqueue_style('doublee-acf-drag-handle', $this->pluginUrl . 'assets/acf-drag-handle.css', [], DOUBLEE_VERSION);
 	    }
     }
 
 	public function admin_js(): void {
 		$current_screen = get_current_screen();
 		if(method_exists($current_screen, 'is_block_editor') && $current_screen->is_block_editor()) {
-			wp_enqueue_script('doublee-acf-drag-handle', '/wp-content/plugins/doublee-base-plugin/assets/dist/acf-drag-handle.dist.js', [], DOUBLEE_VERSION, true);
+			wp_enqueue_script('doublee-acf-drag-handle', $this->pluginUrl . '/assets/dist/acf-drag-handle.dist.js', [], DOUBLEE_VERSION, true);
 		}
 	}
 
@@ -549,6 +567,10 @@ class AdminUI {
 	}
 
 	public function register_custom_admin_color_schemes(): void {
+		if(!$this->should_apply_client_theme_in_admin()) {
+			return;
+		}
+
 		// Check that the theme's colours file exists first
 		if (!file_exists(get_stylesheet_directory() . '/colours.css')) {
 			return;
@@ -558,10 +580,14 @@ class AdminUI {
 		$name = $active_theme->get('Name');
 		$slug = $active_theme->get('TextDomain');
 
+		if(!file_exists($this->pluginDir . 'assets/admin-theme.css')) {
+			return;
+		}
+
 		wp_admin_css_color(
 			"{$slug}-admin-theme",
 			$name,
-			'/wp-content/plugins/doublee-base-plugin/assets/admin-theme.css',
+			$this->pluginUrl. 'assets/admin-theme.css',
 			array("var(--color-primary)", "var(--color-secondary)", "var(--color-accent)", "var(--color-dark)", "var(--color-light)"),
 			array(
 				'base' => "var(--color-light)",
@@ -572,6 +598,10 @@ class AdminUI {
 	}
 
 	public function clear_other_admin_themes(): void {
+		if(!$this->should_apply_client_theme_in_admin()) {
+			return;
+		}
+
 		// remove_action for the function that registers the default themes wasn't working at the time of writing, nor is there a way to filter them
 		global $_wp_admin_css_colors;
 		$active_theme = wp_get_theme();
@@ -586,7 +616,11 @@ class AdminUI {
 		}
 	}
 
-	public function lock_admin_color_scheme(): string {
+	public function lock_admin_color_scheme($theme): string {
+		if(!$this->should_apply_client_theme_in_admin()) {
+			return $theme;
+		}
+
 		global $_wp_admin_css_colors;
 		$active_theme = wp_get_theme();
 		$slug = $active_theme->get('TextDomain') . "-admin-theme";
@@ -599,7 +633,15 @@ class AdminUI {
 	}
 
 	public function admin_body_class($body_class): string {
+		if(!$this->should_apply_client_theme_in_admin()) {
+			return $body_class;
+		}
+
 		return "$body_class admin-doubleedesign";
+	}
+
+	public function admin_bar_css_on_front_and_back_end(): void {
+		wp_enqueue_style('theme-admin-bar', $this->pluginUrl . 'assets/admin-bar.css', [], DOUBLEE_VERSION);
 	}
 
 	public function login_logo(): void {

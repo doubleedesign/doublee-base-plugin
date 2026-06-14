@@ -1,16 +1,36 @@
 # Double-E Plugin changelog
 
+## Version 4.4.0
+Date: 14 June 2026
+
+- Feature: Include tagline in the default page title when no SEO plugin is taking it over
+- Feature: Handling for must-use plugins that are dependencies of others, and to display them as active in the plugins list so they aren't hidden away
+- Fix: Disable link to "Design" (site-editor.php) in Appearance and remove unused styles
+- Fix: Login logo and styling
+- Fix/feat: Admin styling tweaks and first pass at automatic client-level theming of the admin
+- Refactor: Rename main plugin file to `index.php` to make automation in PowerPress and similar tools easier.
+
+## Version 4.3.0
+Date: 24 May 2026
+
+- Feature: Add WooCommerce-related buttons to the welcome screen
+- Fix: Do not attempt to load ACF Drag Handle JS and CSS if the block editor is not active
+- Fix: Remove unsupported features introduced by WP 7 from the admin menu
+-
+	- Feature/refactor: Move Menus from Appearance to the top-level Content section in the admin menu
+- Dev feature: Add filter to opt-out of showing the Indexes in the admin
+- Dev feature/refactor: Add structure and filter to make it easier for plugins to make further alterations to the admin menu
+- Dev feature: Put utility functions for Global Settings, for plugins to use to insert their options into specific places when using doublee_global_settings_fields filter
+
 ## Version 4.2.0
 Date: 8 April 2026
 
 - Feature: Add drag handle to ACF block edit modal.
 
-
 ## Version 4.1.2
 Date: 6 April 2026
 
 - Fix: Hardcode plugin name because `Doublee::get_name()` method no longer exists.
-
 
 ## Version 4.1.1
 Date: 17 January 2026
