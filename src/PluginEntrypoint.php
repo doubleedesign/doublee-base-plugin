@@ -21,7 +21,7 @@ if(!defined('WPINC')) {
  * Current plugin version.
  * Rename this for your plugin and update it as you release new versions.
  */
-const DOUBLEE_VERSION = '4.4.0';
+const DOUBLEE_VERSION = '4.4.1';
 
 
 /**
@@ -92,6 +92,7 @@ class PluginEntrypoint {
 	private function load_classes(): void {
 		new MustUsePluginHandler();
 		self::$user_functions = new UserRolesAndCapabilities();
+		$this->pseudo_activate_when_must_use_plugin();
 		new WelcomeScreen();
 		new AdminNotices();
 		new GlobalOptions();
@@ -106,6 +107,19 @@ class PluginEntrypoint {
 		}
 	}
 
+	private function pseudo_activate_when_must_use_plugin(): void {
+		$mu_plugins = wp_get_mu_plugins(); // MustUsePluginHandler::$mustUse may not have been populated yet
+		$is_must_use = array_find($mu_plugins, function($plugin) {
+				return str_contains($plugin, 'doublee-base-plugin');
+			}) !== null;
+
+		if(!$is_must_use) {
+			return;
+		}
+
+		self::$user_functions->create_roles();
+		self::$user_functions->reassign_users_roles();
+	}
 
 	/**
 	 * Run functions on plugin activation.
