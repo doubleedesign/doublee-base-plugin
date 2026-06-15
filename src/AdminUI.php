@@ -647,6 +647,7 @@ class AdminUI {
 	public function login_logo(): void {
 		wp_enqueue_style( 'theme-colours', get_stylesheet_directory_uri() . '/colours.css' );
 		wp_enqueue_style( 'theme-fonts', get_stylesheet_directory_uri() . '/fonts.css' );
+		wp_enqueue_style( 'theme-login', get_stylesheet_directory_uri() . '/login-page.css' );
 
 		$custom_logo_id = get_option('options_logo');
 		if ($custom_logo_id) {
