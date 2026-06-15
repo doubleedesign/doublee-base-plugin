@@ -101,6 +101,7 @@ class PluginEntrypoint {
 		new SEO();
 		new PageBehaviour();
 		new CPTIndexHandler();
+		new MediaHandler();
 
 		if(class_exists('WooCommerce')) {
 			new WooCommerceHandler();
