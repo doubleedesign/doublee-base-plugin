@@ -24,6 +24,7 @@ class CPTIndexHandler {
 		add_filter('template_redirect', [$this, 'maybe_redirect_archive'], 25);
 		add_action('acf/include_fields', [$this, 'register_alternative_redirect_field'], 5, 0);
 		add_filter('breadcrumbs_filter_post_types', [$this, 'no_breadcrumbs_for_cpt_indexes']);
+		add_filter('post_row_actions', [$this, 'add_link_to_indexed_archive_in_admin_list'], 10, 2);
 	}
 
 	public function register_cpt_index_type(): void {
@@ -68,7 +69,7 @@ class CPTIndexHandler {
 			'menu_position'       => 20,
 			'menu_icon'           => 'dashicons-editor-ul',
 			'show_in_admin_bar'   => false,
-			'show_in_nav_menus'   => false,
+			'show_in_nav_menus'   => true,
 			'can_export'          => true,
 			'has_archive'         => false,
 			'exclude_from_search' => true,
@@ -329,6 +330,31 @@ class CPTIndexHandler {
 		unset($breadcrumbable_post_types['cpt_index']);
 
 		return $breadcrumbable_post_types;
+	}
+
+
+	/**
+	 * Add a "View" link in the admin list for each CPT index that goes to the final real archive or custom redirect URL,
+	 * to make it easier for editors to find the content that these indexes relate to.
+	 *
+	 * This is instead of the default WP behaviour, which if we enabled the post type setting that enables the "View" link,
+	 * would go to the default CPT Index URL which would then redirect. This way, the URL is correct from the beginning.
+	 *
+	 * @param $actions
+	 * @param $post
+	 * @return mixed
+	 */
+	public function add_link_to_indexed_archive_in_admin_list($actions, $post): mixed {
+		if($post->post_type !== 'cpt_index') {
+			return $actions;
+		}
+
+		$final_url = $this->get_real_url($post->ID);
+		if($final_url) {
+			$actions['view'] = '<a href="' . esc_url($final_url) . '" target="_blank">' . __('View', 'doublee') . '</a>';
+		}
+
+		return $actions;
 	}
 
 }
