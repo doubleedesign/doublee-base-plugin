@@ -155,6 +155,10 @@ class SEO {
 	}
 
 	function customise_the_seo_framework_default_site_title($title): string {
-		return get_bloginfo('name') . ' - ' . get_bloginfo('description');
+		if(!empty(get_bloginfo('description'))) {
+			return get_bloginfo('name') . ' - ' . get_bloginfo('description');
+		}
+
+		return $title;
 	}
 }
