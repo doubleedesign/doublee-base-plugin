@@ -1,5 +1,17 @@
 # Double-E Plugin changelog
 
+## Version 4.4.2
+Date: 25 June 2026
+
+- Feature: Load login screen CSS from theme
+- Feature: Style ACF stylised select fields (select2) to better match other fields + customised theme
+- Feature: add View link to row actions in admin list for CPT Indexes
+- Fix: Custom user roles when using plugin as a must-use
+- Fix: Ensure The SEO Framework metabox is below ACF fields for Classic Editor post types
+- Fix: Don't add dash to the automatic meta title if there's no site description set
+- Feature: Enable SVG uploads
+- Cleanup: Don't show individual Posts or Tags in the nav menu manager
+
 ## Version 4.4.0
 Date: 14 June 2026
 

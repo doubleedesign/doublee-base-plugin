@@ -32,6 +32,7 @@ class ComposerStaticInitfd3380296df54f35329004bf3f565b2e
         'Doubleedesign\\BasePlugin\\CPTIndexHandler' => __DIR__ . '/../..' . '/src/CPTIndexHandler.php',
         'Doubleedesign\\BasePlugin\\Doublee_Plugin_List_Table' => __DIR__ . '/../..' . '/src/Doublee_Plugin_List_Table.php',
         'Doubleedesign\\BasePlugin\\GlobalOptions' => __DIR__ . '/../..' . '/src/GlobalOptions.php',
+        'Doubleedesign\\BasePlugin\\MediaHandler' => __DIR__ . '/../..' . '/src/MediaHandler.php',
         'Doubleedesign\\BasePlugin\\MustUsePluginHandler' => __DIR__ . '/../..' . '/src/MustUsePluginHandler.php',
         'Doubleedesign\\BasePlugin\\PageBehaviour' => __DIR__ . '/../..' . '/src/PageBehaviour.php',
         'Doubleedesign\\BasePlugin\\PluginEntrypoint' => __DIR__ . '/../..' . '/src/PluginEntrypoint.php',

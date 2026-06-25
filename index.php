@@ -5,7 +5,7 @@
  *
  * Author:              Double-E Design
  * Author URI:          https://www.doubleedesign.com.au
- * Version:             4.4.1
+ * Version:             4.4.2
  * Requires PHP:        8.4
  * Text Domain:         doublee
  * Requires plugins:    advanced-custom-fields-pro

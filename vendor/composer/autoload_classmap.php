@@ -12,6 +12,7 @@ return array(
     'Doubleedesign\\BasePlugin\\CPTIndexHandler' => $baseDir . '/src/CPTIndexHandler.php',
     'Doubleedesign\\BasePlugin\\Doublee_Plugin_List_Table' => $baseDir . '/src/Doublee_Plugin_List_Table.php',
     'Doubleedesign\\BasePlugin\\GlobalOptions' => $baseDir . '/src/GlobalOptions.php',
+    'Doubleedesign\\BasePlugin\\MediaHandler' => $baseDir . '/src/MediaHandler.php',
     'Doubleedesign\\BasePlugin\\MustUsePluginHandler' => $baseDir . '/src/MustUsePluginHandler.php',
     'Doubleedesign\\BasePlugin\\PageBehaviour' => $baseDir . '/src/PageBehaviour.php',
     'Doubleedesign\\BasePlugin\\PluginEntrypoint' => $baseDir . '/src/PluginEntrypoint.php',
