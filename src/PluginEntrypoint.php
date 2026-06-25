@@ -102,6 +102,7 @@ class PluginEntrypoint {
 		new PageBehaviour();
 		new CPTIndexHandler();
 		new MediaHandler();
+		new NavMenuHandler();
 
 		if(class_exists('WooCommerce')) {
 			new WooCommerceHandler();
