@@ -14,6 +14,7 @@ return array(
     'Doubleedesign\\BasePlugin\\GlobalOptions' => $baseDir . '/src/GlobalOptions.php',
     'Doubleedesign\\BasePlugin\\MediaHandler' => $baseDir . '/src/MediaHandler.php',
     'Doubleedesign\\BasePlugin\\MustUsePluginHandler' => $baseDir . '/src/MustUsePluginHandler.php',
+    'Doubleedesign\\BasePlugin\\NavMenuHandler' => $baseDir . '/src/NavMenuHandler.php',
     'Doubleedesign\\BasePlugin\\PageBehaviour' => $baseDir . '/src/PageBehaviour.php',
     'Doubleedesign\\BasePlugin\\PluginEntrypoint' => $baseDir . '/src/PluginEntrypoint.php',
     'Doubleedesign\\BasePlugin\\PluginListTableHandler' => $baseDir . '/src/PluginListTableHandler.php',

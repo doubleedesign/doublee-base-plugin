@@ -49,23 +49,6 @@ class PluginEntrypoint {
 	 */
 	protected string $version;
 
-
-	/**
-	 * Variables to store instances of our custom classes
-	 * This is one option of how to create an instance of a class, in this case using the same instance in multiple places.
-	 * Instances can also be created as-needed within functions below,
-	 * so it is not mandatory to do this for every custom class we create;
-	 * we can make an informed decision each time about the best way/place to use a class.
-	 * Considerations include:
-	 * - Do we need to use it multiple times or just once?
-	 * - Does it make sense to use the same instance, or should we have a new instance/object each time?
-	 * - Does one method "break" something?
-	 * - Is one method more efficient than another?
-	 * - Which way might be clearer and easier to understand? Are there any downsides to the "easier" way?
-	 */
-	private static UserRolesAndCapabilities $user_functions;
-
-
 	/**
 	 * Set up the core functionality of the plugin in the constructor
 	 * by loading the modular classes of functionality.
@@ -91,8 +74,7 @@ class PluginEntrypoint {
 	 */
 	private function load_classes(): void {
 		new MustUsePluginHandler();
-		self::$user_functions = new UserRolesAndCapabilities();
-		$this->pseudo_activate_when_must_use_plugin();
+		new UserRolesAndCapabilities();
 		new WelcomeScreen();
 		new AdminNotices();
 		new GlobalOptions();
@@ -109,18 +91,11 @@ class PluginEntrypoint {
 		}
 	}
 
-	private function pseudo_activate_when_must_use_plugin(): void {
+	public static function is_must_use_plugin(): bool {
 		$mu_plugins = wp_get_mu_plugins(); // MustUsePluginHandler::$mustUse may not have been populated yet
-		$is_must_use = array_find($mu_plugins, function($plugin) {
+		return array_find($mu_plugins, function($plugin) {
 				return str_contains($plugin, 'doublee-base-plugin');
 			}) !== null;
-
-		if(!$is_must_use) {
-			return;
-		}
-
-		self::$user_functions->create_roles();
-		self::$user_functions->reassign_users_roles();
 	}
 
 	/**
@@ -130,8 +105,7 @@ class PluginEntrypoint {
 	 * @return void
 	 */
 	public static function activate(): void {
-		self::$user_functions->create_roles();
-		self::$user_functions->reassign_users_roles();
+		do_action('doublee_base_activate');
 	}
 
 	/**
@@ -147,7 +121,7 @@ class PluginEntrypoint {
 	 * @return void
 	 */
 	public static function deactivate(): void {
-		self::$user_functions->delete_roles();
+		do_action('doublee_base_deactivate');
 	}
 
 
@@ -164,7 +138,7 @@ class PluginEntrypoint {
 	 * @return void
 	 */
 	public static function uninstall(): void {
-		self::$user_functions->revert_users_roles(true);
+		do_action('doublee_base_uninstall');
 	}
 
 

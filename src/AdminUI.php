@@ -16,7 +16,7 @@ class AdminUI {
 	protected string $pluginUrl;
 
 	public function __construct() {
-		$isMustUsePlugin = $this->is_must_use_plugin();
+		$isMustUsePlugin = PluginEntrypoint::is_must_use_plugin();
 		$this->pluginDir = $isMustUsePlugin ? WP_CONTENT_DIR . '/mu-plugins/doublee-base-plugin/' : WP_CONTENT_DIR . '/plugins/doublee-base-plugin/';
 		$this->pluginUrl = get_bloginfo('url') . '/wp-content/' . ($isMustUsePlugin ? 'mu-plugins' : 'plugins') . '/doublee-base-plugin/';
 
@@ -74,12 +74,7 @@ class AdminUI {
 		add_action('login_enqueue_scripts', [$this, 'login_logo']);
 	}
 
-	function is_must_use_plugin(): bool {
-		$mu_plugins = wp_get_mu_plugins(); // MustUsePluginHandler::$mustUse may not have been populated yet
-		return array_find($mu_plugins, function($plugin) {
-			return str_contains($plugin, 'doublee-base-plugin');
-		}) !== null;
-	}
+
 
 	function should_apply_client_theme_in_admin(): bool {
 		if(!is_admin()) {

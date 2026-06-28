@@ -56,6 +56,17 @@ class UserRolesAndCapabilities {
 		//add_filter('user_has_cap', array($this, 'selectively_override_manage_options_capability'), 10);
 		//add_action('admin_menu', array($this, 'fix_admin_menu_for_manage_options_lite_capability'), 20);
 		//add_action('admin_footer', array($this, 'hackily_disable_editing_admin_email'));
+
+		if(PluginEntrypoint::is_must_use_plugin()) {
+			add_action('init', array($this, 'create_roles'), 20);
+			add_action('init', array($this, 'reassign_users_roles'), 30);
+		}
+		else {
+			add_action('doublee_base_activate', array($this, 'create_roles'), 20);
+			add_action('doublee_base_activate', array($this, 'reassign_users_roles'), 30);
+			add_action('doublee_base_deactivate', array($this, 'revert_users_roles'), 20);
+			add_action('doublee_base_uninstall', array($this, 'revert_users_roles'), 20);
+		}
 	}
 
 
