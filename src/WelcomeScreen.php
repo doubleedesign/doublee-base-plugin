@@ -17,7 +17,7 @@ class WelcomeScreen {
 		add_action('admin_init', [$this, 'remove_default_metaboxes'], 5);
 		add_action('welcome_panel', [$this, 'custom_dashboard_welcome_panel']);
 
-		add_action('admin_init', [$this, 'always_show_welcome_panel'], 1);
+		add_action('admin_init', [$this, 'always_show_welcome_panel'], 1); 
 		add_action('user_register', [$this, 'ensure_welcome_for_new_user']);
 	}
 
@@ -145,7 +145,7 @@ class WelcomeScreen {
 		$site_name = get_bloginfo('name');
 		$secondary_links[] = [
 			'label' => "Update $site_name's contact information",
-			'url'   => admin_url('themes.php?page=acf-options-global-options'),
+			'url'   => admin_url('options-general.php?page=acf-options-global-options'),
 			'icon'  => 'dashicons-email',
 		];
 		$secondary_links[] = [
